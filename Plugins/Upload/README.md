@@ -60,4 +60,6 @@
 
 直接使用控制台输出的路径，就可以使用图片了！
 
+下一章介绍图床工具的实现，手把手教你学会使用 `Node` 写一个图床工具！
+
 喜欢的话给一颗 star 吧（[图床上传工具](https://github.com/a1029563229/plugins)和[博文](https://github.com/a1029563229/Blogs/tree/master/Plugins/Upload)属于原创），这个对我真的很重要，谢谢了！
