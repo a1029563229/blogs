@@ -4,6 +4,7 @@
 我们一般都会有写博客的想法，写博客的话最好是需要图文结合的，而 markdown 是支持插入图片的，markdown 的图片支持以下三种方式：本地图片、网络图片、base 64，这里我们使用网络图片的方式，我们需要做以下准备工作：
   - 阿里云账号：阿里云的 oss 对象存储每个月有 5G 的免费流量，还赠送了一个域名用来访问图片；
   - [图床上传工具](https://github.com/a1029563229/plugins)：集成了 oss 对象存储功能，并且可以映射本地目录到远程目录（可以简单理解为 git 的目录映射）
+  - [Node运行环境](http://nodejs.cn/)：图床上传工具使用 Node 开发
 
 ## oss 对象存储
 对象存储(Object Storage Service,简称OSS),是阿里云对外提供的海量、安全和高可靠的云存储服务。我们使用阿里云的 oss 服务存储图片。我们需要先[登录阿里云](https://account.aliyun.com/login/login.htm?oauth_callback=https%3A%2F%2Fhomenew.console.aliyun.com%2F)，我是直接通过支付宝账号登录的。
