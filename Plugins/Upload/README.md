@@ -46,8 +46,8 @@
 ![文件目录](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/5.png)
 
 我们在按照路径放置图片后，执行 `npm run upload` 命令进行上传，控制台会返回上传后的路径，如下图
-![文件目录](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/6.png)
+![文件地址列表](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/6.png)
 
 直接使用控制台输出的路径，就可以使用图片了！
 
-喜欢的话给一颗 star 吧（图床上传工具和博文属于原创），这个对我很重要，谢谢了！
+喜欢的话给一颗 star 吧（[图床上传工具](https://github.com/a1029563229/plugins)和[博文](https://github.com/a1029563229/Blogs/tree/master/Plugins/Upload)属于原创），这个对我真的很重要，谢谢了！
