@@ -10,12 +10,16 @@
 
 （如果没有进入控制台，则[点击此处进入控制台](https://homenew.console.aliyun.com/)）阿里云的控制台页面应该是这样的，我们点击进入对象存储 OSS（如下图）
 ![阿里云控制](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/1.png)
+
 进入到控制台后，我们需要创建一个 bucket（空间）来承载我们的图片，点击此处新建
 ![新建 bucket](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/2.png)
+
 在新建时，Bucket 名称需要具有唯一性（该参数在图床工具需要用到），我一般是使用一个前缀来区分，并没有其他限制。区域的话，根据自己需要来选择即可（区域参数也在图床工具需要用到），这里我使用的是深圳节点。重点是读写权限，我们需要设置为公共读，这样我们的图片才能通过被外网正常访问，如下图
 ![新建 bucket](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/3.png)
+
 接下来我们需要[新建一个 Access Key](https://usercenter.console.aliyun.com/#/manage/ak)，在这个界面我们可以拿到 AccessKey ID 和 Access Key Secret	，这两个参数在图床工具中也会用到。（如下图）
 ![AccessKey](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/4.png)
+
 到此步为止，我们的 oss 对象存储空间就创建好了，下一步我们开始配置图床工具。
 
 ## 图床工具
@@ -24,7 +28,7 @@
 我们需要新建 `config/config.json` 文件进行 oss 的配置
 ```es6
     {
-      oss: {
+      "oss": {
         "region": "", // bucket 所在的 region，例如深圳的节点为 oss-cn-shenzhen，可在阿里云查询 oss 对应的 region（第一步的参数）
         "accessKeyId": "", // 阿里云 oss 提供的 accessKeyId（第一步的参数）
         "accessKeySecret": "", // 阿里云 oss 提供的 accessKeyId（第一步的参数）
@@ -34,9 +38,9 @@
       }
     }
 ```
-配置文件创建完成后，我们需要创建本地的图片存放目录，文件夹的名称就是配置文件中的 `localResourceDir`, 如果没有配置该参数的话，默认读取的是根目录下的 images 文件夹。
+配置文件创建完成后，我们需要创建本地的图片存放目录，文件夹的名称就是配置文件中的 `localResourceDir`, 如果没有配置该参数的话，默认读取的是根目录下的 `images` 文件夹。
 
-这里以本文示例，在第一步中使用的四章图片地址分别是
+这里以本文示例，在第一步中使用的四张图片地址分别是
 `http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/1.png`
 `http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/2.png`
 `http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/plugins/upload/3.png`
