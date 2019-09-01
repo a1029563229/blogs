@@ -1,4 +1,4 @@
-# 图床工具的实现
+# 图床工具的实现-基础篇
 在上一章，我们介绍了[图床工具（上传组件）的使用](https://github.com/a1029563229/Blogs/tree/master/Plugins/Upload)，这一章，我们来解析图床工具的实现，手把手教你写一个图床工具（Node 小工具）。
 
 在教学开始前，我们需要准备：
@@ -69,7 +69,7 @@ function readDir(entry, images = []) {
 }
 
 // 定义检索的入口文件夹（ images 文件夹）
-const staticDirPath = path.join(__dirname, '../../..', 'images');
+const staticDirPath = path.join(__dirname, '../..', 'images');
 const images = readDir(staticDirPath);
 console.log(images);
 ```
