@@ -28,6 +28,6 @@ console.log(query);
 
 该插件还支持嵌套和批量解析，可以充分满足结构化查询的需求。
 
-喜欢的话给一颗 star 吧（[GraphQL 查询字符串组装](https://github.com/a1029563229/plugins/tree/master/src/graphql/graphql-querye) 属于原创）。
+喜欢的话给一颗 star 吧（[GraphQL 查询字符串组装](https://github.com/a1029563229/plugins/tree/master/src/graphql/graphql-query) 属于原创）。
 
 Star 超过 10 颗的话，作者将会提供一套完整的 GraphQL 前后端架构方案。
