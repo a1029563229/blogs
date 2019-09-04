@@ -4,7 +4,7 @@
 
 ECMAScript 当然也有对应的抽象语法树（下面都称 AST），今天我们就来解析一下 ECMAScript，看看在 AST 中我们的代码将会如何展示。
 
-本文借鉴了 [使用 Acorn 来解析 JavaScript](http://developer.51cto.com/art/201611/521405.htm)
+本文借鉴了 [使用 Acorn 来解析 JavaScript](http://developer.51cto.com/art/201611/521405.htm)。
 
 ## Node
 ```ts
@@ -39,6 +39,8 @@ interface Position {
 - line：行信息；
 - column：列信息；
 
+<br />
+
 ## 基础类型
 
 ### Expression
@@ -48,10 +50,21 @@ interface Expression <: Node { }
 ```
 表达式节点，数组、对象、判断、循环皆为表达式，在后面会更详细的介绍。
 
-### 
-
 ### Pattern
 ```ts
 interface Pattern <: Node { }
 ```
 模式，主要在 ES6 的解构语法中使用，类似于 Identifier。
+
+### Identifier
+```ts
+interface Identifier <: Expression, Pattern {
+  type: "Identifier";
+  name: string;
+}
+```
+标识符（如变量名、函数名、属性名），属于表达式的一种，可以理解为声明一个变量/函数/... 的表达式。
+- type：类型为标识符类型；
+- name：变量名/函数名/...名；
+
+###
