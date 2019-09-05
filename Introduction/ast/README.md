@@ -4,7 +4,7 @@
 
 ECMAScript 当然也有对应的抽象语法树（下面都称 AST），今天我们就来解析一下 ECMAScript，看看在 AST 中我们的代码将会如何展示。
 
-本文借鉴了 [使用 Acorn 来解析 JavaScript](http://developer.51cto.com/art/201611/521405.htm)，本文同样使用 acorn 来编写一些 Demo 帮助理解。
+本文借鉴了 [使用 Acorn 来解析 JavaScript](http://developer.51cto.com/art/201611/521405.htm)，本文同样使用 acorn 来编写一些 Example 帮助理解。
 
 ## Node
 ```ts
@@ -64,7 +64,7 @@ interface Identifier <: Expression, Pattern {
 }
 ```
 标识符（如变量名、函数名、属性名），属于表达式的一种，可以理解为声明一个变量/函数/... 的表达式。
-- type：类型为标识符类型；
+- type：类型为 `Identifier`（标识符）类型；
 - name：变量名/函数名/...名；
 
 ### Literal
@@ -75,7 +75,7 @@ interface Literal <: Expression {
 }
 ```
 字面量，指 1 和 '1' 这种字面量（[] 和 {} 属于表达式，内部实现和字面量不一样）
-- type：类型为字面量；
+- type：类型为 `Literal`（字面量）；
 - value：值为多种类型，字符串/布尔/空/数字/正则类型，都属于字面量值类型；
 
 #### RegLiteral
@@ -104,7 +104,7 @@ interface Program <: Node {
 }
 ```
 `Program ` 一般是作为根节点使用，代表了一颗完整的程序树。
-- type：类型为 "Program"；
+- type：类型为 `Program`；
 - body：由多个语句组成的数组；
 
 ### Function
@@ -115,7 +115,7 @@ interface Function <: Node {
   body: BlockStatement;
 }
 
-// Demo
+// Example
 acorn.parse('function bar(a) { }');
 
 {
@@ -140,3 +140,254 @@ acorn.parse('function bar(a) { }');
 - id：函数名，一般为必填（还有匿名函数）；
 - params：函数的参数集合；
 - body：块语句（在后面会继续提及）；
+
+<br />
+
+## Statement（语句）
+
+### ExpressionStatement
+```ts
+interface ExpressionStatement <: Statement {
+  type: "ExpressionStatement";
+  expression: Expression;
+}
+
+// Example
+acorn.parse('1 + 1')
+
+{
+  "type": "ExpressionStatement", // 表达式语句
+  "expression": {
+    "type": "BinaryExpression", // 一元表达式（后面会提及）
+    "left": {
+      "type": "Literal",
+      "value": 1,
+      "raw": "1"
+    },
+    "operator": "+",
+    "right": {
+      "type": "Literal",
+      "value": 1,
+      "raw": "1"
+    }
+  }
+}
+```
+表达式语句节点，代表的是一个表达式语句。
+- type：类型为 `ExpressionStatement`；
+- expression：表达式语句的内容（表达式）；
+
+### BlockStatement
+```ts
+interface BlockStatement <: Statement {
+  type: "BlockStatement";
+  body: [ Statement ];
+}
+
+// Example
+acorn.parse('{ 1 + 1 }')
+
+{
+  "type": "BlockStatement", // 块语句
+  "body": [
+    {
+      "type": "ExpressionStatement", // 块语句包裹了我们定义的表达式语句；表达式语句只是这个块语句中的一员，块语句可以有多个成员；
+      "expression": {
+        "type": "BinaryExpression",
+        "left": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1"
+        },
+        "operator": "+",
+        "right": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1"
+        }
+      }
+    }
+  ]
+}
+```
+块语句，可简单理解为用 `{  }` 包裹的语句。
+- type：类型为 `BlockStatement`；
+- body：内容为语句组成的一个数组；
+
+### EmptyStatement
+```ts
+interface EmptyStatement <: Statement {
+  type: "EmptyStatement";
+}
+
+// Example
+{
+  "type": "EmptyStatement" // 
+}
+```
+空语句，比如一个单独的 `;` 符号；
+- type：类型为 `EmptyStatement`
+
+### DebuggerStatement
+```ts
+interface DebuggerStatement <: Statement {
+    type: "DebuggerStatement";
+}
+
+// Example
+acorn.parse('debugger;')
+
+{
+  "type": "DebuggerStatement"
+}
+```
+debugger 语句。
+- type：类型为 `DebuggerStatement`
+
+### WithStatement
+```ts
+interface WithStatement <: Statement {
+  type: 'WithStatement';
+  object: Expression;
+  body: Statement;
+}
+
+// Example
+acorn.parse('with(o){ }')
+
+{
+  "type": "WithStatement",
+  "object": {
+    "type": "Identifier", // 使用了 o 的标识符作为内部作用域
+    "name": "o"
+  },
+  "body": {
+    "type": "BlockStatement", // 内部语句使用一个块语句
+    "body": []
+  }
+}
+```
+with 语句，用于设置代码在特定对象中的作用域。
+- type：类型为 `WithStatement`；
+- object：`with` 语句中的 `()` 中的内容，指定语句的作用域，可以为一个自定义的表达式；
+- body：主体，语句类型，可以为块语句 `with(o) { ... }`，也可以为表达式语句 `with(o) a + a`；
+
+### ReturnStatement
+```ts
+interface ReturnStatement <: Statement {
+  type: "ReturnStatement";
+  argument: Expression | null;
+}
+
+// Example
+acorn.parse('function bar() { return true }')
+
+{
+  "type": "FunctionDeclaration",
+  "id": {
+    "type": "Identifier",
+    "name": "bar"
+  },
+  "expression": false,
+  "generator": false,
+  "async": false,
+  "params": [],
+  "body": {
+    "type": "BlockStatement",
+    "body": [
+      {
+        "type": "ReturnStatement", // 类型
+        "argument": { 
+          "type": "Literal", // 返回值是字面量类型
+          "value": true, // 值为 true
+          "raw": "true"
+        }
+      }
+    ]
+  }
+}
+```
+返回语句，通常用于返回函数执行结果；
+- type：类型为 `ReturnStatement`;
+- argument：返回的内容，是一个任意类型的表达式；
+
+### LabeledStatement
+```ts
+interface LabeledStatement <: Statement {
+  type: "LabeledStatement";
+  body: Statement;
+  label: Identifier;
+}
+
+// Example
+acorn.parse('labelName:while(true){ }')
+
+{
+  "type": "LabeledStatement",
+  "body": { // Label 的内容
+    "type": "WhileStatement",
+    "test": {
+      "type": "Literal",
+      "value": true,
+      "raw": "true"
+    },
+    "body": {
+      "type": "BlockStatement",
+      "body": []
+    }
+  },
+  "label": {
+    "type": "Identifier", // Label 名称
+    "name": "labelName"
+  }
+}
+```
+Label 语句，一般用于显式标识 `Statement`；
+- type：类型为 `LabeledStatement`；
+- body：主体，是 Label 对应的语句；
+- label：Label 的名称；
+
+### BreakStatement
+```ts
+interface BreakStatement <: Statement {
+  type: "BreakStatement";
+  label: Identifier | null;
+}
+
+// Example
+acorn.parse('while(true) { break; }')
+
+{
+  "type": "WhileStatement",
+  "test": {
+    "type": "Literal",
+    "value": true,
+    "raw": "true"
+  },
+  "body": {
+    "type": "BlockStatement",
+    "body": [
+      {
+        "type": "BreakStatement",
+        "label": {} // 这个 break 没有 label，则 break 对应的语句需要向上级查询
+      }
+    ]
+  }
+}
+```
+break 语句，通常用来“跳出”循环；
+- type：类型为 `BreakStatement`；
+- label：如果需要指定“跳出”的语句，则需要指定 `label` 属性为 `LabeledStatement` 中的 `label` 属性（`Identifier`）；
+
+### ContinueStatement
+```ts
+interface ContinueStatement <: Statement { 
+    type: "ContinueStatement"; 
+    label: Identifier | null; 
+}
+```
+continue 语句，通常用来“跳出”循环中的一个迭代；
+- type：类型为 `ContinueStatement`；
+- label：如果需要指定“跳出”的语句，则需要指定 `label` 属性为 `LabeledStatement` 中的 `label` 属性（`Identifier`）；
+
+### IfStatement
