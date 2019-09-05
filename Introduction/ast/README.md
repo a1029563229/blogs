@@ -221,6 +221,8 @@ interface EmptyStatement <: Statement {
 }
 
 // Example
+acorn.parse(';')
+
 {
   "type": "EmptyStatement" // 
 }
