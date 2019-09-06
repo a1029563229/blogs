@@ -45,20 +45,20 @@ interface Position {
 
 ### Expression
 ```ts
-// <: 可理解为“继承”的语法糖
-interface Expression <: Node { }
+// extends 可理解为“继承”的语法糖，原文为 <: 本文使用 extends 代替
+interface Expression extends Node { }
 ```
 表达式节点，数组、对象、判断、循环皆为表达式，在后面会更详细的介绍。
 
 ### Pattern
 ```ts
-interface Pattern <: Node { }
+interface Pattern extends Node { }
 ```
 模式，主要在 ES6 的解构语法中使用，类似于 Identifier。
 
 ### Identifier
 ```ts
-interface Identifier <: Expression, Pattern {
+interface Identifier extends Expression, Pattern {
   type: "Identifier";
   name: string;
 }
@@ -69,7 +69,7 @@ interface Identifier <: Expression, Pattern {
 
 ### Literal
 ```ts
-interface Literal <: Expression {
+interface Literal extends Expression {
   type: "Literal";
   value: string | boolean | null | number | RegExp;
 }
@@ -80,7 +80,7 @@ interface Literal <: Expression {
 
 #### RegLiteral
 ```ts
-interface RegExpLiteral <: Literal {
+interface RegExpLiteral extends Literal {
   regex: {
     pattern: string;
     flags: string;
@@ -92,13 +92,13 @@ interface RegExpLiteral <: Literal {
 
 ### Statement
 ```ts
-interface Statement <: Node { }
+interface Statement extends Node { }
 ```
 语句节点。
 
 ### Program
 ```ts
-interface Program <: Node {
+interface Program extends Node {
   type: "Program";
   body: [ Statement ]
 }
@@ -109,7 +109,7 @@ interface Program <: Node {
 
 ### Function
 ```ts
-interface Function <: Node {
+interface Function extends Node {
   id: Identifier | null;
   params: [ Pattern ];
   body: BlockStatement;
@@ -147,7 +147,7 @@ acorn.parse('function bar(a) { }');
 
 ### ExpressionStatement
 ```ts
-interface ExpressionStatement <: Statement {
+interface ExpressionStatement extends Statement {
   type: "ExpressionStatement";
   expression: Expression;
 }
@@ -179,7 +179,7 @@ acorn.parse('1 + 1')
 
 ### BlockStatement
 ```ts
-interface BlockStatement <: Statement {
+interface BlockStatement extends Statement {
   type: "BlockStatement";
   body: [ Statement ];
 }
@@ -216,7 +216,7 @@ acorn.parse('{ 1 + 1 }')
 
 ### EmptyStatement
 ```ts
-interface EmptyStatement <: Statement {
+interface EmptyStatement extends Statement {
   type: "EmptyStatement";
 }
 
@@ -232,7 +232,7 @@ acorn.parse(';')
 
 ### DebuggerStatement
 ```ts
-interface DebuggerStatement <: Statement {
+interface DebuggerStatement extends Statement {
     type: "DebuggerStatement";
 }
 
@@ -248,7 +248,7 @@ debugger 语句。
 
 ### WithStatement
 ```ts
-interface WithStatement <: Statement {
+interface WithStatement extends Statement {
   type: 'WithStatement';
   object: Expression;
   body: Statement;
@@ -276,7 +276,7 @@ with 语句，用于设置代码在特定对象中的作用域。
 
 ### ReturnStatement
 ```ts
-interface ReturnStatement <: Statement {
+interface ReturnStatement extends Statement {
   type: "ReturnStatement";
   argument: Expression | null;
 }
@@ -315,7 +315,7 @@ acorn.parse('function bar() { return true }')
 
 ### LabeledStatement
 ```ts
-interface LabeledStatement <: Statement {
+interface LabeledStatement extends Statement {
   type: "LabeledStatement";
   body: Statement;
   label: Identifier;
@@ -351,7 +351,7 @@ Label 语句，一般用于显式标识 `Statement`；
 
 ### BreakStatement
 ```ts
-interface BreakStatement <: Statement {
+interface BreakStatement extends Statement {
   type: "BreakStatement";
   label: Identifier | null;
 }
@@ -383,7 +383,7 @@ break 语句，通常用来“跳出”循环；
 
 ### ContinueStatement
 ```ts
-interface ContinueStatement <: Statement { 
+interface ContinueStatement extends Statement { 
     type: "ContinueStatement"; 
     label: Identifier | null; 
 }
@@ -393,3 +393,151 @@ continue 语句，通常用来“跳出”循环中的一个迭代；
 - label：如果需要指定“跳出”的语句，则需要指定 `label` 属性为 `LabeledStatement` 中的 `label` 属性（`Identifier`）；
 
 ### IfStatement
+```ts
+interface IfStatement extends Statement {
+  type: "IfStatement";
+  test: Expression;
+  consequent: Statement;
+  alternate: Statement | null;
+}
+
+// Example
+acorn.parse('if (true) {} else if(false) a++')
+
+// 分析一个比较经典的语法，else if
+{
+  "type": "IfStatement",
+  "test": {
+    "type": "Literal", // 判断条件为一个字面量
+    "value": true,
+    "raw": "true"
+  },
+  "consequent": {
+    "type": "BlockStatement", // 如果判断为 true 则执行这个块语句
+    "body": []
+  },
+  "alternate": {
+    "type": "IfStatement", // else 语句是一个 IfStatement 可以得出 else if () === else { if () }
+    "test": {
+      "type": "Literal",
+      "value": false,
+      "raw": "false"
+    },
+    "consequent": {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "UpdateExpression", // 最终满足条件后执行了一个 UpdateExpression
+        "operator": "++",
+        "prefix": false,
+        "argument": {
+          "type": "Identifier",
+          "name": "a"
+        }
+      }
+    },
+    "alternate": {} // 第二个 IfStatement 没有 else 语句
+  }
+}
+```
+
+if 语句，满足 `test` 条件执行 `consequent` 语句，不满足条件则执行 `alternate` 语句。
+- type：类型为 `IfStatement`;
+- test：判断条件，也就是 `if (expression)` 括号中的内容；
+- consequent：条件为 `true` 时执行的语句；
+- alternate：条件为 `false` 时执行的语句，也可以设置为另一个 `IfStatement`，就变成了 `else if` 语法；
+
+### SwitchStatement
+```ts
+interface SwitchStatement extends Statement {
+  type: "SwitchStatement";
+  discriminant: Expression;
+  cases: [ SwitchCase ]
+}
+
+interface SwitchCase extends Node {
+  type: "SwitchCase";
+  test: Expression | null;
+  consequent: [ Statement ];
+}
+
+// Example
+acorn.parse('switch(a) { case 1: a = 2; break; }');
+
+{
+  "type": "SwitchStatement", // 类型
+  "discriminant": {
+    "type": "Identifier", // 主体是个标识符，条件成立则进入 cases 处理逻辑
+    "name": "a"
+  },
+  "cases": [
+    {
+      "type": "SwitchCase",
+      "consequent": [
+        {
+          "type": "ExpressionStatement", // 判断条件成立执行第一个 ExpressionStatement
+          "expression": {
+            "type": "AssignmentExpression",
+            "operator": "=",
+            "left": {
+              "type": "Identifier",
+              "name": "a"
+            },
+            "right": {
+              "type": "Literal",
+              "value": 2,
+              "raw": "2"
+            }
+          }
+        },
+        {
+          "type": "BreakStatement", // 第二个语句为 Break 语句
+          "label": {}
+        }
+      ],
+      "test": {
+        "type": "Literal", // 判断条件为字面量
+        "value": 1,
+        "raw": "1"
+      }
+    }
+  ]
+}
+```
+
+Switch 语句
+- type：类型为 `SwitchStatement`；
+- discriminant：断言符，是 `switch(...)` 括号中的内容；
+- cases：一个 `SwitchCase` 构成的数组；
+
+### ThrowStatement
+```ts
+interface ThrowStatement extends Statement { 
+    type: "ThrowStatement"; 
+    argument: Expression; 
+}
+
+// Example
+acorn.parse('throw new Error()');
+
+{
+  "type": "ThrowStatement",
+  "argument": {
+    "type": "NewExpression", // new 表达式
+    "callee": {
+      "type": "Identifier",
+      "name": "Error"
+    },
+    "arguments": []
+  }
+}
+```
+throw 语句，一般用于抛出错误；
+- type：类型为 `ThrowStatement`；
+- argument：`throw` 后面的表达式，需要抛出的内容；
+
+### TryStatement
+```ts
+interface TryStatement extends Statement {
+  
+}
+```
