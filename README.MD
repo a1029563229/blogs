@@ -4,6 +4,7 @@
 + [Docker 的基础使用](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/use)
 + [Docker + Mysql](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/mysql)
 + [Docker + MongoDB](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/mongodb)
++ [Docker + Jenkins](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/jenkins)
 + [GraphQL 查询字符串的组装](https://github.com/a1029563229/Blogs/tree/master/Introduction/graphql/graphql-query)
 + [AST（Abstract Syntax Tree，抽象语法树）](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)
 
