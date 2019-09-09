@@ -538,6 +538,447 @@ throw 语句，一般用于抛出错误；
 ### TryStatement
 ```ts
 interface TryStatement extends Statement {
-  
+  type: "TryStatement";
+  block: BlockStatement;
+  handler: CatchClause | null;
+  finalizer: BlockStatement | null;
+}
+
+interface CatchClause extends Node { 
+    type: "CatchClause"; 
+    param: Pattern; 
+    body: BlockStatement; 
+}  
+
+// Example
+acorn.parse('try { throw new Error() } catch (error) {  } finally {  } ');
+
+{
+  "type": "TryStatement",
+  "block": { // try 的块语句
+    "type": "BlockStatement",
+    "body": [
+      {
+        "type": "ThrowStatement",
+        "argument": {
+          "type": "NewExpression",
+          "callee": {
+            "type": "Identifier",
+            "name": "Error"
+          },
+          "arguments": []
+        }
+      }
+    ]
+  },
+  "handler": {
+    "type": "CatchClause", // catch 语句
+    "param": {
+      "type": "Identifier", 
+      "name": "error" // catch 语句参数的标识符名为 error
+    },
+    "body": {
+      "type": "BlockStatement", // catch 语句的主体
+      "body": []
+    }
+  },
+  "finalizer": { // finally 语句
+    "type": "BlockStatement", // finally 语句的主体
+    "body": []
+  }
 }
 ```
+TryStatement 为 `try() { ... } catch(param) { ... }` 语句；
+- type：类型为 `TryStatement`
+- block：`try` 语句的主体，是一个块语句；
+- handler：`catch` 语句的主体，包含一个参数；
+- finalizer：`finally` 语句主体；
+
+### WhileStatement
+```ts
+interface WhileStatement extends Statement {
+  type: "WhileStatement";
+  test: Expression;
+  body: BlockStatement;
+}
+
+// Example
+acorn.parse('while(expression) {}');
+
+{
+  "type": "WhileStatement",
+  "test": {
+    "type": "Identifier",
+    "name": "expression"
+  },
+  "body": {
+    "type": "BlockStatement",
+    "body": []
+  }
+}
+```
+`while` 语句，通常用于条件循环。（还有与该节点类似的 `DoWhileStatement`）
+- type：类型为 `WhileStatement`；
+- test：`while(expression) {}` 中的 `expression`，条件满足时将进入循环主体；
+- body：循环主体，为 `BlockStatement`；
+
+### ForStatement
+```ts
+interface ForStatement extends Statement {
+  type: "ForStatement";
+  init: VariableDeclaration | Expression | null;
+  test: Expression | null;
+  update: Expression | null;
+  body: BlockStatement;
+}
+
+// Example
+acorn.parse('for (let i = 0; i <= 10; i++) { }');
+
+{
+  "type": "ForStatement",
+  "init": {
+    "type": "VariableDeclaration", // 初始值是一个 VariableDeclaration （变量声明）
+    "declarations": [
+      {
+        "type": "VariableDeclarator",
+        "id": {
+          "type": "Identifier", // 变量名为 i
+          "name": "i"
+        },
+        "init": {
+          "type": "Literal", // 初始值为 0
+          "value": 0,
+          "raw": "0"
+        }
+      }
+    ],
+    "kind": "let"
+  },
+  "test": {
+    "type": "BinaryExpression", // 判断条件为一个表达式
+    "left": {
+      "type": "Identifier", // 表达式左边是 变量 i
+      "name": "i"
+    },
+    "operator": "<=", // 操作符是 <=
+    "right": {
+      "type": "Literal", // 表达式右边是 字面量是 10
+      "value": 10,
+      "raw": "10"
+    }
+  },
+  "update": {
+    "type": "UpdateExpression", // 更新语句是一个 UpdateExpression
+    "operator": "++",
+    "prefix": false,
+    "argument": {
+      "type": "Identifier",
+      "name": "i"
+    }
+  },
+  "body": {
+    "type": "BlockStatement", // 循环主体
+    "body": []
+  }
+}
+```
+`ForStatement` 表示的是最常用的 `for (init; test; update;) { ... }` 循环；
+- type：类型为 `ForStatement`；
+- init：循环中的初始值；
+- test：循环的判断条件，一般结合 `init` 中定义的变量进行判断；
+- update：每次循环结束后的更新函数，一般用于更新 `test` 中使用到的变量；
+- body：循环主体；
+
+### ForInStatement
+```ts
+interface ForInStatement extends Statement {
+  type: "ForInStatement";
+  left: VariableDeclaration | Pattern;
+  right: Expression;
+  body: Statement;
+}
+
+// Example
+{
+  "type": "ForInStatement",
+  "left": {
+    "type": "VariableDeclaration", // 变量声明
+    "declarations": [
+      {
+        "type": "VariableDeclarator",
+        "id": {
+          "type": "Identifier",
+          "name": "key" // 变量名为 key
+        },
+        "init": {}
+      }
+    ],
+    "kind": "let" // 声明类型为 let
+  },
+  "right": {
+    "type": "Identifier", // 右边是一个标识符
+    "name": "obj"
+  },
+  "body": {
+    "type": "BlockStatement",
+    "body": []
+  }
+}
+```
+`for in` 循环，一般用于遍历一个对象。
+- type：类型为 `ForStatement`；
+- left：左边一般是一个变量声明，也可以是一个解构函数，比如 `for(let { a, b } in obj) {  }`；
+- right：右边是一个表达式，一般为变量标识符，一个对象；
+
+## Declaration
+```ts
+interface Declaration extends Statement { }
+```
+声明语句节点。
+
+### FunctionDeclaration
+```ts
+interface FunctionDeclaration extends Function, Declaration {
+  type: "FunctionDeclaration";
+  id: Identifier;
+}
+
+// Example
+acorn.parse('function run() {  }');
+
+{
+  "type": "FunctionDeclaration", // 函数声明语句
+  "id": {
+    "type": "Identifier",
+    "name": "run" // 标识符为 run
+  },
+  "params": [], // 参数为空
+  "body": {
+    "type": "BlockStatement", // 函数主体
+    "body": []
+  }
+}
+```
+- type：类型为 `FunctionDeclaration`；
+- id：函数名，不能为空；
+
+### VariableDeclaration
+```ts
+interface VariableDeclaration extends Declaration {
+  type: "VariableDeclaration";
+  declarations: [ VariableDeclarator ];
+  kind: "var" | "const" | "let";
+}
+
+interface VariableDeclarator <: Node { 
+    type: "VariableDeclarator"; 
+    id: Pattern; 
+    init: Expression | null; 
+}
+
+// Example
+{
+  "type": "VariableDeclaration",
+  "declarations": [
+    {
+      "type": "VariableDeclarator",
+      "id": {
+        "type": "Identifier",
+        "name": "a" // 变量名为 a
+      },
+      "init": {
+        "type": "Literal",
+        "value": 1,
+        "raw": "1" // 变量值为 1
+      }
+    },
+    {
+      "type": "VariableDeclarator",
+      "id": {
+        "type": "Identifier",
+        "name": "b" // 变量名为 b
+      },
+      "init": {
+        "type": "Literal",
+        "value": 2,
+        "raw": "2" // 变量值为 2
+      }
+    }
+  ],
+  "kind": "const" // 声明类型为 const
+}
+```
+变量声明语句。
+- type：类型为 `VariableDeclaration`；
+- declarations：变量声明数组，可以同时声明多个变量；
+- kind：声明类型，可以是 `var | let | const` 中的一种；
+
+## Expression
+```ts
+interface Expression extends Node { }
+```
+表达式节点。
+
+### ThisExpression
+```ts
+interface ThisExpression extends Expression {
+  type: "ThisExpression";
+}
+
+// Example
+acorn.parse('this');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "ThisExpression"
+  }
+}
+```
+表示 this。
+
+### ArrayExpression
+```ts
+interface ArrayExpression extends Expression {
+  type: "ArrayExpression";
+  elements: [ Expression | null ];
+}
+
+// Example
+acorn.parse('[1, a, 1 === 1]');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "ArrayExpression",
+    "elements": [
+      {
+        "type": "Literal", // 第一个元素是字面量
+        "value": 1,
+        "raw": "1"
+      },
+      {
+        "type": "Identifier", // 第二个元素是变量标识符
+        "name": "a"
+      },
+      {
+        "type": "BinaryExpression", // 第三个元素是表达式
+        "left": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1"
+        },
+        "operator": "===",
+        "right": {
+          "type": "Literal",
+          "value": 1,
+          "raw": "1"
+        }
+      }
+    ]
+  }
+}
+```
+数组表达式，一般用于直接创建一个数组。
+- type: 类型为 `ArrayExpression`；
+- elements：数组元素集合，元素为表达式类型；
+
+### ObjectExpression
+```ts
+interface ObjectExpression extends Expression {
+  type: "ObjectExpression";
+  properties: [ Property ];
+}
+
+interface Property extends Node {
+  type: "Property";
+  key:  Literal | Identifier;
+  value: Expression;
+  kind: "init" | "get" | "set";
+}
+
+interface FunctionExpression <: Function, Expression { 
+    type: "FunctionExpression"; 
+}
+// Example
+acorn.parse('const obj = {a: 1, 2: b, get c() { }}');
+
+{
+  "type": "VariableDeclaration", // 声明语句
+  "declarations": [
+    {
+      "type": "VariableDeclarator",
+      "id": {
+        "type": "Identifier",
+        "name": "obj" // 变量名为 obj
+      },
+      "init": {
+        "type": "ObjectExpression", // 值为对象表达式
+        "properties": [
+          {
+            "type": "Property",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "key": {
+              "type": "Identifier",
+              "name": "a" // key 值为 a
+            },
+            "value": {
+              "type": "Literal",
+              "value": 1, // 值为 1
+              "raw": "1"
+            },
+            "kind": "init" // 类型为初始化
+          },
+          {
+            "type": "Property",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "key": {
+              "type": "Literal",
+              "value": 2, // key 为 字面量 2
+              "raw": "2"
+            },
+            "value": {
+              "type": "Identifier",
+              "name": "b" // 值为变量标识符 b
+            },
+            "kind": "init" // 类型为初始化
+          },
+          {
+            "type": "Property",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "key": {
+              "type": "Identifier", // key 为变量标识符 c
+              "name": "c"
+            },
+            "kind": "get", // 类型为 getter
+            "value": {
+              "type": "FunctionExpression", // 值是一个函数表达式
+              "id": {},
+              "expression": false,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement", // 函数主体
+                "body": []
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "kind": "const"
+}
+```
+对象表达式，一般用于创建对象。
+- type：类型为 `ObjectExpression`；
+- properties：键值对（对象属性）集合；
+
