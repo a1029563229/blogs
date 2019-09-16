@@ -1,5 +1,8 @@
 # 博客文章收录
 
+## 操作系统
++ [Linux 安装 Node](https://github.com/a1029563229/Blogs/tree/master/Introduction/node)
+
 ## 插件类
 + [Docker 的基础使用](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/use)
 + [Docker + Mysql](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/mysql)
