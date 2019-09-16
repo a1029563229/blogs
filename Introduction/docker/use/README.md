@@ -84,3 +84,16 @@ docker container ls
 ```bash
 docker container ls --all
 ```
+
+- 进入某个容器内部
+```bash
+docker exec -it jenkins /bin/bash
+```
+
+- 安装 vim
+```bash
+#更新源
+apt-get update
+# 安装 vim
+apt-get install vim
+```
