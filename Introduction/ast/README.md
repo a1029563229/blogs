@@ -982,3 +982,361 @@ acorn.parse('const obj = {a: 1, 2: b, get c() { }}');
 - type：类型为 `ObjectExpression`；
 - properties：键值对（对象属性）集合；
 
+### UnaryExpression
+```ts
+interface UnaryExpression extends Expression {
+  type: "UnaryExpression";
+  operator: UnaryOperator;
+  prefix: boolean;
+  argument: Expression;
+}
+
+enum UnaryOperator { 
+    "-" | "+" | "!" | "~" | "typeof" | "void" | "delete" 
+}
+
+// Example
+acorn.parse('+a');
+
+{
+  "type": "ExpressionStatement", // 类型为表达式语句
+  "expression": {
+    "type": "UnaryExpression", // 一元表达式
+    "operator": "+", // 运算符为 + 
+    "prefix": true, // 为前置表达式
+    "argument": {
+      "type": "Identifier", // 操作的表达式为标识符 a
+      "name": "a"
+    }
+  }
+}
+```
+一元运算表达式节点。
+- type：类型为 `UnaryExpression`；
+- operator：运算符；
+- prefix：是否为前缀运算符；
+- argument：执行运算的表达式，如变量标识符；
+
+### UpdateExpression
+```ts
+interface UpdateExpression extends Expression { 
+    type: "UpdateExpression"; 
+    operator: UpdateOperator; 
+    argument: Expression; 
+    prefix: boolean; 
+}  
+
+enum UpdateOperator { 
+  "++" | "--" 
+}
+
+// Example
+acorn.parse('a++');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "UpdateExpression",
+    "operator": "++",
+    "prefix": false,
+    "argument": {
+      "type": "Identifier",
+      "name": "a"
+    }
+  }
+}
+```
+更新运算符，只有 `++` 和 `--`；
+- type：类型为 `UnaryExpression`；
+- operator：运算符，只有 `++` 和 `--`；
+- prefix：是否为前缀运算符；
+- argument：执行运算的表达式，如变量标识符；
+
+### BinaryExpression
+```ts
+interface BinaryExpression extends Expression {
+  type: "BinaryExpression";
+  operator: BinaryOperator;
+  left: Expression;
+  right: Expression;
+}
+
+enum BinaryOperator { 
+    "==" | "!=" | "===" | "!==" 
+         | "<" | "<=" | ">" | ">=" 
+         | "<<" | ">>" | ">>>" 
+         | "+" | "-" | "*" | "/" | "%" 
+         | "|" | "^" | "&" | "in" 
+         | "instanceof" 
+}
+
+// Example
+acorn.parse('a + b');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "BinaryExpression",
+    "left": {
+      "type": "Identifier", // 左侧表达式为标识符 a
+      "name": "a"
+    },
+    "operator": "+", // 运算符为 +
+    "right": {
+      "type": "Identifier", // 右侧表达式为标识符 b
+      "name": "b"
+    }
+  }
+}
+```
+二元运算表达式。
+- type：类型为 `BinaryExpression`；
+- operator：运算符；
+- left：左侧表达式，该表达式也可能是一个 `BinaryExpression`；
+- right：右侧表达式，通常为一个变量标识符；
+
+### AssignmentExpression
+```ts
+interface AssignmentExpression extends Expression {
+  type: "AssignmentExpression"; 
+  operator: AssignmentOperator; 
+  left: Pattern | Expression; 
+  right: Expression; 
+}
+
+enum AssignmentOperator { 
+    "=" | "+=" | "-=" | "*=" | "/=" | "%=" 
+        | "<<=" | ">>=" | ">>>=" 
+        | "|=" | "^=" | "&=" 
+}
+
+// Example
+acorn.parse('a += 1');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "AssignmentExpression",
+    "operator": "+=", // 运算符，我们常把 a += 1 理解为 a = a + 1，其实他们在解构后是不同的结构，前者是 AssignmentExpression，后者是 AssignmentExpression + BinaryExpression
+    "left": {
+      "type": "Identifier", // 左侧为标识符 a
+      "name": "a"
+    },
+    "right": {
+      "type": "Literal", // 右侧为字面量 1
+      "value": 1,
+      "raw": "1"
+    }
+  }
+}
+```
+赋值表达式。
+- type：类型为 `ExpressionStatement`；
+- operator：运算符；
+- left：左侧，通常为一个变量标识符；
+- right：右侧，通常为一个字面量或变量标识符；
+
+### LogicalExpression
+```ts
+interface LogicalExpression extends Expression { 
+    type: "LogicalExpression"; 
+    operator: LogicalOperator; 
+    left: Expression; 
+    right: Expression; 
+}  
+
+enum LogicalOperator { 
+    "||" | "&&" 
+}
+
+// Example
+acorn.parse('a || b');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "LogicalExpression",
+    "left": {
+      "type": "Identifier", // 左侧为标识符 a
+      "name": "a"
+    },
+    "operator": "||", // 运算符为 ||
+    "right": {
+      "type": "Identifier", // 右侧为标识符 b
+      "name": "b"
+    }
+  }
+}
+```
+逻辑表达式/与或表达式；
+- type：类型为 `LogicalExpression`；
+- operator：运算符，为 `||` 或 `&&`；
+- left：左侧表达式；
+- right：右侧表达式；
+
+### ConditionalExpression
+```ts
+interface ConditionalExpression extends Expression {
+  type: "ConditionalExpression"; 
+  test: Expression; 
+  alternate: Expression; 
+  consequent: Expression; 
+}
+
+// Example
+acorn.parse('a ? 1 : 0');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "ConditionalExpression",
+    "test": {
+      "type": "Identifier", // 判断条件为 a
+      "name": "a"
+    },
+    "consequent": {
+      "type": "Literal", // 条件成立返回字面量 1
+      "value": 1,
+      "raw": "1"
+    },
+    "alternate": {
+      "type": "Literal", // 条件不成立返回字面量 2
+      "value": 0,
+      "raw": "0"
+    }
+  }
+}
+```
+三元表达式，即 `boolean ? true : false`；
+- type：类型为 `ConditionalExpression`;
+- test：判断条件；
+- consequent：判断条件为 `true` 时执行的语句；
+- alternate：判断条件为 `false` 时执行的语句；
+
+### MemberExpression
+```ts
+interface MemberExpression extends Expression {
+  type: "MemberExpression"; 
+  object: Expression; 
+  property: Expression; 
+  computed: boolean; 
+}
+
+// Example
+acorn.parse('obj.b');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "MemberExpression", // 成员表达式
+    "object": {
+      "type": "Identifier", // 对象为标识符 obj
+      "name": "obj"
+    },
+    "property": {
+      "type": "Identifier", // 属性为标识符 b
+      "name": "b"
+    },
+    "computed": false // 使用 . 来引用对象
+  }
+}
+```
+成员表达式，通常用于在对象中取某属性的值；
+- type：类型为 `MemberExpression`；
+- object：取值的对象，一般为变量标识符；
+- property：需要获取的对象属性，一般为变量标识符；
+- computed：两种取值方式，该值为 `false` 则是 `obj.a` 形式取值，该值为 `true` 时则为 `obj[a]` 形式取值；
+
+### CallExpression
+```ts
+interface CallExpression extends Expression {
+  type: "CallExpression"; 
+  callee: Expression; 
+  arguments: [ Expression ]; 
+}
+
+// Example
+acorn.parse('fun(a)');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "CallExpression", // 函数调用表达式
+    "callee": {
+      "type": "Identifier", // callee 为一个标识符 fun
+      "name": "fun"
+    },
+    "arguments": [
+      {
+        "type": "Identifier", // 参数为标识符 a
+        "name": "a"
+      }
+    ]
+  }
+}
+```
+函数调用表达式，通常用于调用函数；
+- type：类型为 `CallExpression`；
+- callee：调用的函数本身，一般为标识符，指向一个函数；
+- arguments：参数列表，为表达式的集合；
+
+### SequenceExpression
+```ts
+interface SequenceExpression extends Expression { 
+  type: "SequenceExpression"; 
+  expressions: [ Expression ]; 
+}  
+
+// Example
+acorn.parse('a, b');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "SequenceExpression",
+    "expressions": [
+      {
+        "type": "Identifier",
+        "name": "a"
+      },
+      {
+        "type": "Identifier",
+        "name": "b"
+      }
+    ]
+  }
+}
+```
+逗号分隔符表达式；
+- type：类型为 `ExpressionStatement`；
+- expressions：表达式集合；
+
+### NewExpression
+```ts
+interface NewExpression extends CallExpression { 
+  type: "NewExpression"; 
+}  
+
+// Example
+acorn.parse('new Car()');
+
+{
+  "type": "ExpressionStatement",
+  "expression": {
+    "type": "NewExpression", 
+    "callee": {
+      "type": "Identifier",
+      "name": "Car"
+    },
+    "arguments": []
+  }
+}
+```
+new 表达式，继承于 `CallExpression`；
+- type：类型为 `NewExpression`；
+
+## 结语
+
+其实 AST 语法树的语法远不止上述这些，随着新语法的推出，还有很多新的语法，具体的大家可以在 [MDN 文档](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API) 中进行查阅，感谢您的阅读！
+
+[原文地址，欢迎 Star](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)
