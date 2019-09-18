@@ -26,3 +26,8 @@ docker exec -it mall-mongodb mongo admin
 # 创建用户, 此用户创建成功, 则后续操作都需要用户认证
 db.createUser({user:"root",pwd:"root",roles:[{role:'root',db:'admin'}]});
 ```
+
+- 验证身份
+```bash
+db.auth('root', 'root');
+```
