@@ -2,7 +2,6 @@
 
 我们的客户端项目会经常遇到记录异常日志的需求，国内有不少成熟的平台都提供了解决方案，今天我们的主角是 `Sentry + Javascript`，它的免费版服务已经可以满足中小项目的实际应用。
 
-## 准备工作
 - 注册一个账号
 
 进入 [注册页](https://sentry.io/signup/) 注册一个账号，或者使用 `github` 账号登录。
@@ -39,3 +38,5 @@ myUndefinedFunction();
 ![控制台](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/sentry/2.png)
 
 一个简单的 `Sentry` 服务就已经可以使用了！
+
+[原文地址，欢迎 Star](https://github.com/a1029563229/Blogs/tree/master/Introduction/Sentry)
