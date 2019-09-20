@@ -16,11 +16,15 @@ docker images
 ```bash
 cd ~
 mkdir jenkins_home
+
+# 一个兼容性问题
+chown -R 1000:1000 jenkins_home/
+ls -nd jenkins_home
 ```
 
 - 启动 Jenkins
 ```bash
-docker run -d -p 7000:8080 -p 50000:50000 -v jenkins:/~/jenkins_home -v /etc/localtime:/etc/localtime --name jenkins docker.io/jenkins/jenkins
+docker run -d -p 7000:8080 -p 50000:50000 -v ~/jenkins_home:/var/jenkins_home -v /etc/localtime:/etc/localtime --name jenkins docker.io/jenkins/jenkins
 ```
 参数说明：
   - -d 后台运行镜像
