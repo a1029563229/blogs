@@ -1,5 +1,8 @@
 # 博客文章收录
 
+## 源码笔记
++ [Node - http 模块](https://github.com/a1029563229/Node/tree/master/2)
+
 ## 操作系统
 + [Linux 安装 Node](https://github.com/a1029563229/Blogs/tree/master/Introduction/node)
 
