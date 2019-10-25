@@ -46,3 +46,5 @@
 - 幂
 - sqrt
 - 平方根
+- unexpected
+- 意外
