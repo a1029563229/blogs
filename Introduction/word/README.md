@@ -76,3 +76,5 @@
 - 重构
 - implement
 - 实现
+- division
+- 分治
