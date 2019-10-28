@@ -4,7 +4,7 @@
 + [Node - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
 
 ## 算法
-+ [二分排序](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/Introduction/algorithmic/division)
++ [二分排序](https://github.com/a1029563229/Blogs/tree/master/Introduction/algorithmic/division)
 
 ## 操作系统
 + [Linux 安装 Node](https://github.com/a1029563229/Blogs/tree/master/Introduction/node)
