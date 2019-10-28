@@ -66,3 +66,13 @@
 - 部分
 - semester
 - 学期
+- commission
+- 佣金
+- rate
+- 率
+- distinct
+- 不同
+- refactor
+- 重构
+- implement
+- 实现
