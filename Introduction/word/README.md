@@ -78,3 +78,26 @@
 - 实现
 - division
 - 分治
+- digit
+- 数字
+- character
+- 字符
+- quantifier
+- 量化
+- preceding
+- 前面
+- token
+- 令牌
+- extract
+- 提取、摘录
+- hire
+- 聘请
+- assistant
+- 助理
+- interview
+- 面试
+- candidate
+- 候选人
+- strategy
+- 策略
+- 
