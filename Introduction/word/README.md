@@ -100,4 +100,17 @@
 - 候选人
 - strategy
 - 策略
-- 
+- average
+- 平均
+- rating
+- 评分
+- slug
+- 标签
+- pricing
+- 价钱
+- retail
+- 零售
+- sale
+- 销售
+- upsert
+- 上升
