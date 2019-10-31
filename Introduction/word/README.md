@@ -114,3 +114,17 @@
 - 销售
 - upsert
 - 上升
+- partial
+- 部分的
+- sqrt
+- 平方根
+- capacity
+- 容量
+- facade
+- 正面
+- mediator
+- 中间人
+- singleton
+- 单一
+- monostate
+- 单态
