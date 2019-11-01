@@ -128,3 +128,9 @@
 - 单一
 - monostate
 - 单态
+- alarm
+- 报警
+- turnstile
+- 旋转栅门
+- refund
+- 退还
