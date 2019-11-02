@@ -134,3 +134,15 @@
 - 旋转栅门
 - refund
 - 退还
+- almost
+- 几乎
+- employee
+- 雇员
+- transaction
+- 交易、合同、合约
+- receipt
+- 收据
+- charge
+- 收费
+- affiliation
+- 联系
