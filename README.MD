@@ -1,5 +1,8 @@
 # 博客文章收录
 
+## 杂文
++ [手把手教你用 Node 实现 HTTP 协议（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/http)
+
 ## 源码笔记
 + [Node - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
 
