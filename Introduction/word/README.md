@@ -146,3 +146,43 @@
 - 收费
 - affiliation
 - 联系
+- scanner
+- 扫描器
+- decimal
+- 小数
+- add、subtract、multiply、divide
+- 加减乘除
+- balance
+- 平衡、天平
+- spring
+- 弹性
+- boot
+- 开机
+- cloud
+- 云
+- schedule
+- 时间表、日程
+- Inversion of Control（IoC)
+- 控制反转
+- Dependency Injection（DI）
+- 依赖注入
+- Aspect Oriented programming
+- 面向切面编程
+- expressive
+- 表现型
+- concise
+- 简洁
+- concurrency
+- 并发
+- mechanisms
+- 机制
+- multicore
+- 多核
+- networked
+- 广播
+- flexible
+- 灵活
+- interpreted
+- 解释执行
+- distribution
+- 分配
