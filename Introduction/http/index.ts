@@ -1,21 +1,25 @@
 import * as net from 'net';
+import HttpParser from './src/HttpParser';
 
-const server = net.createServer((c) => {
-  c.on('connect', () => {
+const server = net.createServer((socket) => {
+  socket.on('connect', () => {
     console.log('connect...');
   });
 
-  c.on('end', () => {
+  socket.on('end', () => {
     console.log('end...');
   });
 
-  c.on('data', data => {
+  socket.on('data', (data: Buffer) => {
     const message = data.toString('utf-8');
-    console.log(message);
-    console.log({ message });
+    const httpParser = new HttpParser(message);
+    console.log(httpParser.httpMessage);
+    socket.write(`HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{a:1}`);
+    socket.pipe(socket);
+    socket.end();
   });
 
-  c.on('error', error => {
+  socket.on('error', error => {
     console.log({ error });
   });
 });
