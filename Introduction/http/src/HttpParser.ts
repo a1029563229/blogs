@@ -1,6 +1,6 @@
-type Headers = { [key: string]: string };
+export type Headers = { [key: string]: string };
 
-interface HttpMessage {
+export interface HttpMessage {
   method: string;
   url: string;
   version: string;
