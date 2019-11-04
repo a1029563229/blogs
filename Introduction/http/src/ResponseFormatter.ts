@@ -21,6 +21,10 @@ class ResponseFormatter {
     this.body = body;
   }
 
+  public setHeader(key: string, val: string) {
+    this.headers[key] = val;
+  }
+
   public format(): string {
     const head = `${this.version} ${this.status} ${this.message}`;
     let headers = '';
