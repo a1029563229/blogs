@@ -279,6 +279,12 @@
 - inference
 - 推断
 - either
-- 两者之一
+- 两者之一a
 - term
 - 术语
+- uniform
+- 整齐
+- elapse
+- 过去、流逝
+- union
+- 工会
