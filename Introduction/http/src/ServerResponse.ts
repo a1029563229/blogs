@@ -18,6 +18,7 @@ class ServerResponse {
     const resFormatter = this.resFormatter;
     resFormatter.setStatus(status);
     resFormatter.setBody(body);
+    console.log(resFormatter.format());
     this.socket.write(resFormatter.format());
     this.socket.pipe(this.socket);
     this.socket.end();
