@@ -412,3 +412,7 @@
 - 未来
 - expires
 - 到期
+- vowel
+- 元音
+- Jewel
+- 宝石
