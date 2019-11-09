@@ -18,7 +18,7 @@ net.createServer((socket) => {
 
 在 `data` 事件中所接收到的数据属于字节流数据（Buffer 对象），我们需要使用 `Buffer` 对象自带的 `toString` 方法来进行对字节流的解析，将其转化为 `utf-8` 格式的字符。
 
-然后将转化后的字符串交由我们的 `HttpParser` 处理，然后将对象挂载在 `http.createServer((req, res) => {})` 中的 `req` 上，同时可以通过 `res.end(message)` 进行报文响应。
+然后将转化后的字符串交由我们的 `HttpParser` 处理，然后将序列化的请求对象挂载在 `http.createServer((req, res) => {})` 中的 `req` 上，同时可以通过 `res.end(message)` 进行报文响应。
 
 我们将上述步骤解析一下可得知，我们还需要两个类，一个用来承载 Request 信息，一个用于处理响应结果的 Response，那我们现在来新建这两个类：
 
