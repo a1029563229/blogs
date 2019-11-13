@@ -416,3 +416,5 @@
 - 元音
 - Jewel
 - 宝石
+- Deadline
+- 期限
