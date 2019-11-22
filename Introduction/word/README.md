@@ -584,3 +584,15 @@
 - 底层、基础
 - delimiter
 - 定界符
+- communication
+- 通讯
+- trailing slash
+- 斜杠
+- instead of
+- 而不是
+- various
+- 各种
+- populates
+- 转移
+- embedded
+- 嵌入式的
