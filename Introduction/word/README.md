@@ -702,3 +702,45 @@
 - 引导
 - Interactive
 - 交互
+- scenario
+- 脚本
+- regular
+- 常规
+- properly
+- 良好
+- bootcamp
+- 训练营
+- deployment
+- 部署
+- once you have
+- 一旦有了
+- to do so
+- 这么做
+- instructs
+- 指示、指令
+- onto
+- 到 ... 上
+- mentioned
+- 提到
+- individual
+- 各个
+- hosting
+- 托管、主办
+- continuously
+- 一直
+- mechanism
+- 机制
+- maintenance
+- 保持
+- recovery
+- 复苏
+- additional
+- 额外
+- performed
+- 执行、提供
+- suitable
+- 合适
+- Estimated
+- 预计
+- terminated
+- 终止
