@@ -822,3 +822,7 @@
 - 能够理解的
 - except
 - 除了
+- external
+- 额外的
+- stage
+- 舞台、阶段

@@ -97,3 +97,18 @@ apt-get update
 # 安装 vim
 apt-get install vim
 ```
+
+- 其他指令
+```bash
+# 查看容器日志
+docker logs [OPTIONS] CONTAINER
+  Options:
+        --details        显示更多的信息
+    -f, --follow         跟踪实时日志
+        --since string   显示自某个timestamp之后的日志，或相对时间，如42m（即42分钟）
+        --tail string    从日志末尾显示多少行日志， 默认是all
+    -t, --timestamps     显示时间戳
+        --until string   显示自某个timestamp之前的日志，或相对时间，如42m（即42分钟）
+
+
+```

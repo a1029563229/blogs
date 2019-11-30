@@ -82,6 +82,18 @@ RUN npm install
 CMD [ "npm", "start" ]
 ```
 
+最终的完整版应该是这样的：
+
+```dockerfile
+FROM node:10.16.3
+
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+
+CMD [ "npm", "start" ]
+```
+
 ### 怎么将我们的应用打包成 Docker 镜像？
 
 进入你的项目目录，运行一行命令
