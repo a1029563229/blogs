@@ -39,7 +39,7 @@ docker image push <Docker Hub ID>/helloworld:1.0
 
 ![上传成功](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/Jietu20191130-114310.png)
 
-## 拉取镜像
+## 第二步：拉取镜像
 
 拉取镜像这一步就比较简单了，想象你的镜像是一个著名的镜像，类似于 mysql、Node 这种大镜像，你现在就像使用知名镜像一样，使用自己的镜像吧！
 
