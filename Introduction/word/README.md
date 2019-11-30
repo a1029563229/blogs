@@ -796,3 +796,19 @@
 - 绑定
 - troubleshooting
 - 故障排除
+- explore
+- 探索
+- extensive
+- 广泛
+- familiar
+- 熟悉
+- worth
+- 值得
+- mentioning
+- 提到
+- omitted
+- 忽略
+- desired
+- 想要的
+- loose coupling
+- 松耦合
