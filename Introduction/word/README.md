@@ -812,3 +812,13 @@
 - 想要的
 - loose coupling
 - 松耦合
+- inspect
+- 检查
+- Gateway
+- 网关
+- framework
+- 框架
+- understandable
+- 能够理解的
+- except
+- 除了
