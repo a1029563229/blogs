@@ -826,3 +826,13 @@
 - 额外的
 - stage
 - 舞台、阶段
+- underlying
+- 底层
+- temp
+- 温度
+- Celsius
+- 摄氏
+- Fahrenheit
+- 华氏温度
+- boiling
+- 沸腾
