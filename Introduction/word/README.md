@@ -836,3 +836,15 @@
 - 华氏温度
 - boiling
 - 沸腾
+- repository
+- 仓库
+- closures
+- 闭包
+- geometry
+- 几何
+- utilization
+- 利用率
+- quality
+- 质量
+- elegantly
+- 优雅的
