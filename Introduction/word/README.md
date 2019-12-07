@@ -972,3 +972,19 @@
 - 方便
 - sense
 - 感觉
+- garbage
+- 垃圾
+- unreachable
+- 无法到达
+- confuse
+- 迷惑
+- broadcast
+- 广播
+- Unidirectional
+- 单向
+- break up
+- 分解
+- pieces
+- 部分
+- divides
+- 划分
