@@ -1062,3 +1062,17 @@
 - 适当
 - nicer
 - 更好
+- rather than
+- 而不是
+- respond
+- 响应
+- profitable
+- 合适、合算的
+- intrusive
+- 侵入式
+- collaborating
+- 合作
+- notion
+- 概念
+- situation 
+- 情况
