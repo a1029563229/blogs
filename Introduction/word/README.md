@@ -1076,3 +1076,13 @@
 - 概念
 - situation 
 - 情况
+- deposit
+- 存款
+- predict 
+- 预测
+- Intuitively
+- 直观地
+- variation
+- 变异、变动
+- outcomes
+- 结果

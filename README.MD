@@ -8,6 +8,9 @@
 + [使用 Docker 构建一个容器应用（二）](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image/README2.md)
 + [使用 Jenkins + Docker 完成自动化部署（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/jenkins/README.md)
 
+## Go
++ [使用 Jenkins + Docker 完成自动化部署（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/skill/README.md)
+
 ## 源码笔记
 + [Node - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
 
