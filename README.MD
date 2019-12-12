@@ -9,7 +9,7 @@
 + [使用 Jenkins + Docker 完成自动化部署（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/jenkins/README.md)
 
 ## Go
-+ [使用 Jenkins + Docker 完成自动化部署（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/skill/README.md)
++ [Go 实用小技巧](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/skill/README.md)
 
 ## 源码笔记
 + [Node - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
