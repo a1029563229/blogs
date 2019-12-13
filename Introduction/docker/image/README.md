@@ -43,9 +43,10 @@ app.listen(8000, () => {
 不，它没有，所以我们第一步是构建一个支持 Node 应用运行的环境，那我们就需要先在这个容器中放进去一个 Node，怎么放进去呢，一个简单的命令就可以了，在 `Dockerfile` 中新增一行：
 
 ```dockerfile
-# 这句命令的作用是让我们的镜像在 node:10.16.3 镜像的基础上开始
+# 这句命令的作用是让我们的镜像在 node:10.16-alpine 镜像的基础上开始
+# alpine 的包会比较小一点，功能也会少一点，但是已经可以满足我们的需求了
 # 站在巨人的肩膀上
-FROM node:10.16.3
+FROM node:10.16-alpine
 ```
 
 ### 我们需要在容器里做什么？
@@ -85,7 +86,7 @@ CMD [ "npm", "start" ]
 最终的完整版应该是这样的：
 
 ```dockerfile
-FROM node:10.16.3
+FROM node:10.16-alpine
 
 WORKDIR /usr/src/app
 COPY . .
@@ -106,9 +107,9 @@ docker image build -t myapp:1.0 .
 
 在打包完成后，我们用 `docker image ls` 命令来看看这孩子长啥样
 
-![myapp 镜像文件](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/Jietu20191127-100355@2x.png)
+![myapp 镜像文件](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/Jietu20191213-095021@2x.png)
 
-它只有 907M，相对于一个 VM 系统来说，它轻的像一根羽毛，而且还可以更小！
+它只有 79.6M，相对于一个 VM 系统来说，它轻的像一根羽毛，而且还可以更小！
 
 ## 运行你的 Docker 容器！
 
@@ -132,6 +133,6 @@ docker container run --publish 8888:8000 --detach --name app myapp:1.0
 
 ![它来了](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/Jietu20191127-102039.png)
 
-[原文地址，欢迎 Star](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image)
+[原文地址，欢迎收录](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image)
 
-[源码地址，欢迎 Star](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image)
+[源码地址，欢迎收录](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image)
