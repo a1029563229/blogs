@@ -1086,3 +1086,37 @@
 - 变异、变动
 - outcomes
 - 结果
+- obviously
+- 明显
+- approach
+- 方法
+- confined
+- 封闭的
+- deposits
+- 存款
+- balances
+- 余额
+- serial
+- 连续
+- mutual exclusion
+- 互斥
+- acquire
+- 获得
+- encapsulates
+- 封装
+- critical
+- 严重、紧急
+- especially
+- 特别
+- excessive
+- 过多
+- transiently
+- 暂时
+- wonder
+- 惊讶
+- After all
+- 毕竟、终究
+- dozens
+- 许多
+- efficiency
+- 效率
