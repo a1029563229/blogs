@@ -10,6 +10,7 @@
 
 ## Go
 + [Go 实用小技巧](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/skill/README.md)
++ [Go 语言圣经-习题汇总（Go 程序设计语言/The Go Programming Language）](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/The-Go-Programming-Practice/README.md)
 
 ## 源码笔记
 + [Node - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
