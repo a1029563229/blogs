@@ -24,12 +24,21 @@
 - [2.2：写一个类似于 cf 的通用的单位转换程序，从命令行参数或者标准输入（如果没有参数）获取数字，然后将每一个数字转换为以摄氏温度和华氏温度表示的温度，以英寸和米表示的长度单位，以磅和千克表示的重量，等等。](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/2/2.2)
 - [2.3：使用循环重写 PopCount 来代替单个表达式。对比两个版本的效率。](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/2/2.3)
 
+### 第三章：基本数据
+
+- [3.10：编写一个非递归的 comma 函数，运用 bytes.Buffer，而不是简单的字符串拼接](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/3/3.10)
+- [3.11：增强 comma 函数的功能，使其正确处理浮点数，以及带有可选正负号的数字](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/3/3.11)
+- [3.12：编写一个函数判断两个字符串是否同文异构，也就是，它们都含有相同的字符但排列顺序不同](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/3/3.12)
+- [3.13：用尽可能简洁的方法声明从 KB、MB 直到 YB 的常量](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/3/3.13)
+
 ## 无原书版
 
 暂无
 
 
 </br>
+
+QQ 学习交流群：646026429
 
 [原文地址，欢迎收录](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/The-Go-Programming-Practice)
 
