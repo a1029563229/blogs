@@ -38,7 +38,7 @@
 - [4.4：编写一个函数 rotate，实现一次遍历就可以完成元素旋转。](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.4)
 - [4.5：编写一个就地处理函数，用于去除 []string slice 中相邻的重复字符串元素](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.5)
 - [4.6：编写一个就地处理函数，用于将一个 UTF-8 编码的字节 slice 中所有相邻的 Unicode 空白字符（查看 unicode.IsSpace）缩减为一个 ASCII 空白字符](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.6)
-- [4.7：修改函数 reverse，来翻转一个 UTF-8 编码的字符串中的字符元素，传入参数是该字符串对应的字节 slice 类型（[]byte）。你可以做到不需要重新分配内存就实现该功能吗？]
+- [4.7：修改函数 reverse，来翻转一个 UTF-8 编码的字符串中的字符元素，传入参数是该字符串对应的字节 slice 类型（[]byte）。你可以做到不需要重新分配内存就实现该功能吗？](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.7)
 
 ## 无原书版
 
