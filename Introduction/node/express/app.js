@@ -1,9 +1,11 @@
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
+const cors = require("cors");
 
 const app = express();
 
+app.use(cors())
 app.use('/static', express.static('static'));
 
 app.get("/", (req, res) => {
@@ -27,10 +29,27 @@ app.get("/cool", (req, res) => {
 })
 
 app.get("/product/list", (req, res) => {
-  const { data } = axios.post("http://dev-api.jt-gmall.com/mall", {
-    query: `{ counterCategoryList (page: 1, pageSize: 10) { total page pageSize } }`
-  })
-})
+  const page = req.query.page || 1;
+  const pageSize = req.query.pageSize || 10;
+  axios.post("http://dev-api.jt-gmall.com/mall", {
+    query: `
+    { counterGoodsList (page: ${page}, pageSize: ${pageSize}) 
+      { 
+        total 
+        page 
+        pageSize 
+        items {
+          _id
+          name
+          price
+        }
+      } 
+    }`
+  }).then(({ data }) => {
+    res.setHeader("Content-Type", "application/json")
+    res.end(JSON.stringify(data))
+  });
+});
 
 app.listen(8888, () => {
   console.log("server is listening in http://localhost:8888")
