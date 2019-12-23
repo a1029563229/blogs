@@ -1,0 +1,14 @@
+{
+  "name": "expressUse",
+  "version": "1.0.0",
+  "description": "在前端平时的工作中，对后端的了解比较少，但是应该都知道 `Node` 可以用于写后端，今天这篇文章来介绍一下 `Node` 的著名框架 `Express` 的基本使用，从应用起步，去学习 `Node`。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
