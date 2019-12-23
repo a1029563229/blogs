@@ -21,7 +21,7 @@
 
 ## 案例展示：路由选择
 
-我们在这个案例中画出四朵金花，然后通过不同的路由访问不同状态的金花。
+我们在这个案例中画出四朵小花，然后通过不同的路由访问不同状态的小花。
 
 <br />
 <center class="half">
@@ -63,9 +63,9 @@ app.listen(8888, () => {
 
 我们是怎么做到的，是通过 `app.get("/", callback)` 执行的回调函数返回的结果，那回调函数参数中的 `req` 和 `res` 又是什么呢？本文不作深入讲解，有兴趣的童鞋可以看看这篇 [手把手教你用 Node 实现 HTTP 协议](https://juejin.im/post/5dc020cc5188255faf60b372) 这里面对 `req` 和 `res` 的实现介绍的比较仔细，看完对 `HTTP` 协议的掌握也能更上一层楼。
 
-即使不了解这些细节，我们也可以继续往下讲，你只需要把 `res.end()` 简单理解为一个向客户端发送数据的 `API` 即可。根据这个特点，我们就知道我们的四大金花要怎么做了，我们需要先定义四个路由，然后每个路由执行不同的回调函数，返回对应的金花即可。
+即使不了解这些细节，我们也可以继续往下讲，你只需要把 `res.end()` 简单理解为一个向客户端发送数据的 `API` 即可。根据这个特点，我们就知道我们的四朵小花要怎么做了，我们需要先定义四个路由，然后每个路由执行不同的回调函数，返回对应的小花即可。
 
-> Tips：[点击下载四大金花源码](https://github.com/a1029563229/Blogs/tree/master/Introduction/node/express/static/)，将源码下载后放置在文件夹的 `static` 目录下即可。
+> Tips：[点击下载四朵小花源码](https://github.com/a1029563229/Blogs/tree/master/Introduction/node/express/static/)，将源码下载后放置在文件夹的 `static` 目录下即可。
 
 ![目录截图](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/Jietu20191223-152716@2x.png)
 
@@ -92,7 +92,7 @@ app.get("/", (req, res) => {
   res.end("Hello Express");
 });
 
-// 新增了四个路由，用于访问不同状态的金花
+// 新增了四个路由，用于访问不同状态的小花
 app.get("/happy", (req, res) => {
   // res.SendFile 响应一个本地文件
   // path.join 用于拼接一个路径
@@ -195,7 +195,7 @@ app.get("/product/list", (req, res) => {
 
 ![响应结果](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/Jietu20191223-172610.png)
 
-这就是 `Node` 的中间层功能，而我们只需要加一行代码，就可以解决跨域问题。
+成功啦！这就是 `Node` 的中间层功能，而我们只需要加一行代码，就可以解决跨域问题。
 
 ## 案例展示：解决跨域问题
 
@@ -221,4 +221,4 @@ app.use(cors());
 
 [会跳舞的小花 源码地址](https://www.html5tricks.com/html5-svg-dancing-flower.html)
 
-[原文地址，欢迎收藏](https://github.com/a1029563229/blogs/blob/master/Introduction/node/express/README.md)
+[原文地址，欢迎收藏](https://github.com/a1029563229/blogs/blob/master/Introduction/node/express)
