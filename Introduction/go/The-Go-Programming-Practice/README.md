@@ -31,6 +31,15 @@
 - [3.12：编写一个函数判断两个字符串是否同文异构，也就是，它们都含有相同的字符但排列顺序不同](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/3/3.12)
 - [3.13：用尽可能简洁的方法声明从 KB、MB 直到 YB 的常量](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/3/3.13)
 
+### 第四章：复合数据类型
+
+- [4.2：编写一个程序，用于在默认情况下输出其标准输入的 SHA256 散列，但也支持一个输出 SHA384 或 SHA512 散列的命令行标记](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.2)
+- [4.3：重写函数 reverse，使用数组指针作为参数而不是 slice](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.3)
+- [4.4：编写一个函数 rotate，实现一次遍历就可以完成元素旋转。](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.4)
+- [4.5：编写一个就地处理函数，用于去除 []string slice 中相邻的重复字符串元素](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.5)
+- [4.6：编写一个就地处理函数，用于将一个 UTF-8 编码的字节 slice 中所有相邻的 Unicode 空白字符（查看 unicode.IsSpace）缩减为一个 ASCII 空白字符](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.6)
+- [4.7：修改函数 reverse，来翻转一个 UTF-8 编码的字符串中的字符元素，传入参数是该字符串对应的字节 slice 类型（[]byte）。你可以做到不需要重新分配内存就实现该功能吗？](https://github.com/a1029563229/The-Go-Programming-Language/tree/master/practice/4/4.7)
+
 ## 无原书版
 
 暂无

@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  width: 100vw;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  background-color: #ffeaf1;
+}
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+svg {
+  width:600px;
+  height: 600px;
+}
+.buttons {
+  display: flex;
+  flex-wrap:wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+button {
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  margin: 0 10px 10px 0;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-size: 20px;
+  font-family: "Comfortaa", sans-serif;
+  border-radius: 4px;
+  transition: all 0.25s ease;
+  &#btn-happy {
+    background-color: #eb584d;
+    &:hover {
+      background-color: darken(#eb584d, 10%);
+    }
+  }
+  &#btn-cool {
+    background-color: #007185;
+    &:hover {
+      background-color: darken(#007185, 10%);
+    }
+  }
+  &#btn-sexy {
+    background-color: #e5004e;
+    &:hover {
+      background-color: darken(#e5004e, 10%);
+    }
+  }
+  &#btn-crazy {
+    background-color: #883277;
+    &:hover {
+      background-color: darken(#883277, 10%);
+    }
+  }
+}
+
+button:last-child {
+  margin-right: 0;
+}
+button:focus {
+  outline: none;
+  border: 0;
+}
