@@ -35,3 +35,6 @@
 + [图床工具（上传工具）的使用](https://github.com/a1029563229/Blogs/tree/master/Plugins/Upload)
 + [图床工具的实现-基础篇](https://github.com/a1029563229/Blogs/tree/master/Plugins/Upload/Source)
 
+## 笔记（摘录）
+
++ [CDN 加速原理](https://github.com/a1029563229/Blogs/tree/master/excerpt/cdn)
