@@ -77,28 +77,18 @@ export default Home;
 ```js
 // ./pages/vegetables/index.jsx
 import React, { useState, useEffect } from "react";
-import { List, Avatar } from "antd";
+import { Table, Avatar } from "antd";
+
+const { Column } = Table;
 
 const Vegetables = () => {
-  const [data, setData] = useState([1, 2, 3]);
-  useEffect(() => {
-    // ...fetchData
-  }, [])
+  const [data, setData] = useState([{ _id: 1 }, { _id: 2 }, { _id: 3 }]);
 
   return <section style={{ padding: 20 }}>
-    <List
-      itemLayout="horizontal"
-      dataSource={data}
-      renderItem={item => (
-        <List.Item>
-          <List.Item.Meta
-            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-            title={<a href="https://ant.design">{item.title}</a>}
-            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-          />
-        </List.Item>
-      )}
-    />
+    <Table dataSource={data} pagination={false} >
+      <Column render={text => <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />} />
+      <Column key="_id" />
+    </Table>
   </section>
 }
 
@@ -134,9 +124,105 @@ export default class MyApp extends App {
 
 这个文件是 `next` 官方指定用来初始化的一个文件，具体的内容我们后面会提到。现在再看看页面，这个时候你的布局应该就好看多了。
 
-![服务端渲染页面](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/1.png)
+![页面效果](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/3.png)
 
-当然这是静态数据，打开控制台也可以看到数据都已经被完整渲染在 `html` 中，那我们现在就开始获取异步数据，看看是否还可以正常渲染。此时需要用到 `next` 提供的一个 API，那就是 `getInitialProps`，你可以简单理解为这是一个在服务端执行生命周期函数，主要用于获取数据，在 `./pages/_app.jsx` 中添加以下内容。
+当然这是静态数据，打开控制台也可以看到数据都已经被完整渲染在 `html` 中，那我们现在就开始获取异步数据，看看是否还可以正常渲染。此时需要用到 `next` 提供的一个 API，那就是 `getInitialProps`，你可以简单理解为这是一个在服务端执行生命周期函数，主要用于获取数据，在 `./pages/_app.jsx` 中添加以下内容，最终修改后的结果如下：
 
 > 由于我们的代码可能运行在服务端也可能运行在客户端，但是服务端与不同客户端环境的不同导致一些 API 的不一致，`fetch` 就是其中之一，在 `Nodejs` 中并没有实现 `fetch`，所以我们需要安装一个插件 `isomorphic-fetch` 以进行自动的兼容处理。
+> 
+> 请求数据的格式为 `graphql`，有兴趣的童鞋可以自己去了解一下，请求数据的地址是我自己的小站，方便大家做测试使用的。
 
+
+```js
+import React, { useState } from "react";
+import { Table, Avatar } from "antd";
+import fetch from "isomorphic-fetch";
+
+const { Column } = Table;
+const Vegetables = ({ vegetableList }) => {
+  if (!vegetableList) return null;
+
+  // 设置页码信息
+  const [pageInfo, setPageInfo] = useState({
+    current: vegetableList.page,
+    pageSize: vegetableList.pageSize,
+    total: vegetableList.total
+  });
+  // 设置列表信息
+  const [data, setData] = useState(() => vegetableList.items);
+
+  return <section style={{ padding: 20 }}>
+    <Table rowKey="_id" dataSource={data} pagination={pageInfo} >
+      <Column dataIndex="poster" render={text => <Avatar src={text} />} />
+      <Column dataIndex="name" />
+      <Column dataIndex="price" render={text => <>￥ {text}</>} />
+    </Table>
+  </section>
+}
+
+const fetchVegetable = (page, pageSize) => {
+  return fetch("http://dev-api.jt-gmall.com/mall", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // graphql 的查询风格
+    body: JSON.stringify({ query: `{ vegetableList (page: ${page}, pageSize: ${pageSize}) { page, pageSize, total, items { _id, name, poster, price } } }` })
+  }).then(res => res.json());
+}
+
+Vegetables.getInitialProps = async ctx => {
+  const result = await fetchVegetable(1, 10);
+
+  // 将查询结果返回，绑定在 props 上
+  return result.data;
+}
+
+export default Vegetables;
+```
+
+效果图如下，数据已经正常显示
+
+![效果图](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/4.png)
+
+下面我们来好好捋一捋这一块的逻辑，如果打开控制台刷新页面会发现在 `network` 控制台看不到这个请求的内容，这是因为我们的请求是在服务端发起的，并且在下图也可以看出，所有的数据也在 `html` 中被渲染，所以此时的页面可以正常被爬虫抓取。
+
+那么由此就可以解答上面提到的第二个问题，`服务端渲染对首屏加载的渲染提升体现在何处？`，答案是以下两点：
+
+  1. `html` 中直接包含了数据，客户端可以直接渲染，无需等待异步 `ajax` 请求导致的白屏/空白时间，一次渲染完毕；
+  2. 由于 `ajax` 在服务端发起，我们可以在前端服务器与后端服务器之间搭建快速通道（如内网通信），大幅度提升通信/请求速度；
+
+我们现在来完成第二章的最后内容，`分页数据的加载`。服务端渲染的初始页面数据由服务端执行请求，而后续的请求（如交互类）都是由客户端继续完成。
+
+我们希望能实现分页效果，那么只需要添加事件监听，然后处理事件即可，代码实现如下：
+
+```js
+// ...
+
+const Vegetables = ({ vegetableList }) => {
+  if (!vegetableList) return null;
+
+  const fetchHandler = async page => {
+    if (page !== pageInfo.current) {
+      const result = await fetchVegetable(page, 10);
+      const { vegetableList } = result.data;
+      setData(() => vegetableList.items);
+      setPageInfo(() => ({
+        current: vegetableList.page,
+        pageSize: vegetableList.pageSize,
+        total: vegetableList.total,
+        onChange: fetchHandler
+      }));
+    }
+  }
+  // 设置页码信息
+  const [pageInfo, setPageInfo] = useState({
+    current: vegetableList.page,
+    pageSize: vegetableList.pageSize,
+    total: vegetableList.total,
+    onChange: fetchHandler
+  });
+
+  //...
+}
+```
