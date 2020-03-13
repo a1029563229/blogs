@@ -1,14 +1,14 @@
 # React 服务端渲染实战，Next 最佳实践
 
-服务端渲染有两个特点：
+开门见山的说，服务端渲染有两个特点：
   - 响应快，用户体验好，首屏渲染快
   - 对搜索引擎友好，搜索引擎爬虫可以看到完整的程序源码，有利于SEO
 
 如果你的站点或者公司未来的站点需要用到服务端渲染，那么本文将会是非常适合你的一篇入门实战实践教学。本文采用 `next` 框架进行服务器渲染框架的搭建，最终将完成几个目标：
   1. 项目结构的划分；
-  2. 服务端渲染的网站；
-  3. 登录鉴权以及路由的处理；
-  4. 对报错信息的处理；
+  2. SEO 优化以及首屏加载速度的提升；
+  4. 登录鉴权以及路由的处理；
+  5. 对报错信息的处理；
 
 本文的最终目标是所有人都能跟着这篇教程搭建自己的（第）一个服务端渲染项目，那么，开始吧。
 
@@ -48,17 +48,21 @@ export default Home;
 
 我们运行 `npm start` 启动项目并打开 `http://localhost:3000`，此时可以看到 `Hello Next!` 被显示在页面上了。
 
-我们第一步已经完成，但是我们会感觉这和我们平时的写法差异不大，那么实现上有什么差异吗？在打开控制台查看差异之前，我们先思考一个问题，SEO 的优化是怎么做到的，我们需要站在爬虫的角度思考一下，爬虫爬取的是网络请求获取到的 `html`，`一般来说（大部分）`的爬虫并不会去执行或者等待 Javascript 的执行，所以说网络请求拿到的 `html` 就是他们爬取的 `html`。
+我们第一步已经完成，但是我们会感觉这和我们平时的写法差异不大，那么实现上有什么差异吗？
+
+在打开控制台查看差异之前，我们先思考一个问题，`SEO 的优化`是怎么做到的，我们需要站在`爬虫的角度`思考一下，爬虫爬取的是网络请求获取到的 `html`，`一般来说（大部分）`的爬虫并不会去执行或者等待 Javascript 的执行，所以说网络请求拿到的 `html` 就是他们爬取的 `html`。
 
 我们先打开一个普通的 `React` 页面（客户端渲染），打开控制台，查看 `network` 中，对主页的网络请求的响应结果如下：
 
 ![客户端渲染页面](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/1.png)
 
-我们从图中可以看出，客户端渲染的 `React` 页面只有一个 `id="app"` 的 `div`，它作为容器承载渲染 `react` 执行后的结果（虚拟 DOM 树），而普通的爬虫只能爬取到一个 `id="app"` 的空标签，爬取不到任何内容。我们再看看由服务端渲染，也就是我们刚才的 `next` 页面返回的内容是什么：
+我们从图中可以看出，客户端渲染的 `React` 页面只有一个 `id="app"` 的 `div`，它作为容器承载渲染 `react` 执行后的结果（虚拟 DOM 树），而普通的爬虫只能爬取到一个 `id="app"` 的空标签，爬取不到任何内容。
 
-![服务端渲染页面](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/1.png)
+我们再看看由服务端渲染，也就是我们刚才的 `next` 页面返回的内容是什么：
 
-这样看起来就很清楚了，爬虫从客户端渲染的页面中只能爬取到一个无信息的空标签，而在服务端渲染的页面中却可以爬取到有价值的信息内容，这就是服务端渲染对 SEO 的优化。那么在这里再提出两个问题：
+![服务端渲染页面](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/2.png)
+
+这样看起来就很清楚了，爬虫从客户端渲染的页面中只能爬取到一个`无信息的空标签`，而在服务端渲染的页面中却可以爬取到`有价值的信息内容`，这就是服务端渲染对 SEO 的优化。那么在这里再提出两个问题：
   1. 服务端渲染可以对 `AJAX` 请求的数据也进行 SEO 优化吗？
   2. 服务端渲染对首屏加载的渲染提升体现在何处？
 
@@ -66,11 +70,13 @@ export default Home;
 
 ## 对 AJAX 异步数据的 SEO 优化
 
-本文的目的不止是教会你如何使用，还希望能够给大家带来一些认知上的提升，所以会涉及到一些知识点背后的探讨。我们先回顾第一章的问题，`服务端渲染可以对 AJAX 请求的数据也进行 SEO 优化吗？`，答案是可以的，那么如何实现，我们先捋一捋这个思路。
+本文的目的不止是教会你如何使用，还希望能够给大家带来一些认知上的提升，所以会涉及到一些知识点背后的探讨。
+
+我们先回顾第一章的问题，`服务端渲染可以对 AJAX 请求的数据也进行 SEO 优化吗？`，答案是可以的，那么如何实现，我们先捋一捋这个思路。
 
 首先，我们知道要优化 SEO，就是要给爬虫爬取到有用的信息，而我们不能控制爬虫等待我们的 `AJAX` 请求完毕再进行爬取，所以我们需要直接提供给爬虫一个完整的包含数据的 `html` 文件，怎么给？答案已经呼之欲出，对应我们的主题 `服务端渲染`，我们需要在服务端完成 `AJAX` 请求，并且将数据填充在 `html` 中，最后将这个完整的 `html` 让爬虫爬取。
 
-> 知识点补充: 谁可以做到执行 `js` 文件，完成 `ajax` 请求，并且将内容按照预设逻辑填充在 `html` 中，那便是浏览器的 `js 引擎`，谷歌使用的是 `v8` 引擎，而 `Nodejs` 内置也是 `v8` 引擎，所以其实 `next` 内部也是利用了 `Nodejs` 的强大特性（可运行在服务端、可执行 `js` 代码）完成了服务端渲染的功能。
+> 知识点补充: 可以做到执行 `js` 文件，完成 `ajax` 请求，并且将内容按照预设逻辑填充在 `html` 中，需要浏览器的 `js 引擎`，谷歌使用的是 `v8` 引擎，而 `Nodejs` 内置也是 `v8` 引擎，所以其实 `next` 内部也是利用了 `Nodejs` 的强大特性（可运行在服务端、可执行 `js` 代码）完成了服务端渲染的功能。
 
 下面开始实战部分，我们新建文件 `./pages/vegetables/index.jsx`，对应的页面是 `http://localhost:3000/vegetables`
 
@@ -185,7 +191,7 @@ export default Vegetables;
 
 ![效果图](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/4.png)
 
-下面我们来好好捋一捋这一块的逻辑，如果打开控制台刷新页面会发现在 `network` 控制台看不到这个请求的内容，这是因为我们的请求是在服务端发起的，并且在下图也可以看出，所有的数据也在 `html` 中被渲染，所以此时的页面可以正常被爬虫抓取。
+下面我们来好好捋一捋这一块的逻辑，如果你此时打开控制台刷新页面会发现在 `network` 控制台看不到这个请求的相关信息，这是因为我们的请求是在服务端发起的，并且在下图也可以看出，所有的数据也在 `html` 中被渲染，所以此时的页面可以正常被爬虫抓取。
 
 那么由此就可以解答上面提到的第二个问题，`服务端渲染对首屏加载的渲染提升体现在何处？`，答案是以下两点：
 
@@ -226,3 +232,187 @@ const Vegetables = ({ vegetableList }) => {
   //...
 }
 ```
+
+![html](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/5.png)
+
+![数据翻页](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/6.png)
+
+到这里，大家应该对 `next` 和服务端渲染已经有了一个初步的了解。服务端渲染简单点说就是在服务端执行 `js`，将 `html` 填充完毕之后再将完整的 `html` 响应给客户端，所以服务端由 `Nodejs` 来做再合适不过，`Nodejs` 天生就有执行 `js` 的能力。
+
+我们下一章将讲解如何使用 `next` 搭建一个需要鉴权的页面以及鉴权失败后的自动跳转问题，如有需要请继续关注本文更新。
+
+[本教程源码](https://github.com/a1029563229/react-ssr-tutorial)
+
+## 路由拦截以及鉴权处理
+
+我们在工作中经常会遇到路由拦截和鉴权问题的处理，客户端渲染时，我们一般都是将鉴权信息存储在 `cookie、localStorage` 进行本地持久化，而服务端中没有 `window` 对象，在 `next` 中我们又该如何处理这个问题呢？
+
+我们先来规划一下我们的目录，我们会有三个路由，分别是：
+  - 不需要鉴权的 `vegetables` 路由，里面包含了一些所有人都可以访问的实时菜价信息；
+  - 不需要鉴权的 `login` 路由，登录后记录用户的登录信息；
+  - 需要鉴权的 `user` 路由，里面包含了登录用户的个人信息，如头像、姓名等，如果未登录跳转到 `user` 路由则触发自动跳转到 `login` 路由；
+
+我们先对 `./pages/_app.jsx` 进行一些改动，加上一个导航栏，用于跳转到对应的这几个页面，添加以下内容：
+
+```js
+//...
+import { Menu } from 'antd';
+import Link from 'next/link';
+
+export default class MyApp extends App {
+  //...
+
+  render() {
+    const { Component, pageProps } = this.props
+    return <>
+      <Menu mode="horizontal">
+          <Menu.Item key="vegetables"><Link href="/vegetables"><a>实时菜价</a></Link></Menu.Item>
+          <Menu.Item key="user"><Link href="/user"><a>个人中心</a></Link></Menu.Item>
+      </Menu>
+      <Component {...pageProps} />
+    </>
+  }
+}
+```
+
+![数据翻页](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/7.png)
+
+加上导航栏以后，效果如上图。如果这时候你点击个人中心会出现 `404` 的情况，那是因为我们还没有创建这个页面，我们现在来创建 `./pages/user/index.jsx`：
+
+```js
+// ./pages/user/index.jsx
+
+import React from "react";
+import { Descriptions, Avatar } from 'antd';
+import fetch from "isomorphic-fetch";
+
+const User = ({ userInfo }) => {
+  if (!userInfo) return null;
+
+  const { nickname, avatarUrl, gender, city } = userInfo;
+  return (
+    <section style={{ padding: 20 }}>
+      <Descriptions title={`欢迎你 ${nickname}`}>
+        <Descriptions.Item label="用户头像"><Avatar src={avatarUrl} /></Descriptions.Item>
+        <Descriptions.Item label="用户昵称">{nickname}</Descriptions.Item>
+        <Descriptions.Item label="用户性别">{gender ? "男" : "女"}</Descriptions.Item>
+        <Descriptions.Item label="所在地">{city}</Descriptions.Item>
+      </Descriptions>
+    </section>
+  )
+}
+
+// 获取用户信息
+const getUserInfo = async (ctx) => {
+  return fetch("http://dev-api.jt-gmall.com/member", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // graphql 的查询风格
+    body: JSON.stringify({ query: `{ getUserInfo { nickname avatarUrl city gender } }` })
+  }).then(res => res.json());
+}
+
+User.getInitialProps = async ctx => {
+  const result = await getUserInfo(ctx);
+  // 将 result 打印出来，因为未登录，所以首次进入这里肯定是包含错误信息的
+  console.log(result);
+
+  return {};
+}
+
+export default User;
+```
+
+组件编写完毕后，我们进入 `http://localhost:3000/user`。此时发现页面是空白的，是因为进入了 `if (!userInfo) return null;` 这一步的逻辑。我们需要看看控制台的输出，发现内容如下：
+
+> 因为请求发生在服务端的 `getInitialProps`，此时的输出是在命令行输出的，并不会在浏览器控制台输出，写服务端渲染的项目这一点要习惯。
+
+```js
+{ 
+  errors:
+   [ 
+     { message: '401: No Auth', locations: [Array], path: [Array] } 
+    ],
+  data: { getUserInfo: null } 
+}
+```
+
+拿到报错信息之后，我们只需要处理报错信息，然后在出现 `401` 登录未授权时跳转到登录界面即可，所以在 `getInitialProps` 函数中再加入以下逻辑：
+
+```js
+import Router from "next/router";
+
+// 重定向函数
+const redirect = ({ req, res }, path) => {
+  // 如果包含 req 信息则表示代码运行在服务端
+  if (req) {
+    res.writeHead(302, { Location: path });
+    res.end();
+  } else {
+    // 客户端跳转方式
+    Router.push(path);
+  }
+};
+
+User.getInitialProps = async ctx => {
+  const result = await getUserInfo(ctx);
+  const { errors, data } = result;
+  // 判断是否为鉴权失败错误
+  if (errors.length > 0 || errors[0].message.startsWith("401")) {
+    return redirect(ctx, '/login');
+  }
+
+  return { userInfo: data.getUserInfo };
+}
+```
+
+> 这里格外需要注意的一点就是，你的代码可能运行在服务端也可能运行在客户端，所以在很多地方需要进行判断，执行对应的函数，这样才是一个健壮的服务端渲染项目。在上面的例子中，重定向函数就对环境进行了判断，从而执行对应的跳转方法，防止页面出错。
+
+现在刷新页面，我们应该跳转到了登录页面，那么我们现在就来把登录页面实现一下，鉴于方便实现，我们登录界面只放一个登录按钮，完成登录功能，实现如下：
+
+```js
+// ./pages/login/index.jsx
+import React from "react";
+import { Button } from "antd";
+import Router from "next/router";
+import fetch from "isomorphic-fetch";
+
+const Login = () => {
+  const login = async () => {
+    const result = await fetch("http://dev-api.jt-gmall.com/member", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query: `{ loginQuickly { token } }` })
+    }).then(res => res.json());
+
+    // 打印登录结果
+    console.log(result);
+  }
+  
+  return (
+    <section style={{ padding: 20 }}>
+      <Button type="primary" onClick={login}>一键登录</Button>
+    </section>
+  )
+}
+
+export default Login;
+```
+
+代码写到这里就可以先停一下，思考一下问题了，打开页面，点击一键登录按钮，这时候控制会输出响应结果如下：
+
+```js
+{
+  "data": {
+    "loginQuickly": {
+      "token": "7cdbd84e994f7be693b6e578549777869e086b9db634363635e2f29b136df1a1"
+    }
+  }
+}
+```
+
+登录拿到了一个 `token` 信息，现在我们的问题就变成了，如何存储 `token`，保持登录态的持久化处理。我们需要用到一个插件
