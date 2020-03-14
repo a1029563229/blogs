@@ -56,10 +56,8 @@
 
 - 给你的 Node 应用加上日志系统，winston 的基本使用
 
-- React 服务端渲染，Next 最佳实践！
-
 - 一个简单实用的 Go Web 框架 - Soa
 
-- 手把手教你写个 HTML 模板语法
-
 - 图解三次握手、四次挥手
+
+- [React 服务端渲染实战，Next 最佳实践](https://github.com/a1029563229/Blogs/tree/master/Introduction/react-ssr)
