@@ -239,13 +239,11 @@ const Vegetables = ({ vegetableList }) => {
 
 到这里，大家应该对 `next` 和服务端渲染已经有了一个初步的了解。服务端渲染简单点说就是在服务端执行 `js`，将 `html` 填充完毕之后再将完整的 `html` 响应给客户端，所以服务端由 `Nodejs` 来做再合适不过，`Nodejs` 天生就有执行 `js` 的能力。
 
-我们下一章将讲解如何使用 `next` 搭建一个需要鉴权的页面以及鉴权失败后的自动跳转问题，如有需要请继续关注本文更新。
-
-[本教程源码](https://github.com/a1029563229/react-ssr-tutorial)
+我们下一章将讲解如何使用 `next` 搭建一个需要鉴权的页面以及鉴权失败后的自动跳转问题。
 
 ## 路由拦截以及鉴权处理
 
-我们在工作中经常会遇到路由拦截和鉴权问题的处理，客户端渲染时，我们一般都是将鉴权信息存储在 `cookie、localStorage` 进行本地持久化，而服务端中没有 `window` 对象，在 `next` 中我们又该如何处理这个问题呢？
+我们在工作中经常会遇到路由拦截和鉴权问题的处理，在客户端渲染时，我们一般都是将鉴权信息存储在 `cookie、localStorage` 进行本地持久化，而服务端中没有 `window` 对象，在 `next` 中我们又该如何处理这个问题呢？
 
 我们先来规划一下我们的目录，我们会有三个路由，分别是：
   - 不需要鉴权的 `vegetables` 路由，里面包含了一些所有人都可以访问的实时菜价信息；
@@ -275,7 +273,7 @@ export default class MyApp extends App {
 }
 ```
 
-![数据翻页](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/7.png)
+![数据翻页](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/8.png)
 
 加上导航栏以后，效果如上图。如果这时候你点击个人中心会出现 `404` 的情况，那是因为我们还没有创建这个页面，我们现在来创建 `./pages/user/index.jsx`：
 
@@ -360,7 +358,7 @@ User.getInitialProps = async ctx => {
   const result = await getUserInfo(ctx);
   const { errors, data } = result;
   // 判断是否为鉴权失败错误
-  if (errors.length > 0 || errors[0].message.startsWith("401")) {
+  if (errors && errors.length > 0 && errors[0].message.startsWith("401")) {
     return redirect(ctx, '/login');
   }
 
@@ -368,7 +366,7 @@ User.getInitialProps = async ctx => {
 }
 ```
 
-> 这里格外需要注意的一点就是，你的代码可能运行在服务端也可能运行在客户端，所以在很多地方需要进行判断，执行对应的函数，这样才是一个健壮的服务端渲染项目。在上面的例子中，重定向函数就对环境进行了判断，从而执行对应的跳转方法，防止页面出错。
+> 这里格外需要注意的一点就是，你的代码可能运行在服务端也可能运行在客户端，所以在很多地方需要进行判断，执行对应的函数，这样才是一个具有健壮性的服务端渲染项目。在上面的例子中，重定向函数就对环境进行了判断，从而执行对应的跳转方法，防止页面出错。
 
 现在刷新页面，我们应该跳转到了登录页面，那么我们现在就来把登录页面实现一下，鉴于方便实现，我们登录界面只放一个登录按钮，完成登录功能，实现如下：
 
@@ -415,4 +413,171 @@ export default Login;
 }
 ```
 
-登录拿到了一个 `token` 信息，现在我们的问题就变成了，如何存储 `token`，保持登录态的持久化处理。我们需要用到一个插件
+登录拿到了一个 `token` 信息，现在我们的问题就变成了，如何存储 `token`，保持登录态的持久化处理。我们需要用到两个插件，分别是 `js-cookie` 和 `next-cookies`，前者用于在客户端存储 `cookie`，而后者用于在服务端和客户端获取 `cookie`，我们先用 `npm` 进行安装：
+
+```bash
+npm i js-cookie next-cookies -S
+```
+
+随后我们修改 `./pages/login/index.jsx`，在登录成功后将 `token` 信息存储到 `cookie` 之中，同时我们也需要修改 `./pages/user/index.jsx`，将 `token` 作为请求头发送给 `api 服务端`，代码实现如下：
+
+```js
+// ./pages/login/index.jsx
+//...
+import cookie from 'js-cookie';
+
+const login = async () => {
+    //...
+
+    const { token } = result.data.loginQuickly;
+    cookie.set("token", token);
+    // 存储 token 后跳转到个人信息界面
+    Router.push("/user");
+  }
+```
+
+```js
+// ./pages/login/index.jsx
+//...
+import nextCookie from 'next-cookies';
+
+//...
+// 获取用户信息
+const getUserInfo = async (ctx) => {
+  // 在 cookie 中获取 token 信息
+  const { token } = nextCookie(ctx);
+  return fetch("http://dev-api.jt-gmall.com/member", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // 在首部带上身份认证信息 token
+      'x-auth-token': token
+    },
+    // graphql 的查询风格
+    body: JSON.stringify({ query: `{ getUserInfo { nickname avatarUrl city gender } }` })
+  }).then(res => res.json());
+}
+
+//...
+```
+
+> 之所以使用 `cookie` 存储 token 是利用了 `cookie` 会随着请求发送给服务端，服务端就有能力获取到客户端存储的 `cookie`，而 `localStorage` 并没有该特性。
+
+我们在 `user` 页面刷新，查看控制台（下图），会发现 `html` 文件的请求头中有 `cookie` 信息，服务端获取 `cookie` 的原理就是在请求头中获取客户端传输过来的 `cookie`，这也是服务端渲染和客户端渲染的一大区别。
+
+![请求头信息](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/9.png)
+
+到这一步，关于登录鉴权路由控制的问题已经解决。这里的话，再抛出一个问题，我们的请求是在服务端发起的，如果发生了错误，`html` 无法正常填充，我们应该怎么处理？带着这个问题，进入下一章吧。
+
+## 对报错信息的处理
+
+我们的代码在大部分时候都是可控可预测的，一般来说只有网络请求是不好预测的，所以我们从下面这段函数来思考如何处理网络请求错误：
+
+```js
+// ./pages/vegetables/index.jsx
+// ...
+const fetchVegetable = (page, pageSize) => {
+  return fetch("http://dev-api.jt-gmall.com/mall", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // graphql 的查询风格
+    body: JSON.stringify({ query: `{ vegetableList (page: ${page}, pageSize: ${pageSize}) { page, pageSize, total, items { _id, name, poster, price } } }` })
+  }).then(res => res.json());
+}
+
+Vegetables.getInitialProps = async ctx => {
+  const result = await fetchVegetable(1, 10);
+
+  // 将查询结果返回，绑定在 props 上
+  return result.data;
+}
+```
+
+我们修改一行代码，把请求信息中的 `... vegetableList (page ...`  修改成 `... vegetableListError (page ...` 来测试一下会发现什么。
+
+修改过后打开页面进行刷新，发现界面变成空白，这是因为 `if (!vegetableList) return null;` 这行代码导致的，我们在 `getInitialProps` 中输出一下请求结果 `result`，会发现返回的对象中包含 `errors` 信息。那么问题就很简单了，我们只需要把错误信息传递给组件的 `props`，然后交由组件处理下一步逻辑就好了，具体实现如下：
+
+```js
+const Vegetables = ({ errors, vegetableList }) => {
+  if (errors) return <section>{JSON.stringify(errors)}</section>
+
+  //...
+}
+
+Vegetables.getInitialProps = async ctx => {
+  const result = await fetchVegetable(1, 10);
+
+  if (result.errors) {
+    return { errors: result.errors };
+  }
+
+  // 将查询结果返回，绑定在 props 上
+  return result.data;
+}
+```
+
+![错误信息](https://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/react-ssr/10.png)
+
+到这里你应该就明白了，我们可以在开发环境将详细错误信息直接呈现，方便我们调试，而正式环境我们可以返回一个指定的错误页面，例如 `500 服务器开小差`。
+
+到这里就结束了吗？当然没有，这样的话我们就需要在每个页面加入这个错误处理，这样的操作非常繁琐而且缺乏健壮性，所以我们需要写一个高阶组件来进行错误的处理，我们新建文件 `./components/withError.jsx`；
+
+```js
+// ./components/withError.jsx
+import React from "react";
+
+const WithError = () => WrappedComponent => {
+  return class Error extends React.PureComponent {
+    static async getInitialProps(ctx) {
+      const result = WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
+
+      // 这里从业务上来说与直接返回 result 并无区别
+      // 这里只是强调对发生错误时的特殊处理
+      if (result.errors) {
+        return { errors: result.errors };
+      }
+      return result.data;
+    }
+
+    render() {
+      const { errors } = this.props;
+      if (errors && errors.length > 0) return <section>Error: {JSON.stringify(errors)}</section>
+      return <WrappedComponent {...this.props} />;
+    }
+  }
+}
+
+export default WithError;
+```
+
+同时我们也需要修改 `./pages/vegetables/index.jsx` 中的 `getInitialProps` 函数，将对响应结果的处理延迟到组合类，同时删除之前添加的所有错误处理函数，修改后如下：
+
+```js
+const Vegetables = ({ vegetableList }) => {
+  if (!vegetableList) return null;
+  //...
+}
+
+Vegetables.getInitialProps = async ctx => {
+  const result = await fetchVegetable(1, 10);
+
+  // 将查询结果返回，绑定在 props 上
+  return result;
+}
+
+export default WithError()(Vegetables);
+```
+
+此时刷新页面，会发现结果和刚才是一样的，只不过我们只需要在导出组件的时候进行 `WithError()(Vegetables)` 操作即可。这个函数其实也可以放在根组件，这个就交由大家自己去探究了。
+
+## 结语
+
+此时此刻，React 服务端渲染入门教程已经结束了，相信大家对服务端渲染也有了更加深刻的理解。如果想要了解更多，可以看看 `next` 的官网教程，并跟着写一个实际的项目最好，这样的提升是最大的。
+
+最后祝愿大家都能够掌握使用服务端渲染，前端技术日益精进！
+
+[本教程源码](https://github.com/a1029563229/react-ssr-tutorial)
+
+[原文地址](https://github.com/a1029563229/Blogs/tree/master/Introduction/react-ssr)
