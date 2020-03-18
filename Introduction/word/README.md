@@ -1126,3 +1126,9 @@
 - 无线
 - expiration
 - 过期
+- nested
+- 嵌套的
+- interruption
+- 打断
+- interaction
+- 相互作用
