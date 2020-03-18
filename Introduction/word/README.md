@@ -1124,3 +1124,5 @@
 - 格式化
 - wireless
 - 无线
+- expiration
+- 过期
