@@ -397,3 +397,10 @@ function beginWork(
     workInProgress.tag,
   );
 }
+
+function workLoopSync() {
+  while (workInProgress !== null) {
+    workInProgress = performUnitOfWork(workInProgress);
+  }
+}
+
