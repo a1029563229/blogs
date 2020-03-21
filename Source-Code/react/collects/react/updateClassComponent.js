@@ -1,166 +1,231 @@
 const Component = workInProgress.type;
 const unresolvedProps = workInProgress.pendingProps;
 const resolvedProps =
-  workInProgress.elementType === Component
-    ? unresolvedProps
-    : resolveDefaultProps(Component, unresolvedProps);
+    workInProgress.elementType === Component ?
+    unresolvedProps :
+    resolveDefaultProps(Component, unresolvedProps);
 return updateClassComponent(
-  current,
-  workInProgress,
-  Component,
-  resolvedProps,
-  renderExpirationTime,
-);
-
-function updateClassComponent(
-  current: Fiber | null,
-  workInProgress: Fiber,
-  Component: any,
-  nextProps,
-  renderExpirationTime: ExpirationTime,
-) {
-  let hasContext;
-  if (isLegacyContextProvider(Component)) {
-    hasContext = true;
-    pushLegacyContextProvider(workInProgress);
-  } else {
-    hasContext = false;
-  }
-  prepareToReadContext(workInProgress, renderExpirationTime);
-
-  const instance = workInProgress.stateNode;
-  let shouldUpdate;
-  if (instance === null) {
-    if (current !== null) {
-      current.alternate = null;
-      workInProgress.alternate = null;
-      workInProgress.effectTag |= Placement;
-    }
-    constructClassInstance(workInProgress, Component, nextProps);
-    mountClassInstance(
-      workInProgress,
-      Component,
-      nextProps,
-      renderExpirationTime,
-    );
-    shouldUpdate = true;
-  } else if (current === null) {
-    shouldUpdate = resumeMountClassInstance(
-      workInProgress,
-      Component,
-      nextProps,
-      renderExpirationTime,
-    );
-  } else {
-    shouldUpdate = updateClassInstance(
-      current,
-      workInProgress,
-      Component,
-      nextProps,
-      renderExpirationTime,
-    );
-  }
-  const nextUnitOfWork = finishClassComponent(
     current,
     workInProgress,
     Component,
-    shouldUpdate,
-    hasContext,
+    resolvedProps,
     renderExpirationTime,
-  );
-  return nextUnitOfWork;
+);
+
+function updateClassComponent(
+    current: Fiber | null,
+    workInProgress: Fiber,
+    Component: any,
+    nextProps,
+    renderExpirationTime: ExpirationTime,
+) {
+    let hasContext;
+    if (isLegacyContextProvider(Component)) {
+        hasContext = true;
+        pushLegacyContextProvider(workInProgress);
+    } else {
+        hasContext = false;
+    }
+    prepareToReadContext(workInProgress, renderExpirationTime);
+
+    const instance = workInProgress.stateNode;
+    let shouldUpdate;
+    if (instance === null) {
+        if (current !== null) {
+            current.alternate = null;
+            workInProgress.alternate = null;
+            workInProgress.effectTag |= Placement;
+        }
+        constructClassInstance(workInProgress, Component, nextProps);
+        mountClassInstance(
+            workInProgress,
+            Component,
+            nextProps,
+            renderExpirationTime,
+        );
+        shouldUpdate = true;
+    } else if (current === null) {
+        shouldUpdate = resumeMountClassInstance(
+            workInProgress,
+            Component,
+            nextProps,
+            renderExpirationTime,
+        );
+    } else {
+        shouldUpdate = updateClassInstance(
+            current,
+            workInProgress,
+            Component,
+            nextProps,
+            renderExpirationTime,
+        );
+    }
+    const nextUnitOfWork = finishClassComponent(
+        current,
+        workInProgress,
+        Component,
+        shouldUpdate,
+        hasContext,
+        renderExpirationTime,
+    );
+    return nextUnitOfWork;
 }
 
 function constructClassInstance(
-  workInProgress: Fiber,
-  ctor: any,
-  props: any,
+    workInProgress: Fiber,
+    ctor: any,
+    props: any,
 ): any {
-  let isLegacyContextConsumer = false;
-  let unmaskedContext = emptyContextObject;
-  let context = emptyContextObject;
-  const contextType = ctor.contextType;
+    let isLegacyContextConsumer = false;
+    let unmaskedContext = emptyContextObject;
+    let context = emptyContextObject;
+    const contextType = ctor.contextType;
 
-  if (typeof contextType === 'object' && contextType !== null) {
-    context = readContext((contextType: any));
-  } else if (!disableLegacyContext) {
-    unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
-    const contextTypes = ctor.contextTypes;
-    isLegacyContextConsumer =
-      contextTypes !== null && contextTypes !== undefined;
-    context = isLegacyContextConsumer
-      ? getMaskedContext(workInProgress, unmaskedContext)
-      : emptyContextObject;
-  }
+    if (typeof contextType === 'object' && contextType !== null) {
+        context = readContext((contextType: any));
+    } else if (!disableLegacyContext) {
+        unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
+        const contextTypes = ctor.contextTypes;
+        isLegacyContextConsumer =
+            contextTypes !== null && contextTypes !== undefined;
+        context = isLegacyContextConsumer ?
+            getMaskedContext(workInProgress, unmaskedContext) :
+            emptyContextObject;
+    }
 
-  const instance = new ctor(props, context);
-  const state = (workInProgress.memoizedState =
-    instance.state !== null && instance.state !== undefined
-      ? instance.state
-      : null);
-  adoptClassInstance(workInProgress, instance);
+    const instance = new ctor(props, context);
+    const state = (workInProgress.memoizedState =
+        instance.state !== null && instance.state !== undefined ?
+        instance.state :
+        null);
+    adoptClassInstance(workInProgress, instance);
 
-  if (isLegacyContextConsumer) {
-    cacheContext(workInProgress, unmaskedContext, context);
-  }
+    if (isLegacyContextConsumer) {
+        cacheContext(workInProgress, unmaskedContext, context);
+    }
 
-  return instance;
+    return instance;
 }
 
 function mountClassInstance(
-  workInProgress: Fiber,
-  ctor: any,
-  newProps: any,
-  renderExpirationTime: ExpirationTime,
+    workInProgress: Fiber,
+    ctor: any,
+    newProps: any,
+    renderExpirationTime: ExpirationTime,
 ): void {
-  const instance = workInProgress.stateNode;
-  instance.props = newProps;
-  instance.state = workInProgress.memoizedState;
-  instance.refs = emptyRefsObject;
-
-  initializeUpdateQueue(workInProgress);
-
-  const contextType = ctor.contextType;
-  if (typeof contextType === 'object' && contextType !== null) {
-    instance.context = readContext(contextType);
-  } else if (disableLegacyContext) {
-    instance.context = emptyContextObject;
-  } else {
-    const unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
-    instance.context = getMaskedContext(workInProgress, unmaskedContext);
-  }
-
-  processUpdateQueue(workInProgress, newProps, instance, renderExpirationTime);
-  instance.state = workInProgress.memoizedState;
-
-  const getDerivedStateFromProps = ctor.getDerivedStateFromProps;
-  if (typeof getDerivedStateFromProps === 'function') {
-    applyDerivedStateFromProps(
-      workInProgress,
-      ctor,
-      getDerivedStateFromProps,
-      newProps,
-    );
+    const instance = workInProgress.stateNode;
+    instance.props = newProps;
     instance.state = workInProgress.memoizedState;
-  }
+    instance.refs = emptyRefsObject;
 
-  if (
-    typeof ctor.getDerivedStateFromProps !== 'function' &&
-    typeof instance.getSnapshotBeforeUpdate !== 'function' &&
-    (typeof instance.UNSAFE_componentWillMount === 'function' ||
-      typeof instance.componentWillMount === 'function')
-  ) {
-    callComponentWillMount(workInProgress, instance);
-    processUpdateQueue(
-      workInProgress,
-      newProps,
-      instance,
-      renderExpirationTime,
-    );
+    initializeUpdateQueue(workInProgress);
+
+    const contextType = ctor.contextType;
+    if (typeof contextType === 'object' && contextType !== null) {
+        instance.context = readContext(contextType);
+    } else if (disableLegacyContext) {
+        instance.context = emptyContextObject;
+    } else {
+        const unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
+        instance.context = getMaskedContext(workInProgress, unmaskedContext);
+    }
+
+    processUpdateQueue(workInProgress, newProps, instance, renderExpirationTime);
     instance.state = workInProgress.memoizedState;
-  }
 
-  if (typeof instance.componentDidMount === 'function') {
-    workInProgress.effectTag |= Update;
-  }
+    const getDerivedStateFromProps = ctor.getDerivedStateFromProps;
+    if (typeof getDerivedStateFromProps === 'function') {
+        applyDerivedStateFromProps(
+            workInProgress,
+            ctor,
+            getDerivedStateFromProps,
+            newProps,
+        );
+        instance.state = workInProgress.memoizedState;
+    }
+
+    if (
+        typeof ctor.getDerivedStateFromProps !== 'function' &&
+        typeof instance.getSnapshotBeforeUpdate !== 'function' &&
+        (typeof instance.UNSAFE_componentWillMount === 'function' ||
+            typeof instance.componentWillMount === 'function')
+    ) {
+        callComponentWillMount(workInProgress, instance);
+        processUpdateQueue(
+            workInProgress,
+            newProps,
+            instance,
+            renderExpirationTime,
+        );
+        instance.state = workInProgress.memoizedState;
+    }
+
+    if (typeof instance.componentDidMount === 'function') {
+        workInProgress.effectTag |= Update;
+    }
+}
+
+function finishClassComponent(
+    current: Fiber | null, workInProgress: Fiber, Component: any, shouldUpdate: boolean, hasContext: boolean,
+    renderExpirationTime: ExpirationTime,
+) {
+    markRef(current, workInProgress);
+
+    const didCaptureError = (workInProgress.effectTag & DidCapture) !== NoEffect;
+
+    if (!shouldUpdate && !didCaptureError) {
+        // Context providers should defer to sCU for rendering
+        if (hasContext) {
+            invalidateContextProvider(workInProgress, Component, false);
+        }
+
+        return bailoutOnAlreadyFinishedWork(
+            current,
+            workInProgress,
+            renderExpirationTime,
+        );
+    }
+
+    const instance = workInProgress.stateNode;
+
+    // Rerender
+    ReactCurrentOwner.current = workInProgress;
+    let nextChildren;
+    if (
+        didCaptureError &&
+        typeof Component.getDerivedStateFromError !== 'function'
+    ) {
+        nextChildren = null;
+
+        if (enableProfilerTimer) {
+            stopProfilerTimerIfRunning(workInProgress);
+        }
+    } else {
+        nextChildren = instance.render();
+    }
+
+    workInProgress.effectTag |= PerformedWork;
+    if (current !== null && didCaptureError) {
+        forceUnmountCurrentAndReconcile(
+            current,
+            workInProgress,
+            nextChildren,
+            renderExpirationTime,
+        );
+    } else {
+        reconcileChildren(
+            current,
+            workInProgress,
+            nextChildren,
+            renderExpirationTime,
+        );
+    }
+
+    workInProgress.memoizedState = instance.state;
+
+    if (hasContext) {
+        invalidateContextProvider(workInProgress, Component, true);
+    }
+
+    return workInProgress.child;
 }
