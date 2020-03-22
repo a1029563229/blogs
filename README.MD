@@ -3,7 +3,7 @@
 ## Web 前端成长之路
 
 + [React 服务端渲染实战，Next 最佳实践](https://github.com/a1029563229/Blogs/tree/master/Introduction/react-ssr)
-+ [React 系列源码深度解析（react 篇）](https://github.com/a1029563229/Blogs/tree/master/Source-Code/react/1.md)
++ [万字长文+图文并茂+全面解析 React 源码 - render 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/react/1.md)
 + [AST（Abstract Syntax Tree，抽象语法树）](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)
 + [GraphQL 查询字符串的组装](https://github.com/a1029563229/Blogs/tree/master/Introduction/graphql/graphql-query)
 + [使用 Sentry 平台处理异常日志](https://github.com/a1029563229/Blogs/tree/master/Introduction/Sentry)
