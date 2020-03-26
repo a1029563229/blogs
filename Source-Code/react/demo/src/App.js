@@ -9,13 +9,14 @@ class App extends React.Component {
   }
 
   changeContent() {
-    debugger;
+    // debugger;
     this.setState({
       content: "Update Content"
     });
   }
 
   render() {
+    console.log(this.state);
     const { content } = this.state;
     return (
       <section>
