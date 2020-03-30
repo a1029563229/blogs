@@ -13,6 +13,14 @@ class App extends React.Component {
     this.setState({
       content: "Update Content"
     });
+    // this.setState({
+    //   content: "Update Content1-2"
+    // });
+    // setTimeout(() => {
+    //   this.setState({
+    //     content: "Update Content2"
+    //   });
+    // }, 3000);
   }
 
   render() {
