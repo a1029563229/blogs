@@ -229,3 +229,154 @@ function finishClassComponent(
 
     return workInProgress.child;
 }
+
+function updateClassInstance(
+    current: Fiber,
+    workInProgress: Fiber,
+    ctor: any,
+    newProps: any,
+    renderExpirationTime: ExpirationTime,
+  ): boolean {
+    const instance = workInProgress.stateNode;
+  
+    cloneUpdateQueue(current, workInProgress);
+  
+    const oldProps = workInProgress.memoizedProps;
+    instance.props =
+      workInProgress.type === workInProgress.elementType
+        ? oldProps
+        : resolveDefaultProps(workInProgress.type, oldProps);
+  
+    const oldContext = instance.context;
+    const contextType = ctor.contextType;
+    let nextContext = emptyContextObject;
+    if (typeof contextType === 'object' && contextType !== null) {
+      nextContext = readContext(contextType);
+    } else if (!disableLegacyContext) {
+      const nextUnmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
+      nextContext = getMaskedContext(workInProgress, nextUnmaskedContext);
+    }
+  
+    const getDerivedStateFromProps = ctor.getDerivedStateFromProps;
+    const hasNewLifecycles =
+      typeof getDerivedStateFromProps === 'function' ||
+      typeof instance.getSnapshotBeforeUpdate === 'function';
+  
+    if (
+      !hasNewLifecycles &&
+      (typeof instance.UNSAFE_componentWillReceiveProps === 'function' ||
+        typeof instance.componentWillReceiveProps === 'function')
+    ) {
+      if (oldProps !== newProps || oldContext !== nextContext) {
+        callComponentWillReceiveProps(
+          workInProgress,
+          instance,
+          newProps,
+          nextContext,
+        );
+      }
+    }
+  
+    resetHasForceUpdateBeforeProcessing();
+  
+    const oldState = workInProgress.memoizedState;
+    let newState = (instance.state = oldState);
+    processUpdateQueue(workInProgress, newProps, instance, renderExpirationTime);
+    newState = workInProgress.memoizedState;
+  
+    if (
+      oldProps === newProps &&
+      oldState === newState &&
+      !hasContextChanged() &&
+      !checkHasForceUpdateAfterProcessing()
+    ) {
+      if (typeof instance.componentDidUpdate === 'function') {
+        if (
+          oldProps !== current.memoizedProps ||
+          oldState !== current.memoizedState
+        ) {
+          workInProgress.effectTag |= Update;
+        }
+      }
+      if (typeof instance.getSnapshotBeforeUpdate === 'function') {
+        if (
+          oldProps !== current.memoizedProps ||
+          oldState !== current.memoizedState
+        ) {
+          workInProgress.effectTag |= Snapshot;
+        }
+      }
+      return false;
+    }
+  
+    if (typeof getDerivedStateFromProps === 'function') {
+      applyDerivedStateFromProps(
+        workInProgress,
+        ctor,
+        getDerivedStateFromProps,
+        newProps,
+      );
+      newState = workInProgress.memoizedState;
+    }
+  
+    const shouldUpdate =
+      checkHasForceUpdateAfterProcessing() ||
+      checkShouldComponentUpdate(
+        workInProgress,
+        ctor,
+        oldProps,
+        newProps,
+        oldState,
+        newState,
+        nextContext,
+      );
+  
+    if (shouldUpdate) {
+      if (
+        !hasNewLifecycles &&
+        (typeof instance.UNSAFE_componentWillUpdate === 'function' ||
+          typeof instance.componentWillUpdate === 'function')
+      ) {
+        startPhaseTimer(workInProgress, 'componentWillUpdate');
+        if (typeof instance.componentWillUpdate === 'function') {
+          instance.componentWillUpdate(newProps, newState, nextContext);
+        }
+        if (typeof instance.UNSAFE_componentWillUpdate === 'function') {
+          instance.UNSAFE_componentWillUpdate(newProps, newState, nextContext);
+        }
+        stopPhaseTimer();
+      }
+      if (typeof instance.componentDidUpdate === 'function') {
+        workInProgress.effectTag |= Update;
+      }
+      if (typeof instance.getSnapshotBeforeUpdate === 'function') {
+        workInProgress.effectTag |= Snapshot;
+      }
+    } else {
+      if (typeof instance.componentDidUpdate === 'function') {
+        if (
+          oldProps !== current.memoizedProps ||
+          oldState !== current.memoizedState
+        ) {
+          workInProgress.effectTag |= Update;
+        }
+      }
+      if (typeof instance.getSnapshotBeforeUpdate === 'function') {
+        if (
+          oldProps !== current.memoizedProps ||
+          oldState !== current.memoizedState
+        ) {
+          workInProgress.effectTag |= Snapshot;
+        }
+      }
+  
+      workInProgress.memoizedProps = newProps;
+      workInProgress.memoizedState = newState;
+    }
+  
+    instance.props = newProps;
+    instance.state = newState;
+    instance.context = nextContext;
+  
+    return shouldUpdate;
+  }
