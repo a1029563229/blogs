@@ -72,6 +72,8 @@
 
 - qiankun 源码阅读
 
+- redux 源码阅读
+
 - V8 源码阅读
 
 - Docker 源码阅读
