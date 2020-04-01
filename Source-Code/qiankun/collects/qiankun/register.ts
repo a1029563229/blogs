@@ -68,36 +68,23 @@ export function getImportLoaderConfiguration() {
 
 export function registerMicroApps<T extends object = {}>(apps: Array<RegistrableApp<T>>, lifeCycles?: LifeCycles<T>) {
   const unregisteredApps = apps.filter(app => !microApps.some(registeredApp => registeredApp.name === app.name));
-
   microApps = [...microApps, ...unregisteredApps];
-
   let prevAppUnmountedDeferred: Deferred<void>;
-
+  
   unregisteredApps.forEach(app => {
     const { name, entry, render, activeRule, props = {} } = app;
-
     registerApplication(
       name,
-
       async ({ name: appName }) => {
         await frameworkStartedDefer.promise;
-
         const { getTemplate = identity, ...settings } = importLoaderConfiguration || {};
-        // get the entry html content and script executor
         const { template: appContent, execScripts, assetPublicPath } = await importEntry(entry, {
-          // compose the config getTemplate function with default wrapper
           getTemplate: flow(getTemplate, getDefaultTplWrapper(appName)),
           ...settings,
         });
-
-        // as single-spa load and bootstrap new app parallel with other apps unmounting
-        // (see https://github.com/CanopyTax/single-spa/blob/master/src/navigation/reroute.js#L74)
-        // we need wait to load the app until all apps are finishing unmount in singular mode
         if (await validateSingularMode(singular, app)) {
           await (prevAppUnmountedDeferred && prevAppUnmountedDeferred.promise);
         }
-        // 第一次加载设置应用可见区域 dom 结构
-        // 确保每次应用加载前容器 dom 结构已经设置完毕
         render({ appContent, loading: true });
 
         let jsSandbox: Window = window;
@@ -120,23 +107,13 @@ export function registerMicroApps<T extends object = {}>(apps: Array<Registrable
 
         await execHooksChain(toArray(beforeLoad), app);
 
-        // get the lifecycle hooks from module exports
         let { bootstrap: bootstrapApp, mount, unmount } = await execScripts(jsSandbox, !singular);
 
         if (!isFunction(bootstrapApp) || !isFunction(mount) || !isFunction(unmount)) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn(
-              `[qiankun] lifecycle not found from ${appName} entry exports, fallback to get from window['${appName}']`,
-            );
-          }
-
           const global = jsSandbox;
-          // fallback to global variable who named with ${appName} while module exports not found
           const globalVariableExports = (global as any)[appName] || {};
           bootstrapApp = globalVariableExports.bootstrap;
-          // eslint-disable-next-line prefer-destructuring
           mount = globalVariableExports.mount;
-          // eslint-disable-next-line prefer-destructuring
           unmount = globalVariableExports.unmount;
           if (!isFunction(bootstrapApp) || !isFunction(mount) || !isFunction(unmount)) {
             throw new Error(`[qiankun] You need to export lifecycle functions in ${appName} entry`);
@@ -153,16 +130,12 @@ export function registerMicroApps<T extends object = {}>(apps: Array<Registrable
 
               return undefined;
             },
-            // 添加 mount hook, 确保每次应用加载前容器 dom 结构已经设置完毕
             async () => render({ appContent, loading: true }),
-            // exec the chain after rendering to keep the behavior with beforeLoad
             async () => execHooksChain(toArray(beforeMount), app),
             mountSandbox,
             mount,
-            // 应用 mount 完成后结束 loading
             async () => render({ appContent, loading: false }),
             async () => execHooksChain(toArray(afterMount), app),
-            // initialize the unmount defer after app mounted and resolve the defer after it unmounted
             async () => {
               if (await validateSingularMode(singular, app)) {
                 prevAppUnmountedDeferred = new Deferred<void>();
@@ -184,7 +157,6 @@ export function registerMicroApps<T extends object = {}>(apps: Array<Registrable
           ],
         };
       },
-
       activeRule,
       props,
     );
