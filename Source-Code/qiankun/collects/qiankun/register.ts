@@ -122,6 +122,7 @@ export function registerMicroApps<T extends object = {}>(apps: Array<Registrable
 
         return {
           bootstrap: [bootstrapApp],
+
           mount: [
             async () => {
               if ((await validateSingularMode(singular, app)) && prevAppUnmountedDeferred) {
@@ -142,12 +143,12 @@ export function registerMicroApps<T extends object = {}>(apps: Array<Registrable
               }
             },
           ],
+
           unmount: [
             async () => execHooksChain(toArray(beforeUnmount), app),
             unmount,
             unmountSandbox,
             async () => execHooksChain(toArray(afterUnmount), app),
-            // remove the app content after unmount
             async () => render({ appContent: '', loading: false }),
             async () => {
               if ((await validateSingularMode(singular, app)) && prevAppUnmountedDeferred) {

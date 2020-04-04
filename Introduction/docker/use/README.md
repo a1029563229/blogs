@@ -73,6 +73,7 @@ docker image pull [image]
 - docker 运行 image 文件
 ```bash
 docker container run [image]
+docker container run --publish [localPort]:[containerPort] --detach --name [containerName] [imageName]
 ```
 
 - 列出本机正在运行的容器

@@ -70,7 +70,7 @@ func (t LocalTime) MarshalJSON() ([]byte, error) {
 
 ### 数据库写入和写出问题 - `Value` 与 `Scan`
 
-在实现了 `JSON` 数据的解析取值后，会发现我们的值依然无法通过 `gorm` 被存储到 `mysql` 数据库中，通过抓包我们可以看看正常的请求和错误的请求的区别（见下图）
+在实现了 `JSON` 格式数据的解析取值后，会发现我们的值依然无法通过 `gorm` 被存储到 `mysql` 数据库中，通过抓包我们可以看看正常的请求和错误的请求的区别（见下图）
 
 ![图](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/2.png)
 
@@ -80,15 +80,27 @@ func (t LocalTime) MarshalJSON() ([]byte, error) {
 
 从 `上图 2（我们现在的情况）` 可以看出，我们的 `payment_time` 字段根本没有被传递，从而导致更新失败。
 
-所以这个问题属于 `gorm` 对字段取值的问题，从这个角度出发，我们就需要给我们的类型实现 `Value` 和 `Scan` 方法，分别对应写入的时候获取值和写出的时候解析值。（实现如下）
+所以这个问题属于 `gorm` 对字段取值的问题，`gorm` 内部是通过 `Value` 和 `Scan` 这两个方法完成值的写入和检出。那么从这个角度出发，我们就需要给我们的类型实现 `Value` 和 `Scan` 方法，分别对应写入的时候获取值和检出的时候解析值。（实现如下）
 
 ```go
+// 写入 mysql 时调用
+func (t LocalTime) Value() (driver.Value, error) {
+	// 0001-01-01 00:00:00 属于空值，遇到空值解析成 null 即可
+	if t.String() == "0001-01-01 00:00:00" {
+		return nil, nil
+	}
+	return []byte(time.Time(t).Format(TimeFormat)), nil
+}
+
+// 检出 mysql 时调用
 func (t *LocalTime) Scan(v interface{}) error {
+	// mysql 内部日期的格式可能是 2006-01-02 15:04:05 +0800 CST 格式，所以检出的时候还需要进行一次格式化
 	tTime, _ := time.Parse("2006-01-02 15:04:05 +0800 CST", v.(time.Time).String())
 	*t = LocalTime(tTime)
 	return nil
 }
 
+// 用于 fmt.Println 和后续验证场景
 func (t LocalTime) String() string {
 	return time.Time(t).Format(TimeFormat)
 }
@@ -151,9 +163,9 @@ func (t LocalTime) String() string {
 
 ## 解决验证器 `binding:"required"` 无法正常工作
 
-在完成上述步骤后，你的 `go` 应用已经可以正常存取自定义的日期格式格式了。但是还有一个问题，那就是 `binding:"required"` 并不能正常工作了，如果你传入一个空字符串 "" 日期数据，也会通过校验，并在数据库写入 `null`！
+在完成上述步骤后，你的 `go` 应用已经可以正常存取自定义的日期格式格式了。但是还有一个问题，那就是 `binding:"required"` 并不能正常工作了，如果你传入一个空字符串 `""` 日期数据，也会通过校验，并在数据库写入 `null`！
 
-这个问题是因为 `gin` 内置的 `validator` 对我们的 `model.LocalTime` 还没有一个完善的空值检测机制，我们只需要加上这个机制即可。（实现如下）
+这个问题是因为 `gin` 内置的 `validator` 对我们的 `model.LocalTime` 还没有一个完善的空值检测机制，我们只需要加上这个检测机制即可。（实现如下）
 
 ```go
 package app
@@ -161,7 +173,8 @@ package app
 func ValidateJSONDateType(field reflect.Value) interface{} {
 	if field.Type() == reflect.TypeOf(model.LocalTime{}) {
     timeStr := field.Interface().(model.LocalTime).String()
-    // 0001-01-01 00:00:00 是 go 中 time.Time 类型的空值
+		// 0001-01-01 00:00:00 是 go 中 time.Time 类型的空值
+		// 这里返回 Nil 则会被 validator 判定为空值，而无法通过 `binding:"required"` 规则
 		if timeStr == "0001-01-01 00:00:00" {
 			return nil
 		}
@@ -192,6 +205,6 @@ func Run() {
 
 如果本文对您有帮助的话，请点个赞和收藏吧！
 
-您的点赞是为作者的最大鼓励，也可以让更多人看到本篇文章！
+您的点赞是对作者的最大鼓励，也可以让更多人看到本篇文章！
 
 [原文地址](https://github.com/a1029563229/Blogs/tree/master/BugFix/go/time)
