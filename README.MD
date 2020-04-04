@@ -25,6 +25,7 @@
 + [Go 语言圣经-习题汇总（Go 程序设计语言/The Go Programming Language）](https://github.com/a1029563229/Blogs/tree/master/Introduction/go/The-Go-Programming-Practice/README.md)
 + [Gin 源码阅读（一）](https://github.com/a1029563229/Blogs/tree/master/Source-Code/gin/1.md)
 + [Gin 源码阅读（二）](https://github.com/a1029563229/Blogs/tree/master/Source-Code/gin/2.md)
++ [Go 自定义日期时间格式解析解决方案 - 解决 `parsing time xx as xx: cannot parse xx as xx` 错误](https://github.com/a1029563229/Blogs/tree/master/BugFix/go/time)
 
 ## 网络相关成长之路
 
