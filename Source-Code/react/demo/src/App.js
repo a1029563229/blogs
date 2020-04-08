@@ -4,14 +4,14 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: "Hello World"
+      content: "Hello World",
     };
   }
 
   changeContent() {
     // debugger;
     this.setState({
-      content: "Update Content"
+      content: "Update Content",
     });
     // this.setState({
     //   content: "Update Content1-2"
@@ -24,7 +24,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     const { content } = this.state;
     return (
       <section>
