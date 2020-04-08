@@ -3,5 +3,7 @@
     "freers",
     "rebuilder",
     "rebuilders"
-  ]
+  ],
+  "typescript.validate.enable": false,
+  "javascript.validate.enable": false,
 }
