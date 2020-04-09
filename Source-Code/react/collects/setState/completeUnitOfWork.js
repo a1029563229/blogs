@@ -44,17 +44,8 @@ function completeUnitOfWork(unitOfWork: Fiber): Fiber | null {
                   returnFiber.lastEffect = workInProgress.lastEffect;
               }
 
-              // If this fiber had side-effects, we append it AFTER the children's
-              // side-effects. We can perform certain side-effects earlier if needed,
-              // by doing multiple passes over the effect list. We don't want to
-              // schedule our own side-effect on our own list because if end up
-              // reusing children we'll schedule this effect onto itself since we're
-              // at the end.
               const effectTag = workInProgress.effectTag;
 
-              // Skip both NoWork and PerformedWork tags when creating the effect
-              // list. PerformedWork effect is read by React DevTools but shouldn't be
-              // committed.
               if (effectTag > PerformedWork) {
                   if (returnFiber.lastEffect !== null) {
                       returnFiber.lastEffect.nextEffect = workInProgress;
