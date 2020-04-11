@@ -90,3 +90,42 @@ function commitMutationEffects(root: FiberRoot, renderPriorityLevel) {
       nextEffect = nextEffect.nextEffect;
   }
 }
+
+export function commitUpdate(
+  domElement: Instance,
+  updatePayload: Array<mixed>,
+  type: string,
+  oldProps: Props,
+  newProps: Props,
+  internalInstanceHandle: Object,
+): void {
+  updateFiberProps(domElement, newProps);
+  updateProperties(domElement, updatePayload, type, oldProps, newProps);
+}
+
+function commitLayoutEffects(
+  root: FiberRoot,
+  committedExpirationTime: ExpirationTime,
+) {
+  while (nextEffect !== null) {
+      const effectTag = nextEffect.effectTag;
+
+      if (effectTag & (Update | Callback)) {
+          recordEffect();
+          const current = nextEffect.alternate;
+          commitLayoutEffectOnFiber(
+              root,
+              current,
+              nextEffect,
+              committedExpirationTime,
+          );
+      }
+
+      if (effectTag & Ref) {
+          recordEffect();
+          commitAttachRef(nextEffect);
+      }
+
+      nextEffect = nextEffect.nextEffect;
+  }
+}
