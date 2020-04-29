@@ -39,8 +39,8 @@
 
 ## 网络相关成长之路
 
-+ [CDN 加速原理](https://github.com/a1029563229/Blogs/tree/master/excerpt/cdn)
-+ [抓包原理](https://github.com/a1029563229/Blogs/tree/master/excerpt/packetCapture)
++ [CDN 加速原理](https://github.com/a1029563229/Blogs/tree/master/Excerpt/cdn)
++ [抓包原理](https://github.com/a1029563229/Blogs/tree/master/Excerpt/packetCapture)
 
 ## 算法成长之路
 
