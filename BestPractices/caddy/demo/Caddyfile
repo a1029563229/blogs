@@ -1,8 +1,9 @@
-http://proxy.dev-api-mall.jt-gmall.com {
-  reverse_proxy http://dev-api-mall.jt-gmall.com {
+localhost 
 
-  }
-  cors {
-    
-  }
+automatic_https {
+  disable_redirects true
+}
+
+reverse_proxy http://proxy1.dev-api-mall.jt-gmall.com {
+  to http://dev-api-mall.jt-gmall.com
 }
