@@ -36,7 +36,7 @@
 
 我们以 [实战案例](https://github.com/a1029563229/micro-front-template) 为例，来介绍一下如何使用 `qiankun` 完成应用间的通信功能。
 
-> 建议 `clone` [实战案例](https://github.com/a1029563229/micro-front-template) `feature-communication-1` 分支代码到本地，使用 `npm start` 运行项目查看实际运行结果。
+> 建议 `clone` [实战案例](https://github.com/a1029563229/micro-front-template) `feature-communication-1` 分支代码到本地，运行项目查看实际效果。
 
 #### 主应用的工作
 
