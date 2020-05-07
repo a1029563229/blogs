@@ -187,6 +187,8 @@ function render(props) {
 最后我们在子应用的 `通讯页` 获取状态池中的 `token`，使用 `token` 获取用户信息，最后在页面中显示用户信息。代码实现如下：
 
 ```js
+// micro-app-main/src/pages/communication/index.vue
+
 // 引入 actions 实例
 import actions from "@/shared/actions";
 import { ApiGetUserInfo } from "@/apis";
@@ -248,7 +250,9 @@ export default {
 
 ## `Shared` 通信
 
-官方提供的通信方案是通过状态池通信，该通信方式适合大部分的场景。
+> 由于 `Shared` 方案实现起来会较为复杂，所以当 `Actions` 通信方案满足需求时，使用官方提供的 `Actions` 通信方案可以得到更好的支持。
+
+官方提供的 `Actions` 通信方案是通过状态池通信，该通信方式适合大部分的场景。
 
 该通信方式也存在一些优缺点，优点如下：
   1. 使用简单；
@@ -256,11 +260,9 @@ export default {
   3. 适合通信较少的业务场景；
 
 缺点如下：
-  1. 子应用独立运行时，没有状态池，可能会导致一些无法意料的问题（如上面的那个例子）；
+  1. 子应用独立运行时，可能会导致一些无法意料的问题（如上面的那个例子）；
   2. 子应用需要了解状态池的细节，以避免发生协作问题；
   3. 由于状态池无法跟踪，通信场景较多时，维护成本较高；
-
-> 在 `Actions` 通信方案满足需求时，使用官方提供的方案可以得到更好的支持。
 
 如果你的应用通信场景较多，子应用需要独立运行，希望主应用更好的管理子应用，那么可以考虑 `Shared` 通信方案。
 
@@ -277,4 +279,276 @@ export default {
 ### 实战教程
 
 我们还是以 [实战案例 - feature-communication-shared 分支](https://github.com/a1029563229/micro-front-template) 的 `登录流程` 为例，给大家展示如何使用 `shared` 进行应用间通信。
+
+#### 主应用的工作
+
+首先我们需要在主应用中创建 `store` 用于管理全局状态池，这里我们使用 `redux` 来实现，代码实现如下：
+
+```ts
+// micro-app-main/src/shared/store.ts
+
+import { createStore } from "redux";
+
+export type State = {
+  token?: string;
+};
+
+type Action = {
+  type: string;
+  payload: any;
+};
+
+const reducer = (state: State = {}, action: Action): State => {
+  switch (action.type) {
+    default:
+      return state;
+    // 设置 Token
+    case "SET_TOKEN":
+      return {
+        ...state,
+        token: action.payload,
+      };
+  }
+};
+
+const store = createStore<State, Action, unknown, unknown>(reducer);
+
+export default store;
+```
+
+从上面可以看出，我们使用 `redux` 创建了一个全局状态池，并设置了一个 `reducer` 用于修改 `token` 的值。接下来我们需要实现主应用的 `shared` 实例，代码实现如下：
+
+```ts
+// micro-app-main/src/shared/index.ts
+
+import store from "./store";
+
+class Shared {
+  /**
+   * 获取 Token
+   */
+  public getToken(): string {
+    const state = store.getState();
+    return state.token || "";
+  }
+
+  /**
+   * 设置 Token
+   */
+  public setToken(token: string): void {
+    // 将 token 的值记录在 store 中
+    store.dispatch({
+      type: "SET_TOKEN",
+      payload: token
+    });
+  }
+}
+
+const shared = new Shared();
+export default shared;
+```
+
+从上面实现可以看出，我们的 `shared` 实现非常简单，`shared` 实例包括两个方法 `getToken` 和 `setToken` 分别用于获取 `token` 和设置 `token`。接下来我们还需要对我们的 `登录组件` 进行改造，将 `login` 方法修改一下，修改如下：
+
+```ts
+// micro-app-main/src/pages/login/index.vue
+
+// ...
+async login() {
+  // ApiLoginQuickly 是一个远程登录函数，用于获取 token，详见 Demo
+  const result = await ApiLoginQuickly();
+  const { token } = result.data.loginQuickly;
+
+  // 使用 shared 的 setToken 记录 token
+  shared.setToken(token);
+  this.$router.push("/");
+}
+```
+
+从上面可以看出，在登录成功后，我们将通过 `shared.setToken` 方法将 `token` 记录在 `store` 中。
+
+最后，我们需要将 `shared` 实例通过 `props` 传递给子应用，代码实现如下：
+
+```ts
+// micro-app-main/src/micro/apps.ts
+
+import shared from "@/shared";
+
+const apps = [
+  {
+    name: "ReactMicroApp",
+    entry: "//localhost:10100",
+    container: "#frame",
+    activeRule: "/react",
+    // 通过 props 将 shared 传递给子应用
+    props: { shared },
+  },
+  {
+    name: "VueMicroApp",
+    entry: "//localhost:10200",
+    container: "#frame",
+    activeRule: "/vue",
+    // 通过 props 将 shared 传递给子应用
+    props: { shared },
+  },
+];
+
+export default apps;
+```
+
+#### 子应用的工作
+
+我们刚才提到，我们希望子应用有独立运行的能力，所以子应用也应该实现 `shared`，以便在独立运行时可以拥有兼容处理能力。代码实现如下：
+
+```js
+// micro-app-main/src/shared/index.js
+
+class Shared {
+  /**
+   * 获取 Token
+   */
+  getToken() {
+    // 子应用独立运行时，在 localStorage 中获取 token
+    return localStorage.getItem("token") || "";
+  }
+
+  /**
+   * 设置 Token
+   */
+  setToken(token) {
+    // 子应用独立运行时，在 localStorage 中设置 token
+    localStorage.setItem("token", token);
+  }
+}
+
+class SharedModule {
+  static shared = new Shared();
+
+  /**
+   * 重载 shared
+   */
+  static overloadShared(shared) {
+    SharedModule.shared = shared;
+  }
+
+  /**
+   * 获取 shared 实例
+   */
+  static getShared() {
+    return SharedModule.shared;
+  }
+}
+
+export default SharedModule;
+```
+
+从上面我们可以看到两个类，我们来分析一下其用处：
+  - `Shared`：子应用自身的 `shared`，子应用独立运行时将使用该 `shared`；
+  - `SharedModule`：用于管理 `shared`，例如重载 `shared`、获取 `shared` 等等；
+
+我们实现了子应用的 `shared` 后，我们需要在入口文件处注入 `shared`，代码实现如下：
+
+
+```js
+// micro-app-main/src/main.js
+
+//...
+
+/**
+ * 渲染函数
+ * 主应用生命周期钩子中运行/子应用单独启动时运行
+ */
+function render(props = {}) {
+  // 当传入的 shared 为空时，使用子应用自身的 shared
+  // 当传入的 shared 不为空时，主应用传入的 shared 将会重载子应用的 shared
+  const { shared = SharedModule.getShared() } = props;
+  SharedModule.overloadShared(shared);
+
+  router = new VueRouter({
+    base: window.__POWERED_BY_QIANKUN__ ? "/vue" : "/",
+    mode: "history",
+    routes,
+  });
+
+  // 挂载应用
+  instance = new Vue({
+    router,
+    render: (h) => h(App),
+  }).$mount("#app");
+}
+```
+
+从上面可以看出，我们在 `props` 的 `shared` 字段不为空时，将会使用传入的 `shared` 重载子应用自身的 `shared`。这样做的好处是调用方并不需要关注 `shared` 的实现细节，无论是主应用的 `shared` 或是子应用的 `shared` 在使用时的表现是一致的。
+
+然后我们修改子应用的 `通讯页`，使用 `shared` 实例获取 `token`，代码实现如下：
+
+```js
+// micro-app-main/src/pages/communication/index.vue
+
+// 引入 SharedModule
+import SharedModule from "@/shared";
+import { ApiGetUserInfo } from "@/apis";
+
+export default {
+  name: "Communication",
+
+  data() {
+    return {
+      userInfo: {}
+    };
+  },
+
+  mounted() {
+    const shared = SharedModule.getShared();
+    // 使用 shared 获取 token
+    const token = shared.getToken();
+
+    // 未登录 - 返回主页
+    if (!token) {
+      this.$message.error("未检测到登录信息！");
+      return this.$router.push("/");
+    }
+
+    this.getUserInfo(token);
+  },
+
+  methods: {
+    async getUserInfo(token) {
+      // ApiGetUserInfo 是用于获取用户信息的函数
+      const result = await ApiGetUserInfo(token);
+      this.userInfo = result.data.getUserInfo;
+    }
+  }
+};
+```
+
+最后我们打开页面，看看在主应用中运行和独立运行时的表现吧！（见下图）
+
+![qiankun](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/12.png)
+
+![qiankun](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/13.png)
+
+从上图 1 可以看出，我们在主应用中运行子应用时，`shared` 实例是主应用的 `shared`，登录后可以在状态池中获取到 `token`，并且使用 `token` 成功获取了用户信息。
+
+从上图 2 可以看出，在我们独立运行子应用时，`shared` 实例是子应用自身的 `shared`，在 `localStorage` 中无法获取到 `token`
+
+这样一来，我们就完成了 `shared` 通信啦！
+
+### 小结
+
+我们从上面的案例也可以看出 `shared` 通信的优缺点，这里也做一些简单的分析：
+  
+  优点有这些：
+  - 可以自由选择状态管理库，更好的开发体验。 - 比如 `redux` 有专门配套的开发工具可以跟踪状态的变化。
+  - 子应用无需了解主应用的状态池实现细节，只需要了解 `shared` 的函数抽象，实现一套自身的 `shared` 甚至空 `shared` 即可，可以更好的规范子应用开发。
+  - 子应用无法随意污染主应用的状态池，只能通过主应用暴露的 `shared` 实例的特定方法操作状态池，从而避免状态池污染产生的问题。
+  - 子应用将具备独立运行的能力，`shared` 通信使得父子应用有了更好的解耦性。
+
+  缺点也有两个：
+  - 主应用需要单独维护一套状态池，会增加维护成本和项目复杂度；
+  - 子应用需要单独维护一份 `shared` 实例，会增加维护成本；
+
+`shared` 通信方式也是有利有弊，更高的维护成本带来的是应用的健壮性和可维护性。
+
+最后我们来画一张图对 `shared` 通信的流程进行解析（见下图）
 
