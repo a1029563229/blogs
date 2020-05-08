@@ -40,9 +40,9 @@
 
 ### 实战教程
 
-我们以 [实战案例](https://github.com/a1029563229/micro-front-template) （案例是以 `Vue` 为基座的主应用，接入 `React` 和 `Vue` 两个子应用） 为例，来介绍一下如何使用 `qiankun` 完成应用间的通信功能。
+我们以 [实战案例 - feature-communication 分支](https://github.com/a1029563229/micro-front-template/tree/feature-communication) （案例是以 `Vue` 为基座的主应用，接入 `React` 和 `Vue` 两个子应用） 为例，来介绍一下如何使用 `qiankun` 完成应用间的通信功能。
 
-> 建议 `clone` [实战案例](https://github.com/a1029563229/micro-front-template/tree/feature-communication) `feature-communication` 分支代码到本地，运行项目查看实际效果。
+> 建议 `clone` [实战案例 - feature-communication 分支](https://github.com/a1029563229/micro-front-template/tree/feature-communication) 分支代码到本地，运行项目查看实际效果。
 
 #### 主应用的工作
 
@@ -241,7 +241,7 @@ export default {
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/9.png)
 
-`React` 的实现也是类似的，实现代码可以参照 [完整 Demo - feature-communication 分支](https://github.com/a1029563229/micro-front-template/tree/feature-communication)，实现效果如下（见下图）
+`React` 子应用的实现也是类似的，实现代码可以参照 [完整 Demo - feature-communication 分支](https://github.com/a1029563229/micro-front-template/tree/feature-communication)，实现效果如下（见下图）
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/10.png)
 
