@@ -580,7 +580,24 @@ export async function unmount() {
 }
 ```
 
-在配置好了入口文件 `index.js` 后，我们还需要配置 `webpack`，使 `index.js` 导出的生命周期钩子函数可以被 `qiankun` 识别获取。
+在配置好了入口文件 `index.js` 后，我们还需要配置路由命名空间，代码实现如下：
+
+```js
+// micro-app-react/src/App.jsx
+const BASE_NAME = window.__POWERED_BY_QIANKUN__ ? "/react" : "";
+const App = () => {
+  //...
+
+  return (
+    // 设置路由命名空间
+    <Router basename={BASE_NAME}>
+      {/* ... */}
+    </Router>
+  );
+};
+```
+
+接下来，我们还需要配置 `webpack`，使 `index.js` 导出的生命周期钩子函数可以被 `qiankun` 识别获取。
 
 我们需要借助 `react-app-rewired` 来帮助我们修改 `webpack` 的配置，我们直接安装该插件：
 
@@ -654,5 +671,105 @@ module.exports = {
 到这里，`React` 微应用就接入成功了！
 
 ## 接入 `Angular` 微应用
+
+我们以 [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) 为例，我们在主应用的同级目录（`micro-app-main` 同级目录），使用 `@angular/cli` 先创建一个 `Angular` 的项目，在命令行运行如下命令：
+
+```bash
+ng new micro-app-angular
+```
+
+本文的 `@angular/cli` 选项如下图所示，你也可以根据自己的喜好选择配置。
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/30.png)
+
+项目初始化完成后，我们修改 `package.json` 中的 `scripts`，设置一些初始化配置，代码如下：
+
+```json
+// 在 scripts.start 命令中添加一些选项
+// disable-host-check: 关闭主机检查，使微应用可以被 fetch
+// port: 指定端口
+"start": "ng serve --disable-host-check --port 10300",
+```
+
+然后，我们创建几个路由页面再加上一些样式，最后效果如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/31.png)
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/32.png)
+
+### 注册微应用
+
+在创建好了 `Angular` 微应用后，我们可以开始我们的接入工作了。首先我们需要在主应用中注册该微应用的信息，代码实现如下：
+
+```ts
+// micro-app-main/src/micro/apps.ts
+const apps = [
+  /**
+   * name: 微应用名称 - 具有唯一性
+   * entry: 微应用入口 - 通过该地址加载微应用
+   * container: 微应用挂载节点 - 微应用加载完成后将挂载在该节点上
+   * activeRule: 微应用触发的路由规则 - 触发路由规则后将加载该微应用
+   */
+  {
+    name: "AngularMicroApp",
+    entry: "//localhost:10300",
+    container: "#frame",
+    activeRule: "/angular"
+  },
+];
+
+export default apps;
+```
+
+通过上面的代码，我们就在主应用中注册了我们的 `Angular` 微应用，进入 `/angular` 路由时将加载我们的 `Angular` 微应用。我们在菜单配置处也加入 `Angular` 微应用的快捷入口，代码实现如下：
+
+```ts
+// micro-app-main/src/App.vue
+//...
+export default class App extends Vue {
+  /**
+   * 菜单列表
+   * key: 唯一 Key 值
+   * title: 菜单标题
+   * path: 菜单对应的路径
+   */
+  menus = [
+    {
+      key: "Home",
+      title: "主页",
+      path: "/"
+    },
+    {
+      key: "AngularMicroApp",
+      title: "Angular 主页",
+      path: "/angular"
+    },
+    {
+      key: "AngularMicroAppList",
+      title: "Angular 列表页",
+      path: "/angular/list"
+    },
+  ];
+}
+```
+
+菜单配置完成后，我们的主应用基座效果图如下
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/33.png)
+
+### 配置微应用
+
+在主应用注册好了微应用后，我们还需要对微应用进行一系列的配置。首先，我们使用 `single-spa-angular` 生成一套配置，在命令行运行以下命令：
+
+```bash
+# 安装 single-spa
+yarn add single-spa -S
+
+# 添加 single-spa-angular
+ng add single-spa-angular
+```
+
+运行命令时，根据自己的
+
 
 ## 接入 `Jquery、xxx...` 微应用
