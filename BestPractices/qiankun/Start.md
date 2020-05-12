@@ -1,12 +1,31 @@
-# 基于 qiankun 的微前端最佳实践（图文并茂） - 从 0 到 1 篇
+# 基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun/40.png)
 
+## 写在开头
+
+微前端系列文章：
+
+- [基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇](https://juejin.im/post/5eb530495188256d9a28da13)
+- [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://juejin.im/post/5eb530495188256d9a28da13)
+- [万字长文+图文并茂+全面解析微前端框架 qiankun 源码 - qiankun 篇](https://juejin.im/post/5e8aa8d1f265da47ae4ab8c5)
+
+本系列其他文章计划一到两个月内完成，点个 `关注` 不迷路，计划如下：
+
+ - 生命周期篇；
+ - IE 兼容篇；
+ - 生产环境部署篇；
+ - 性能优化、缓存方案篇；
+
+## 引言
+
 大家好~
 
-本文是基于 `qiankun` 的微前端最佳实践系列文章之 `从 0 到 1 篇`，本文将分享在 `qiankun` 中如何搭建主应用基座，然后接入不同技术栈的微应用，完成微前端架构的从 0 到 1。
+本文是基于 `qiankun` 的微前端最佳实践系列文章之 `从 0 到 1 篇`，本文将分享如何使用 `qiankun` 如何搭建主应用基座，然后接入不同技术栈的微应用，完成微前端架构的从 0 到 1。
 
-`qiankun` 属于无侵入性的微前端框架，对主应用基座和微应用的技术栈都没有要求。本文采用 `Vue` 作为主应用基座，接入不同技术栈的微应用。如果你不懂 `Vue` 也没关系，我们在搭建主应用基座的教程尽量不涉及 `Vue` 的 `API`，涉及到 `API` 的地方都会给出解释。
+本文采用 `Vue` 作为主应用基座，接入不同技术栈的微应用。如果你不懂 `Vue` 也没关系，我们在搭建主应用基座的教程尽量不涉及 `Vue` 的 `API`，涉及到 `API` 的地方都会给出解释。
+
+> 注意：`qiankun` 属于无侵入性的微前端框架，对主应用基座和微应用的技术栈都没有要求。
 
 ## 构建主应用基座
 
@@ -18,13 +37,13 @@
 
 将普通的项目改造成 `qiankun` 主应用基座，需要进行三步操作：
 
-1. 设置微应用容器 - 用于渲染显示微应用；
-2. 注册微应用 - 设定微应用触发条件，微应用地址等等；
+1. 创建微应用容器 - 用于承载微应用，渲染显示微应用；
+2. 注册微应用 - 设置微应用激活条件，微应用地址等等；
 3. 启动 `qiankun`；
 
-### 设置微应用容器
+### 创建微应用容器
 
-我们先在主应用中设置微应用的容器，这个容器规范了微应用的显示区域，微应用将在该容器内渲染并显示。
+我们先在主应用中创建微应用的承载容器，这个容器规定了微应用的显示区域，微应用将在该容器内渲染并显示。
 
 我们先设置路由，路由文件规定了主应用自身的路由匹配规则，代码实现如下：
 
@@ -921,3 +940,277 @@ module.exports = (angularWebpackConfig, options) => {
 到这里，`Angular` 微应用就接入成功了！
 
 ## 接入 `Jquery、xxx...` 微应用
+
+> 这里的 `Jquery、xxx...` 微应用指的是没有使用脚手架，采用 `html + css + js` 三剑客传统开发的应用。
+> 
+> 本案例使用了一些高级 `ES` 语法，请使用谷歌浏览器运行查看效果。
+
+我们以 [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) 为例，我们在主应用的同级目录（`micro-app-main` 同级目录），手动创建目录 `micro-app-static`。
+
+我们使用 `express` 作为服务器加载静态 `html`，我们先编辑 `package.json`，设置启动命令和相关依赖。
+
+```json
+// micro-app-static/package.json
+{
+  "name": "micro-app-jquery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
+```
+
+然后添加入口文件 `index.js`，代码实现如下：
+
+```js
+// micro-app-static/index.js
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+// 解决跨域问题
+app.use(cors());
+app.use('/', express.static('static'));
+
+// 监听端口
+app.listen(10400, () => {
+  console.log("server is listening in http://localhost:10400")
+});
+```
+
+使用 `npm install` 安装相关依赖后，我们使用 `npm start` 启动应用。
+
+我们新建 `static` 文件夹，在文件夹内新增一个静态页面 `index.html`（代码在后面会贴出），加上一些样式后，打开浏览器，最后效果如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/37.png)
+
+### 注册微应用
+
+在创建好了 `Static` 微应用后，我们可以开始我们的接入工作了。首先我们需要在主应用中注册该微应用的信息，代码实现如下：
+
+```ts
+// micro-app-main/src/micro/apps.ts
+const apps = [
+  /**
+   * name: 微应用名称 - 具有唯一性
+   * entry: 微应用入口 - 通过该地址加载微应用
+   * container: 微应用挂载节点 - 微应用加载完成后将挂载在该节点上
+   * activeRule: 微应用触发的路由规则 - 触发路由规则后将加载该微应用
+   */
+  {
+    name: "StaticMicroApp",
+    entry: "//localhost:10400",
+    container: "#frame",
+    activeRule: "/static"
+  },
+];
+
+export default apps;
+```
+
+通过上面的代码，我们就在主应用中注册了我们的 `Static` 微应用，进入 `/static` 路由时将加载我们的 `Static` 微应用。我们在菜单配置处也加入 `Static` 微应用的快捷入口，代码实现如下：
+
+```ts
+// micro-app-main/src/App.vue
+//...
+export default class App extends Vue {
+  /**
+   * 菜单列表
+   * key: 唯一 Key 值
+   * title: 菜单标题
+   * path: 菜单对应的路径
+   */
+  menus = [
+    {
+      key: "Home",
+      title: "主页",
+      path: "/"
+    },
+    {
+      key: "StaticMicroApp",
+      title: "Static 微应用",
+      path: "/static"
+    }
+  ];
+}
+```
+
+菜单配置完成后，我们的主应用基座效果图如下
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/38.png)
+
+### 配置微应用
+
+在主应用注册好了微应用后，我们还需要直接写微应用 `index.html` 的代码即可，代码实现如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/39.png)
+
+从上图来分析：
+  - `第 70 行`：微应用的挂载函数，在主应用中运行时将在 `mount` 生命周期钩子函数中调用，可以保证在沙箱内运行。
+  - `第 77 行`：微应用独立运行时，直接执行 `render` 函数挂载微应用。
+  - `第 88 行`：微应用注册的生命周期钩子函数 - `bootstrap`。
+  - `第 95 行`：微应用注册的生命周期钩子函数 - `mount`。
+  - `第 102 行`：微应用注册的生命周期钩子函数 - `unmount`。
+
+完整代码实现如下：
+
+```html
+<!-- micro-app-static/static/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- 引入 bootstrap -->
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>Jquery App</title>
+  </head>
+
+  <body>
+    <section
+      id="jquery-app-container"
+      style="padding: 20px; color: blue;"
+    ></section>
+  </body>
+  <!-- 引入 jquery -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    /**
+     * 请求接口数据，构建 HTML
+     */
+    async function buildHTML() {
+      const result = await fetch("http://dev-api.jt-gmall.com/mall", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // graphql 的查询风格
+        body: JSON.stringify({
+          query: `{ vegetableList (page: 1, pageSize: 20) { page, pageSize, total, items { _id, name, poster, price } } }`,
+        }),
+      }).then((res) => res.json());
+      const list = result.data.vegetableList.items;
+      const html = `<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">菜名</th>
+      <th scope="col">图片</th>
+      <th scope="col">报价</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${list
+      .map(
+        (item) => `
+    <tr>
+      <td>
+        <img style="width: 40px; height: 40px; border-radius: 100%;" src="${item.poster}"></img>
+      </td>
+      <td>${item.name}</td>
+      <td>￥ ${item.price}</td>
+    </tr>
+      `
+      )
+      .join("")}
+  </tbody>
+</table>`;
+      return html;
+    }
+
+    /**
+     * 渲染函数
+     * 两种情况：主应用生命周期钩子中运行 / 微应用单独启动时运行
+     */
+    const render = async ($) => {
+      const html = await buildHTML();
+      $("#jquery-app-container").html(html);
+      return Promise.resolve();
+    };
+
+    // 独立运行时，直接挂载应用
+    if (!window.__POWERED_BY_QIANKUN__) {
+      render($);
+    }
+
+    ((global) => {
+      /**
+       * 注册微应用生命周期钩子函数
+       * global[appName] 中的 appName 与主应用中注册的微应用名称一致
+       */
+      global["StaticMicroApp"] = {
+        /**
+         * bootstrap 只会在微应用初始化的时候调用一次，下次微应用重新进入时会直接调用 mount 钩子，不会再重复触发 bootstrap。
+         * 通常我们可以在这里做一些全局变量的初始化，比如不会在 unmount 阶段被销毁的应用级别的缓存等。
+         */
+        bootstrap: () => {
+          console.log("MicroJqueryApp bootstraped");
+          return Promise.resolve();
+        },
+        /**
+         * 应用每次进入都会调用 mount 方法，通常我们在这里触发应用的渲染方法
+         */
+        mount: () => {
+          console.log("MicroJqueryApp mount");
+          return render($);
+        },
+        /**
+         * 应用每次 切出/卸载 会调用的方法，通常在这里我们会卸载微应用的应用实例
+         */
+        unmount: () => {
+          console.log("MicroJqueryApp unmount");
+          return Promise.resolve();
+        },
+      };
+    })(window);
+  </script>
+</html>
+```
+
+在构建好了 `Static` 微应用后，我们打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时可以看到，我们的 `Static` 微应用被正常加载啦！（见下图）
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/40.png)
+
+此时我们打开控制台，可以看到我们所执行的生命周期钩子函数（见下图）
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/41.png)
+
+到这里，`Static` 微应用就接入成功了！
+
+### 扩展阅读
+
+如果在 `Static` 微应用的 `html` 中注入 `SPA` 路由功能的话，将演变成单页应用，只需要在主应用中注册一次。
+
+如果是多个 `html` 则需要在服务器（或反向代理服务器）中通过 `referer` 头返回对应的 `html` 文件，或者在主应用中注册多个微应用（不推荐）。
+
+## 小结
+
+最后，我们所有微应用都注册在主应用和主应用的菜单中，效果图如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/42.png)
+
+从上图可以看出，我们把不同技术栈 `Vue、React、Angular、Jquery...` 的微应用都已经接入到主应用基座中啦！
+
+## 最后一件事
+
+如果您已经看到这里了，希望您还是点个 `赞` 再走吧~
+
+您的 `点赞` 是对作者的最大鼓励，也可以让更多人看到本篇文章！
+
+如果感兴趣的话，请关注 [博客](https://github.com/a1029563229/Blogs/tree/master) 或者关注作者即可获取最新动态！
+
+[github 地址](https://github.com/a1029563229/Blogs/tree/master)
