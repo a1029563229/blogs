@@ -17,9 +17,10 @@
 > [vue-cli](https://cli.vuejs.org/zh/guide/) 是 `Vue` 官方提供的脚手架工具，用于快速搭建一个 `Vue` 项目。如果你想跳过这一步，可以直接 `clone` [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) 的代码。
 
 将普通的项目改造成 `qiankun` 主应用基座，需要进行三步操作：
-  1. 设置微应用容器 - 用于渲染显示微应用；
-  2. 注册微应用 - 设定微应用触发条件，微应用地址等等；
-  3. 启动 `qiankun`；
+
+1. 设置微应用容器 - 用于渲染显示微应用；
+2. 注册微应用 - 设定微应用触发条件，微应用地址等等；
+3. 启动 `qiankun`；
 
 ### 设置微应用容器
 
@@ -41,7 +42,7 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-  }
+  },
 ];
 
 export default routes;
@@ -85,8 +86,8 @@ export default class App extends Vue {
     {
       key: "Home",
       title: "主页",
-      path: "/"
-    }
+      path: "/",
+    },
   ];
 }
 ```
@@ -96,9 +97,10 @@ export default class App extends Vue {
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/12.png)
 
 我们来分析一下上面的代码：
-  - `第 5 行`：主应用菜单，用于渲染菜单；
-  - `第 9 行`：主应用渲染区。在触发主应用路由规则时（由路由配置表的 `$route.name` 判断），将渲染主应用的组件；
-  - `第 10 行`：微应用渲染区。在未触发主应用路由规则时（由路由配置表的 `$route.name` 判断），将渲染微应用节点；
+
+- `第 5 行`：主应用菜单，用于渲染菜单；
+- `第 9 行`：主应用渲染区。在触发主应用路由规则时（由路由配置表的 `$route.name` 判断），将渲染主应用的组件；
+- `第 10 行`：微应用渲染区。在未触发主应用路由规则时（由路由配置表的 `$route.name` 判断），将渲染微应用节点；
 
 从上面的分析可以看出，我们使用了在路由表配置的 `name` 字段进行判断，判断当前路由是否为主应用路由，最后决定渲染主应用组件或是微应用节点。
 
@@ -243,7 +245,7 @@ const apps = [
     name: "VueMicroApp",
     entry: "//localhost:10200",
     container: "#frame",
-    activeRule: "/vue"
+    activeRule: "/vue",
   },
 ];
 
@@ -266,17 +268,17 @@ export default class App extends Vue {
     {
       key: "Home",
       title: "主页",
-      path: "/"
+      path: "/",
     },
     {
       key: "VueMicroApp",
       title: "Vue 主页",
-      path: "/vue"
+      path: "/vue",
     },
     {
       key: "VueMicroAppList",
       title: "Vue 列表页",
-      path: "/vue/list"
+      path: "/vue/list",
     },
   ];
 }
@@ -293,12 +295,13 @@ export default class App extends Vue {
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/19.png)
 
 从上图来分析：
-  - `第 6 行`：`webpack` 默认的 `publicPath` 为 `""`  空字符串，会基于当前路径来加载资源。我们在主应用中加载微应用时需要重新设置 `publicPath`，这样才能正确加载微应用的相关资源。（`public-path.js` 具体实现在后面）
-  - `第 21 行`：微应用的挂载函数，在主应用中运行时将在 `mount` 生命周期钩子函数中调用，可以保证在沙箱内运行。
-  - `第 38 行`：微应用独立运行时，直接执行 `render` 函数挂载微应用。
-  - `第 46 行`：微应用导出的生命周期钩子函数 - `bootstrap`。
-  - `第 53 行`：微应用导出的生命周期钩子函数 - `mount`。
-  - `第 61 行`：微应用导出的生命周期钩子函数 - `unmount`。
+
+- `第 6 行`：`webpack` 默认的 `publicPath` 为 `""` 空字符串，会基于当前路径来加载资源。我们在主应用中加载微应用时需要重新设置 `publicPath`，这样才能正确加载微应用的相关资源。（`public-path.js` 具体实现在后面）
+- `第 21 行`：微应用的挂载函数，在主应用中运行时将在 `mount` 生命周期钩子函数中调用，可以保证在沙箱内运行。
+- `第 38 行`：微应用独立运行时，直接执行 `render` 函数挂载微应用。
+- `第 46 行`：微应用导出的生命周期钩子函数 - `bootstrap`。
+- `第 53 行`：微应用导出的生命周期钩子函数 - `mount`。
+- `第 61 行`：微应用导出的生命周期钩子函数 - `unmount`。
 
 完整代码实现如下：
 
@@ -349,7 +352,7 @@ function render() {
 
 // 独立运行时，直接挂载应用
 if (!window.__POWERED_BY_QIANKUN__) {
-  render()
+  render();
 }
 
 /**
@@ -385,7 +388,7 @@ export async function unmount() {
 
 ```js
 // micro-app-vue/vue.config.js
-const path = require('path');
+const path = require("path");
 
 module.exports = {
   devServer: {
@@ -395,25 +398,25 @@ module.exports = {
     disableHostCheck: true,
     // 配置跨域请求头，解决开发环境的跨域问题
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      "Access-Control-Allow-Origin": "*",
     },
   },
   configureWebpack: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src')
-      }
+        "@": path.resolve(__dirname, "src"),
+      },
     },
     output: {
       // 微应用的包名，这里与主应用中注册的微应用名称一致
       library: "VueMicroApp",
       // 将你的 library 暴露为所有的模块定义下都可运行的方式
-      libraryTarget: 'umd',
+      libraryTarget: "umd",
       // 按需加载相关，设置为 webpackJsonp_VueMicroApp 即可
       jsonpFunction: `webpackJsonp_VueMicroApp`,
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 我们需要重点关注一下 `output` 选项，当我们把 `libraryTarget` 设置为 `umd` 后，我们的 `library` 就暴露为所有的模块定义下都可运行的方式了，主应用就可以获取到微应用的生命周期钩子函数了。
@@ -467,8 +470,8 @@ const apps = [
     name: "ReactMicroApp",
     entry: "//localhost:10100",
     container: "#frame",
-    activeRule: "/react"
-  }
+    activeRule: "/react",
+  },
 ];
 
 export default apps;
@@ -490,17 +493,17 @@ export default class App extends Vue {
     {
       key: "Home",
       title: "主页",
-      path: "/"
+      path: "/",
     },
     {
       key: "ReactMicroApp",
       title: "React 主页",
-      path: "/react"
+      path: "/react",
     },
     {
       key: "ReactMicroAppList",
       title: "React 列表页",
-      path: "/react/list"
+      path: "/react/list",
     },
   ];
 }
@@ -517,12 +520,13 @@ export default class App extends Vue {
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/27.png)
 
 从上图来分析：
-  - `第 5 行`：`webpack` 默认的 `publicPath` 为 `""`  空字符串，会基于当前路径来加载资源。我们在主应用中加载微应用时需要重新设置 `publicPath`，这样才能正确加载微应用的相关资源。（`public-path.js` 具体实现在后面）
-  - `第 12 行`：微应用的挂载函数，在主应用中运行时将在 `mount` 生命周期钩子函数中调用，可以保证在沙箱内运行。
-  - `第 17 行`：微应用独立运行时，直接执行 `render` 函数挂载微应用。
-  - `第 25 行`：微应用导出的生命周期钩子函数 - `bootstrap`。
-  - `第 32 行`：微应用导出的生命周期钩子函数 - `mount`。
-  - `第 40 行`：微应用导出的生命周期钩子函数 - `unmount`。
+
+- `第 5 行`：`webpack` 默认的 `publicPath` 为 `""` 空字符串，会基于当前路径来加载资源。我们在主应用中加载微应用时需要重新设置 `publicPath`，这样才能正确加载微应用的相关资源。（`public-path.js` 具体实现在后面）
+- `第 12 行`：微应用的挂载函数，在主应用中运行时将在 `mount` 生命周期钩子函数中调用，可以保证在沙箱内运行。
+- `第 17 行`：微应用独立运行时，直接执行 `render` 函数挂载微应用。
+- `第 25 行`：微应用导出的生命周期钩子函数 - `bootstrap`。
+- `第 32 行`：微应用导出的生命周期钩子函数 - `mount`。
+- `第 40 行`：微应用导出的生命周期钩子函数 - `unmount`。
 
 完整代码实现如下：
 
@@ -575,7 +579,7 @@ export async function mount(props) {
  * 应用每次 切出/卸载 会调用的方法，通常在这里我们会卸载微应用的应用实例
  */
 export async function unmount() {
-  console.log("ReactMicroApp unmount");  
+  console.log("ReactMicroApp unmount");
   ReactDOM.unmountComponentAtNode(document.getElementById("root"));
 }
 ```
@@ -590,9 +594,7 @@ const App = () => {
 
   return (
     // 设置路由命名空间
-    <Router basename={BASE_NAME}>
-      {/* ... */}
-    </Router>
+    <Router basename={BASE_NAME}>{/* ... */}</Router>
   );
 };
 ```
@@ -672,6 +674,10 @@ module.exports = {
 
 ## 接入 `Angular` 微应用
 
+`Angular` 与 `qiankun` 目前的兼容性并不太好，接入 `Angular` 微应用需要一定的耐心与技巧。
+
+> 对于选择 `Angular` 技术栈的前端开发来说，对这类情况应该驾轻就熟（没有办法）。
+
 我们以 [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) 为例，我们在主应用的同级目录（`micro-app-main` 同级目录），使用 `@angular/cli` 先创建一个 `Angular` 的项目，在命令行运行如下命令：
 
 ```bash
@@ -714,7 +720,7 @@ const apps = [
     name: "AngularMicroApp",
     entry: "//localhost:10300",
     container: "#frame",
-    activeRule: "/angular"
+    activeRule: "/angular",
   },
 ];
 
@@ -737,17 +743,17 @@ export default class App extends Vue {
     {
       key: "Home",
       title: "主页",
-      path: "/"
+      path: "/",
     },
     {
       key: "AngularMicroApp",
       title: "Angular 主页",
-      path: "/angular"
+      path: "/angular",
     },
     {
       key: "AngularMicroAppList",
       title: "Angular 列表页",
-      path: "/angular/list"
+      path: "/angular/list",
     },
   ];
 }
@@ -757,9 +763,22 @@ export default class App extends Vue {
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/33.png)
 
+最后我们在主应用的入口文件，引入 `zone.js`，代码实现如下：
+
+> `Angular` 运行依赖于 `zone.js`。
+>
+> `qiankun` 基于 `single-spa` 实现，`single-spa` 明确指出一个项目的 `zone.js` 只能存在一份实例，所以我们在主应用注入 `zone.js`。
+
+```js
+// micro-app-main/src/main.js
+
+// 为 Angular 微应用所做的 zone 包注入
+import "zone.js/dist/zone";
+```
+
 ### 配置微应用
 
-在主应用注册好了微应用后，我们还需要对微应用进行一系列的配置。首先，我们使用 `single-spa-angular` 生成一套配置，在命令行运行以下命令：
+在主应用的工作完成后，我们还需要对微应用进行一系列的配置。首先，我们使用 `single-spa-angular` 生成一套配置，在命令行运行以下命令：
 
 ```bash
 # 安装 single-spa
@@ -769,7 +788,136 @@ yarn add single-spa -S
 ng add single-spa-angular
 ```
 
-运行命令时，根据自己的
+运行命令时，根据自己的需求选择配置即可，本文配置如下：
 
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/34.png)
+
+在生成 `single-spa` 配置后，我们需要进行一些 `qiankun` 的接入配置。我们在 `Angular` 微应用现在的入口文件 `main.single-spa.ts` 中，导出 `qiankun` 主应用所需要的三个生命周期钩子函数，代码实现如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/35.png)
+
+从上图来分析：
+
+- `第 21 行`：微应用独立运行时，直接执行挂载函数挂载微应用。
+- `第 46 行`：微应用导出的生命周期钩子函数 - `bootstrap`。
+- `第 50 行`：微应用导出的生命周期钩子函数 - `mount`。
+- `第 54 行`：微应用导出的生命周期钩子函数 - `unmount`。
+
+完整代码实现如下：
+
+```ts
+// micro-app-angular/src/main.single-spa.ts
+import { enableProdMode, NgZone } from "@angular/core";
+
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { Router } from "@angular/router";
+import { ɵAnimationEngine as AnimationEngine } from "@angular/animations/browser";
+
+import {
+  singleSpaAngular,
+  getSingleSpaExtraProviders,
+} from "single-spa-angular";
+
+import { AppModule } from "./app/app.module";
+import { environment } from "./environments/environment";
+import { singleSpaPropsSubject } from "./single-spa/single-spa-props";
+
+if (environment.production) {
+  enableProdMode();
+}
+
+// 微应用单独启动时运行
+if (!(window as any).__POWERED_BY_QIANKUN__) {
+  platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .catch((err) => console.error(err));
+}
+
+const { bootstrap, mount, unmount } = singleSpaAngular({
+  bootstrapFunction: (singleSpaProps) => {
+    singleSpaPropsSubject.next(singleSpaProps);
+    return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(
+      AppModule
+    );
+  },
+  template: "<app-root />",
+  Router,
+  NgZone,
+  AnimationEngine,
+});
+
+/** 主应用生命周期钩子中运行 */
+export {
+  /**
+   * bootstrap 只会在微应用初始化的时候调用一次，下次微应用重新进入时会直接调用 mount 钩子，不会再重复触发 bootstrap。
+   * 通常我们可以在这里做一些全局变量的初始化，比如不会在 unmount 阶段被销毁的应用级别的缓存等。
+   */
+  bootstrap,
+  /**
+   * 应用每次进入都会调用 mount 方法，通常我们在这里触发应用的渲染方法
+   */
+  mount,
+  /**
+   * 应用每次 切出/卸载 会调用的方法，通常在这里我们会卸载微应用的应用实例
+   */
+  unmount,
+};
+```
+
+在配置好了入口文件 `main.single-spa.ts` 后，我们还需要配置 `webpack`，使 `main.single-spa.ts` 导出的生命周期钩子函数可以被 `qiankun` 识别获取。
+
+我们直接配置 `extra-webpack.config.js` 即可，代码实现如下：
+
+```js
+// micro-app-angular/extra-webpack.config.js
+const singleSpaAngularWebpack = require("single-spa-angular/lib/webpack")
+  .default;
+const webpackMerge = require("webpack-merge");
+
+module.exports = (angularWebpackConfig, options) => {
+  const singleSpaWebpackConfig = singleSpaAngularWebpack(
+    angularWebpackConfig,
+    options
+  );
+
+  const singleSpaConfig = {
+    output: {
+      // 微应用的包名，这里与主应用中注册的微应用名称一致
+      library: "AngularMicroApp",
+      // 将你的 library 暴露为所有的模块定义下都可运行的方式
+      libraryTarget: "umd",
+    },
+  };
+  const mergedConfig = webpackMerge.smart(
+    singleSpaWebpackConfig,
+    singleSpaConfig
+  );
+  return mergedConfig;
+};
+```
+
+我们需要重点关注一下 `output` 选项，当我们把 `libraryTarget` 设置为 `umd` 后，我们的 `library` 就暴露为所有的模块定义下都可运行的方式了，主应用就可以获取到微应用的生命周期钩子函数了。
+
+在 `extra-webpack.config.js` 修改完成后，我们还需要修改一下 `package.json` 中的启动命令，修改如下：
+
+```json
+// micro-app-angular/package.json
+{
+  //...
+  "script": {
+    //...
+    // --disable-host-check: 关闭主机检查，使微应用可以被 fetch
+    // --port: 监听端口
+    // --base-href: 站点的起始路径，与主应用中配置的一致
+    "start": "ng serve --disable-host-check --port 10300 --base-href /angular"
+  }
+}
+```
+
+修改完成后，我们重新启动 `Angular` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `Angular` 微应用被正常加载啦！（见下图）
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/36.png)
+
+到这里，`Angular` 微应用就接入成功了！
 
 ## 接入 `Jquery、xxx...` 微应用

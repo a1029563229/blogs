@@ -58,6 +58,13 @@ const router = new VueRouter({
   mode: "history",
   routes,
 });
+
+// 创建 Vue 实例
+// 该实例将挂载/渲染在 id 为 main-app 的节点上
+new Vue({
+  router,
+  render: (h) => h(App),
+}).$mount("#main-app");
 ```
 
 从上面代码可以看出，我们设置了主应用的路由规则，设置了 `Home` 主页的路由匹配规则。
@@ -372,7 +379,7 @@ export async function unmount() {
 }
 ```
 
-在配置好了入口文件 `main.js` 后，我们需要再配置 `webpack`，使 `main.js` 导出的生命周期钩子函数可以被 `qiankun` 识别获取。
+在配置好了入口文件 `main.js` 后，我们还需要配置 `webpack`，使 `main.js` 导出的生命周期钩子函数可以被 `qiankun` 识别获取。
 
 我们直接配置 `vue.config.js` 即可，代码实现如下：
 
@@ -422,6 +429,229 @@ module.exports = {
 到这里，`Vue` 微应用就接入成功了！
 
 ## 接入 `React` 微应用
+
+我们以 [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) 为例，我们在主应用的同级目录（`micro-app-main` 同级目录），使用 `react-create-app` 先创建一个 `React` 的项目，在命令行运行如下命令：
+
+```bash
+npx create-react-app micro-app-react
+```
+
+在项目创建完成后，我们在根目录下添加 `.env` 文件，设置项目监听的端口，代码实现如下：
+
+```bash
+# micro-app-react/.env
+PORT=10100
+BROWSER=none
+```
+
+然后，我们创建几个路由页面再加上一些样式，最后效果如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/23.png)
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/24.png)
+
+### 注册微应用
+
+在创建好了 `React` 微应用后，我们可以开始我们的接入工作了。首先我们需要在主应用中注册该微应用的信息，代码实现如下：
+
+```ts
+// micro-app-main/src/micro/apps.ts
+const apps = [
+  /**
+   * name: 微应用名称 - 具有唯一性
+   * entry: 微应用入口 - 通过该地址加载微应用
+   * container: 微应用挂载节点 - 微应用加载完成后将挂载在该节点上
+   * activeRule: 微应用触发的路由规则 - 触发路由规则后将加载该微应用
+   */
+  {
+    name: "ReactMicroApp",
+    entry: "//localhost:10100",
+    container: "#frame",
+    activeRule: "/react"
+  }
+];
+
+export default apps;
+```
+
+通过上面的代码，我们就在主应用中注册了我们的 `React` 微应用，进入 `/react` 路由时将加载我们的 `React` 微应用。我们在菜单配置处也加入 `React` 微应用的快捷入口，代码实现如下：
+
+```ts
+// micro-app-main/src/App.vue
+//...
+export default class App extends Vue {
+  /**
+   * 菜单列表
+   * key: 唯一 Key 值
+   * title: 菜单标题
+   * path: 菜单对应的路径
+   */
+  menus = [
+    {
+      key: "Home",
+      title: "主页",
+      path: "/"
+    },
+    {
+      key: "ReactMicroApp",
+      title: "React 主页",
+      path: "/react"
+    },
+    {
+      key: "ReactMicroAppList",
+      title: "React 列表页",
+      path: "/react/list"
+    },
+  ];
+}
+```
+
+菜单配置完成后，我们的主应用基座效果图如下
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/25.png)
+
+### 配置微应用
+
+在主应用注册好了微应用后，我们还需要对微应用进行一系列的配置。首先，我们在 `React` 的入口文件 `index.js` 中，导出 `qiankun` 主应用所需要的三个生命周期钩子函数，代码实现如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/27.png)
+
+从上图来分析：
+  - `第 5 行`：`webpack` 默认的 `publicPath` 为 `""`  空字符串，会基于当前路径来加载资源。我们在主应用中加载微应用时需要重新设置 `publicPath`，这样才能正确加载微应用的相关资源。（`public-path.js` 具体实现在后面）
+  - `第 12 行`：微应用的挂载函数，在主应用中运行时将在 `mount` 生命周期钩子函数中调用，可以保证在沙箱内运行。
+  - `第 17 行`：微应用独立运行时，直接执行 `render` 函数挂载微应用。
+  - `第 25 行`：微应用导出的生命周期钩子函数 - `bootstrap`。
+  - `第 32 行`：微应用导出的生命周期钩子函数 - `mount`。
+  - `第 40 行`：微应用导出的生命周期钩子函数 - `unmount`。
+
+完整代码实现如下：
+
+```js
+// micro-app-react/src/public-path.js
+if (window.__POWERED_BY_QIANKUN__) {
+  // 动态设置 webpack publicPath，防止资源加载出错
+  // eslint-disable-next-line no-undef
+  __webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__;
+}
+
+// micro-app-react/src/index.js
+import React from "react";
+import ReactDOM from "react-dom";
+import "antd/dist/antd.css";
+
+import "./public-path";
+import App from "./App.jsx";
+
+/**
+ * 渲染函数
+ * 两种情况：主应用生命周期钩子中运行 / 微应用单独启动时运行
+ */
+function render() {
+  ReactDOM.render(<App />, document.getElementById("root"));
+}
+
+// 独立运行时，直接挂载应用
+if (!window.__POWERED_BY_QIANKUN__) {
+  render();
+}
+
+/**
+ * bootstrap 只会在微应用初始化的时候调用一次，下次微应用重新进入时会直接调用 mount 钩子，不会再重复触发 bootstrap。
+ * 通常我们可以在这里做一些全局变量的初始化，比如不会在 unmount 阶段被销毁的应用级别的缓存等。
+ */
+export async function bootstrap() {
+  console.log("ReactMicroApp bootstraped");
+}
+
+/**
+ * 应用每次进入都会调用 mount 方法，通常我们在这里触发应用的渲染方法
+ */
+export async function mount(props) {
+  console.log("ReactMicroApp mount", props);
+  render(props);
+}
+
+/**
+ * 应用每次 切出/卸载 会调用的方法，通常在这里我们会卸载微应用的应用实例
+ */
+export async function unmount() {
+  console.log("ReactMicroApp unmount");  
+  ReactDOM.unmountComponentAtNode(document.getElementById("root"));
+}
+```
+
+在配置好了入口文件 `index.js` 后，我们还需要配置 `webpack`，使 `index.js` 导出的生命周期钩子函数可以被 `qiankun` 识别获取。
+
+我们需要借助 `react-app-rewired` 来帮助我们修改 `webpack` 的配置，我们直接安装该插件：
+
+```bash
+npm install react-app-rewired -D
+```
+
+在 `react-app-rewired` 安装完成后，我们还需要修改 `package.json` 的 `scripts` 选项，修改为由 `react-app-rewired` 启动应用，就像下面这样
+
+```json
+// micro-app-react/package.json
+
+//...
+"scripts": {
+  "start": "react-app-rewired start",
+  "build": "react-app-rewired build",
+  "test": "react-app-rewired test",
+  "eject": "react-app-rewired eject"
+}
+```
+
+在 `react-app-rewired` 配置完成后，我们新建 `config-overrides.js` 文件来配置 `webpack`，代码实现如下：
+
+```js
+const path = require("path");
+
+module.exports = {
+  webpack: (config) => {
+    // 微应用的包名，这里与主应用中注册的微应用名称一致
+    config.output.library = `ReactMicroApp`;
+    // 将你的 library 暴露为所有的模块定义下都可运行的方式
+    config.output.libraryTarget = "umd";
+    // 按需加载相关，设置为 webpackJsonp_VueMicroApp 即可
+    config.output.jsonpFunction = `webpackJsonp_ReactMicroApp`;
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": path.resolve(__dirname, "src"),
+    };
+    return config;
+  },
+
+  devServer: function (configFunction) {
+    return function (proxy, allowedHost) {
+      const config = configFunction(proxy, allowedHost);
+      // 关闭主机检查，使微应用可以被 fetch
+      config.disableHostCheck = true;
+      // 配置跨域请求头，解决开发环境的跨域问题
+      config.headers = {
+        "Access-Control-Allow-Origin": "*",
+      };
+      // 配置 history 模式
+      config.historyApiFallback = true;
+
+      return config;
+    };
+  },
+};
+```
+
+我们需要重点关注一下 `output` 选项，当我们把 `libraryTarget` 设置为 `umd` 后，我们的 `library` 就暴露为所有的模块定义下都可运行的方式了，主应用就可以获取到微应用的生命周期钩子函数了。
+
+在 `config-overrides.js` 修改完成后，我们重新启动 `React` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `React` 微应用被正常加载啦！（见下图）
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/28.png)
+
+此时我们打开控制台，可以看到我们所执行的生命周期钩子函数（见下图）
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/29.png)
+
+到这里，`React` 微应用就接入成功了！
 
 ## 接入 `Angular` 微应用
 
