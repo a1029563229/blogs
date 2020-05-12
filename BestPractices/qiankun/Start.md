@@ -10,7 +10,9 @@
 - [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://juejin.im/post/5eb530495188256d9a28da13)
 - [万字长文+图文并茂+全面解析微前端框架 qiankun 源码 - qiankun 篇](https://juejin.im/post/5e8aa8d1f265da47ae4ab8c5)
 
-本系列其他文章计划一到两个月内完成，点个 `关注` 不迷路，计划如下：
+本系列其他文章计划一到两个月内完成，点个 `关注` 不迷路。
+
+计划如下：
 
  - 生命周期篇；
  - IE 兼容篇；
@@ -23,7 +25,7 @@
 
 本文是基于 `qiankun` 的微前端最佳实践系列文章之 `从 0 到 1 篇`，本文将分享如何使用 `qiankun` 如何搭建主应用基座，然后接入不同技术栈的微应用，完成微前端架构的从 0 到 1。
 
-本文采用 `Vue` 作为主应用基座，接入不同技术栈的微应用。如果你不懂 `Vue` 也没关系，我们在搭建主应用基座的教程尽量不涉及 `Vue` 的 `API`，涉及到 `API` 的地方都会给出解释。
+本教程采用 `Vue` 作为主应用基座，接入不同技术栈的微应用。如果你不懂 `Vue` 也没关系，我们在搭建主应用基座的教程尽量不涉及 `Vue` 的 `API`，涉及到 `API` 的地方都会给出解释。
 
 > 注意：`qiankun` 属于无侵入性的微前端框架，对主应用基座和微应用的技术栈都没有要求。
 
@@ -31,7 +33,7 @@
 
 我们以 [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) （案例是以 `Vue` 为基座的主应用，接入多个微应用） 为例，来介绍一下如何在 `qiankun` 中如何接入不同技术栈的微应用。
 
-我们先使用 `vue-cli` 构建一个普通的 `Vue` 项目，初始化主应用。
+我们先使用 `vue-cli` 生成一个 `Vue` 的项目，初始化主应用。
 
 > [vue-cli](https://cli.vuejs.org/zh/guide/) 是 `Vue` 官方提供的脚手架工具，用于快速搭建一个 `Vue` 项目。如果你想跳过这一步，可以直接 `clone` [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) 的代码。
 
@@ -68,6 +70,9 @@ export default routes;
 
 // micro-app-main/src/main.ts
 //...
+import Vue from "vue";
+import VueRouter from "vue-router";
+
 import routes from "./routes";
 
 /**
@@ -89,7 +94,7 @@ new Vue({
 
 从上面代码可以看出，我们设置了主应用的路由规则，设置了 `Home` 主页的路由匹配规则。
 
-我们现在来设置主应用的显示样式，我们会有一个菜单和显示区域，代码实现如下：
+我们现在来设置主应用的布局，我们会有一个菜单和显示区域，代码实现如下：
 
 ```ts
 // micro-app-main/src/App.vue
@@ -149,7 +154,7 @@ import {
   registerMicroApps,
   addGlobalUncaughtErrorHandler,
   start,
-} from "./qiankun";
+} from "qiankun";
 
 // 微应用注册信息
 import apps from "./apps";
@@ -160,14 +165,14 @@ import apps from "./apps";
  * 第二个参数 - 全局生命周期钩子
  */
 registerMicroApps(apps, {
-  // qiankun 生命周期钩子 - 加载前
+  // qiankun 生命周期钩子 - 微应用加载前
   beforeLoad: (app: any) => {
     // 加载微应用前，加载进度条
     NProgress.start();
     console.log("before load", app.name);
     return Promise.resolve();
   },
-  // qiankun 生命周期钩子 - 挂载后
+  // qiankun 生命周期钩子 - 微应用挂载后
   afterMount: (app: any) => {
     // 加载微应用前，进度条加载完成
     NProgress.done();
@@ -202,6 +207,7 @@ export default start;
 
 ```ts
 // micro-app-main/src/main.ts
+//...
 import startQiankun from "./micro";
 
 startQiankun();
@@ -211,19 +217,21 @@ startQiankun();
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/11.png)
 
-到这一步，我们的主应用基座就完成啦！
+因为我们还没有注册任何微应用，所以这里的效果图和上面的效果图是一样的。
+
+到这一步，我们的主应用基座就创建好啦！
 
 ## 接入微应用
 
 我们现在的主应用基座只有一个主页，现在我们需要接入微应用。
 
-`qiankun` 内部通过 `import-entry-html` 加载微应用，要求微应用需要导出生命周期钩子函数。
+`qiankun` 内部通过 `import-entry-html` 加载微应用，要求微应用需要导出生命周期钩子函数（见下图）。
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/13.png)
 
 从上图可以看出，`qiankun` 内部会校验微应用的生命周期钩子函数，如果微应用没有导出这三个生命周期钩子函数，则微应用会加载失败。
 
-我们可以通过 `webpack` 配置在入口文件处导出这三个生命周期钩子函数，也可以直接在微应用的 `window` 上挂载这三个生命周期钩子函数，一般来说我们都选用第一种方案。
+如果我们使用了脚手架搭建微应用的话，我们可以通过 `webpack` 配置在入口文件处导出这三个生命周期钩子函数。如果没有使用脚手架的话，也可以直接在微应用的 `window` 上挂载这三个生命周期钩子函数。
 
 现在我们来接入我们的各个技术栈微应用吧！
 
@@ -271,7 +279,9 @@ const apps = [
 export default apps;
 ```
 
-通过上面的代码，我们就在主应用中注册了我们的 `Vue` 微应用，进入 `/vue` 路由时将加载我们的 `Vue` 微应用。我们在菜单配置处也加入 `Vue` 微应用的快捷入口，代码实现如下：
+通过上面的代码，我们就在主应用中注册了我们的 `Vue` 微应用，进入 `/vue` 路由时将加载我们的 `Vue` 微应用。
+
+我们在菜单配置处也加入 `Vue` 微应用的快捷入口，代码实现如下：
 
 ```ts
 // micro-app-main/src/App.vue
@@ -440,7 +450,7 @@ module.exports = {
 
 我们需要重点关注一下 `output` 选项，当我们把 `libraryTarget` 设置为 `umd` 后，我们的 `library` 就暴露为所有的模块定义下都可运行的方式了，主应用就可以获取到微应用的生命周期钩子函数了。
 
-在 `vue.config.js` 修改完成后，我们重新启动 `Vue` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `Vue` 微应用被正常加载啦！（见下图）
+在 `vue.config.js` 修改完成后，我们重新启动 `Vue` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `Vue` 微应用被正确加载啦！（见下图）
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/20.png)
 
@@ -496,7 +506,9 @@ const apps = [
 export default apps;
 ```
 
-通过上面的代码，我们就在主应用中注册了我们的 `React` 微应用，进入 `/react` 路由时将加载我们的 `React` 微应用。我们在菜单配置处也加入 `React` 微应用的快捷入口，代码实现如下：
+通过上面的代码，我们就在主应用中注册了我们的 `React` 微应用，进入 `/react` 路由时将加载我们的 `React` 微应用。
+
+我们在菜单配置处也加入 `React` 微应用的快捷入口，代码实现如下：
 
 ```ts
 // micro-app-main/src/App.vue
@@ -603,7 +615,7 @@ export async function unmount() {
 }
 ```
 
-在配置好了入口文件 `index.js` 后，我们还需要配置路由命名空间，代码实现如下：
+在配置好了入口文件 `index.js` 后，我们还需要配置路由命名空间，以确保主应用可以正确加载微应用，代码实现如下：
 
 ```js
 // micro-app-react/src/App.jsx
@@ -681,7 +693,7 @@ module.exports = {
 
 我们需要重点关注一下 `output` 选项，当我们把 `libraryTarget` 设置为 `umd` 后，我们的 `library` 就暴露为所有的模块定义下都可运行的方式了，主应用就可以获取到微应用的生命周期钩子函数了。
 
-在 `config-overrides.js` 修改完成后，我们重新启动 `React` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `React` 微应用被正常加载啦！（见下图）
+在 `config-overrides.js` 修改完成后，我们重新启动 `React` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `React` 微应用被正确加载啦！（见下图）
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/28.png)
 
@@ -706,15 +718,6 @@ ng new micro-app-angular
 本文的 `@angular/cli` 选项如下图所示，你也可以根据自己的喜好选择配置。
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/30.png)
-
-项目初始化完成后，我们修改 `package.json` 中的 `scripts`，设置一些初始化配置，代码如下：
-
-```json
-// 在 scripts.start 命令中添加一些选项
-// disable-host-check: 关闭主机检查，使微应用可以被 fetch
-// port: 指定端口
-"start": "ng serve --disable-host-check --port 10300",
-```
 
 然后，我们创建几个路由页面再加上一些样式，最后效果如下：
 
@@ -746,7 +749,9 @@ const apps = [
 export default apps;
 ```
 
-通过上面的代码，我们就在主应用中注册了我们的 `Angular` 微应用，进入 `/angular` 路由时将加载我们的 `Angular` 微应用。我们在菜单配置处也加入 `Angular` 微应用的快捷入口，代码实现如下：
+通过上面的代码，我们就在主应用中注册了我们的 `Angular` 微应用，进入 `/angular` 路由时将加载我们的 `Angular` 微应用。
+
+我们在菜单配置处也加入 `Angular` 微应用的快捷入口，代码实现如下：
 
 ```ts
 // micro-app-main/src/App.vue
@@ -811,7 +816,7 @@ ng add single-spa-angular
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/34.png)
 
-在生成 `single-spa` 配置后，我们需要进行一些 `qiankun` 的接入配置。我们在 `Angular` 微应用现在的入口文件 `main.single-spa.ts` 中，导出 `qiankun` 主应用所需要的三个生命周期钩子函数，代码实现如下：
+在生成 `single-spa` 配置后，我们需要进行一些 `qiankun` 的接入配置。我们在 `Angular` 微应用的入口文件 `main.single-spa.ts` 中，导出 `qiankun` 主应用所需要的三个生命周期钩子函数，代码实现如下：
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/35.png)
 
@@ -933,7 +938,7 @@ module.exports = (angularWebpackConfig, options) => {
 }
 ```
 
-修改完成后，我们重新启动 `Angular` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `Angular` 微应用被正常加载啦！（见下图）
+修改完成后，我们重新启动 `Angular` 微应用，然后打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时我们的 `Angular` 微应用被正确加载啦！（见下图）
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/36.png)
 
@@ -941,7 +946,7 @@ module.exports = (angularWebpackConfig, options) => {
 
 ## 接入 `Jquery、xxx...` 微应用
 
-> 这里的 `Jquery、xxx...` 微应用指的是没有使用脚手架，采用 `html + css + js` 三剑客传统开发的应用。
+> 这里的 `Jquery、xxx...` 微应用指的是没有使用脚手架，直接采用 `html + css + js` 三剑客开发的应用。
 > 
 > 本案例使用了一些高级 `ES` 语法，请使用谷歌浏览器运行查看效果。
 
@@ -1019,7 +1024,9 @@ const apps = [
 export default apps;
 ```
 
-通过上面的代码，我们就在主应用中注册了我们的 `Static` 微应用，进入 `/static` 路由时将加载我们的 `Static` 微应用。我们在菜单配置处也加入 `Static` 微应用的快捷入口，代码实现如下：
+通过上面的代码，我们就在主应用中注册了我们的 `Static` 微应用，进入 `/static` 路由时将加载我们的 `Static` 微应用。
+
+我们在菜单配置处也加入 `Static` 微应用的快捷入口，代码实现如下：
 
 ```ts
 // micro-app-main/src/App.vue
@@ -1181,7 +1188,7 @@ export default class App extends Vue {
 </html>
 ```
 
-在构建好了 `Static` 微应用后，我们打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时可以看到，我们的 `Static` 微应用被正常加载啦！（见下图）
+在构建好了 `Static` 微应用后，我们打开主应用基座 `http://localhost:9999`。我们点击左侧菜单切换到微应用，此时可以看到，我们的 `Static` 微应用被正确加载啦！（见下图）
 
 ![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/40.png)
 
@@ -1195,7 +1202,7 @@ export default class App extends Vue {
 
 如果在 `Static` 微应用的 `html` 中注入 `SPA` 路由功能的话，将演变成单页应用，只需要在主应用中注册一次。
 
-如果是多个 `html` 则需要在服务器（或反向代理服务器）中通过 `referer` 头返回对应的 `html` 文件，或者在主应用中注册多个微应用（不推荐）。
+如果是多个 `html` 的多页应用 - `MPA`，则需要在服务器（或反向代理服务器）中通过 `referer` 头返回对应的 `html` 文件，或者在主应用中注册多个微应用（不推荐）。
 
 ## 小结
 
