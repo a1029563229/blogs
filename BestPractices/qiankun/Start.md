@@ -29,6 +29,10 @@
 
 > 注意：`qiankun` 属于无侵入性的微前端框架，对主应用基座和微应用的技术栈都没有要求。
 
+我们在本教程中，接入了多技术栈 `微应用` 的 `主应用` 最终效果图如下：
+
+![micro-app](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/42.png)
+
 ## 构建主应用基座
 
 我们以 [实战案例 - feature-inject-sub-apps 分支](https://github.com/a1029563229/micro-front-template/tree/feature-inject-sub-apps) （案例是以 `Vue` 为基座的主应用，接入多个微应用） 为例，来介绍一下如何在 `qiankun` 中如何接入不同技术栈的微应用。
