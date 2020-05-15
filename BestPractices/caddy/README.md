@@ -72,19 +72,99 @@ source ~/.bash_profile
 
 首先我们需要[下载 `caddy`](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_windows_amd64.zip)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
 
-
-
 ### Linux 平台
 
 Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装包和映射命令的方法不同，这里不作复述了。
 
 如果对这块内容有需要的话请在评论区留言，作者会根据大家需求补全这一块的内容。
 
-## 使用 `Caddy`
+## `Caddy` 使用教程
 
 在 `Caddy` 安装完成后，我们来学习如何使用 `Caddy` 吧。
 
-### `Caddy` 解决跨域问题
+## 使用 `Caddy` 解决跨域问题
 
 我们先使用 `Caddy` 来解决一个经典跨域问题，我们以一个[简单 `Demo`](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) 为例。在该案例中，我们使用 `fetch` 发起一个网络请求，请求一个网络资源（见下图）
 
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/16.png)
+
+从上图我们可以看出，我们使用 `fetch` 发起了一个网络请求，最后将请求的结果打印出来。现在，我们打开浏览器，查看请求结果（见下图）。
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/17.png)
+
+从上图可以看到，我们的请求失败了，请求失败的原因是因为浏览器的 `同源策略` 导致的跨域问题。
+
+> 同源策略是一个重要的安全策略，它用于限制一个 `origin` 的文档如何能与另一个源的资源进行交互，在使用 `XMLHttpRequest` 或 `fetch` 时则会受到同源策略的约束。
+
+我们需要解决这个问题的话，需要服务端返回指定的响应头，这些响应头可以通过浏览器的 `同源策略` 检测。
+
+需要服务端配置响应头的话，需要后端人员配合，由前端推动后端的工作在效率上是不高的，可能有些后端人员难以配合（可能是异地、第三方接口...）。
+
+我们现在来使用 `caddy` 解决这个问题，我们需要通过简单的两步来解决这个跨域问题：
+  - 配置 `Caddyfile` （`caddy` 的配置文件），启动 `caddy`；
+  - 配置 `hosts` 文件；
+
+### 配置 `Caddyfile`
+
+`Caddyfile` 是 `caddy` 的配置文件，我们在根目录下新建文件 `Caddyfile`（见下图）：
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/18.png)
+
+我们来分析一下上面三行核心配置代码的含义吧，解析如下：
+
+  - `第 1 行`：拦截对 `http://proxy.dev-api-mall.jt-gmall.com` 这条 `url` 的访问请求，进行内部逻辑处理；
+  - `第 2 行`：拦截了 `http://proxy.dev-api-mall.jt-gmall.com` 的请求后，将其转发（反向代理）到 `http://dev-api-mall.jt-gmall.com`（我们请求的目标地址）；
+  - `第 3 行`：转发请求时，带上首部 `host`，值为 `dev-api-mall.jt-mall.com`，这一步的目的是为了让目标服务器上的反向代理能够识别请求源；
+  - `第 4~6 行`：响应结果时，加上 `Access-Control-Allow-*` 首部信息，这样可以通过浏览器的 `同源策略` 检测；
+
+我们使用嵌套结构的几行代码就可以将 `Caddyfile` 配置完成啦！
+
+### 配置 `hosts` 文件
+
+我们将我们请求的地址修改为 `http://proxy.dev-api-mall.jt-gmall.com`，代码实现如下：
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/19.png)
+
+我们使用 `caddy run --watch` 命令运行 `caddy`（运行 `caddy` 时请保证 `80` 端口是空闲的），`caddy` 运行成功后将会输出下面的结果（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/22.png)
+
+然后我们打开浏览器，查看请求结果（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/20.png)
+
+从上图可以看出，我们的请求失败了，这是因为我们在访问代理地址（`http://proxy.dev-api-mall.jt-gmall.com`）时，由于这个域名没有注册，将会导致 `DNS` 解析失败，最终导致请求失败。
+
+此时我们只需要配置 `hosts` 文件，指定这条 `url` 的地址为本机即可，在 `hosts` 文件中添加下面这条记录：
+
+> `hosts` 文件是一个操作系统文件，以表的形式存储了 主机名 和 IP地址，用于查找主机名称。
+> 
+> 不同系统的 `hosts` 文件配置方法在本文的 `最后一节`。
+
+```bash
+127.0.0.1 proxy.dev-api-mall.jt-gmall.com
+```
+
+配置好了 `hosts` 文件后，我们刷新页面，看到我们的请求结果被打印在控制台了！（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/21.png)
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/23.png)
+
+我们从上图可以看出，我们通过 `caddy` 的反向代理解决了跨域问题，并且更好的模拟了真实环境的网络请求。
+
+### 原理解析
+
+我们来简单梳理一遍流程，分析一下 `Caddy` 做了什么，帮助我们解决了跨域问题。
+
+#### 客户端
+
+首先，我们发起了一个请求，请求的地址是 `http://proxy.dev-api-mall.jt-gmall.com/vegetable/list?page=1&pageSize=20`，浏览器首先解析出 `hostname` 的值为 `proxy.dev-api-mall.jt-gmall.com`。
+
+在解析出了 `hostname` 后，浏览器读取主机的 `hosts` 文件配置，查询是否匹配，此时将命中我们在 `hosts` 文件中设置的 `127.0.0.1 proxy.dev-api-mall.jt-gmall.com` 规则，将域名解析为 `IP` 地址 - `127.0.0.1`，也就是本机地址。
+
+将域名解析完成后，浏览器解析到请求的端口为空，请求协议为 `http`，然后使用 `http` 的默认端口 `80` 与 `IP` 地址创建了网络套接字 `127.0.0.1:80`。
+
+创建好了网络套接字后，浏览器按照 `http` 协议标准封装好请求信息，与目标地址 `127.0.0.1:80` 创建 `TCP` 连接后，将数据 `segment` 分段发送。
+
+#### 服务端

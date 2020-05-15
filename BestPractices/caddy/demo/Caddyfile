@@ -1,5 +1,8 @@
 http://proxy.dev-api-mall.jt-gmall.com {
   reverse_proxy http://dev-api-mall.jt-gmall.com {
     header_up Host dev-api-mall.jt-gmall.com
+    header_down Access-Control-Allow-Origin *
+    header_down Access-Control-Allow-Methods *
+    header_down Access-Control-Allow-Headers *
   }
 }
