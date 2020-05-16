@@ -130,7 +130,7 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/22.png)
 
-然后我们打开浏览器，查看请求结果（见下图）
+然后我们打开浏览器，打开 `http://localhost:3000`（`Demo` 的运行地址），查看控制台输出的请求结果（见下图）
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/20.png)
 
@@ -160,7 +160,7 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 我们从客户-服务端的视角来进行解析，我们的浏览器就是客户端，`Caddy` 和目标服务器都属于服务端。
 
-#### 客户端
+#### 浏览器 - 客户端
 
 首先，我们在客户端（浏览器）发起了一个请求，请求的地址是 `http://proxy.dev-api-mall.jt-gmall.com/vegetable/list?page=1&pageSize=20`，浏览器首先解析出 `hostname` 的值为 `proxy.dev-api-mall.jt-gmall.com`。
 
@@ -170,10 +170,53 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 创建好了网络套接字后，浏览器按照 `http` 协议标准封装好请求信息，与目标地址 `127.0.0.1:80` 创建 `TCP` 连接后，将数据分组（`segment`） 发送给服务端。
 
-#### 服务端
+#### `Caddy` - 服务端 + 客户端
 
 我们的 `Caddy` 服务（服务端）运行在本地端口 `80` 上，对应的地址就是 `127.0.0.1:80`，所以 `Caddy` 服务收到了这个 `TCP` 连接请求，`Caddy` 将 `TCP` 的数据分组（`segment`）解析后，解析到了 `http` 请求（见下图）。
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/24.png)
 
-从上面可以看出，我们在本机 `127.0.0.1` 的随机端口
+从上面可以看出，我们的请求源是 `127.0.0.1:57721`（浏览器使用的随机端口），目的地址是 `127.0.0.1:80`（`Caddy` 运行端口）。我们的 `Host` 请求头为 `proxy.xxx`（代理地址），请求来源（发起方）是 `http://localhost:3000`（我们的本地服务）。
+
+`Caddy` 收到了这个 `http` 请求后，解析到协议为 `http1.1`，`Host` 为 `proxy.dev-api-mall.jt-gmall.com`，然后开始匹配内部规则，最终匹配到下面这条配置规则。（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/25.png)
+
+从上图可以看出，`Caddy` 在匹配到内部规则后，开始处理这条请求。根据配置规则，`Caddy` 将这条请求转发到 `http://dev-api-mall.jt-gmall.com`，此时 `Caddy` 将进行 `DNS` 查询，查询到 `IP` 地址后再与该地址建立 `TCP` 连接，将客户端的请求原封不动的转发到指定地址（见下图）。
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/27.png)
+
+从上图可以看出，这条请求由作为客户端的 `Caddy` 发出。我们的请求源是 `10.8.71.38:52170`（`IP` 地址为本机的 `IP`，端口是 `Caddy` 使用的随机端口），目的地址是 `39.98.164.255:80`（`IP` 地址为目标服务器 `IP`，端口为 `HTTP` 协议默认端口号）。我们的 `Host` 请求头为 `dev-api-mall.xxx`（我们在 `Caddyfile` 中指定的 `Host` 首部），其余的请求首部及请求信息都是由 `Caddy` 直接转发到目的服务器的。
+
+目的服务器接收到请求后，处理请求后响应结果。（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/28.png)
+
+我们从上图可以看出，这条响应结果的源地址是 `39.98.164.255:80`（`IP` 地址为请求的服务器 `IP`，端口为请求的服务器端口 `80`），目的地址是 `10.8.71.38:52170`（`IP` 地址为我们本机的 `IP`，端口是 `Caddy` 使用的随机端口）。服务器将响应结果发送到 `Caddy` 客户端，我们的 `Caddy` 客户端接收到响应结果后，最后被 `Caddy` 服务器所处理。
+
+我们的 `Caddy` 服务器将处理响应结果，`Caddy` 读取配置后在响应结果中添加 `Access-Control-Allow-*` 三条首部信息（我们在 `Caddyfile` 中设置的首部信息），最后将这条响应结果发送给浏览器客户端。（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/26.png)
+
+我们从上图可以看出，这条响应结果的源地址是 `127.0.0.1:80`（`IP` 地址为我们本机的 `IP`，端口为 `Caddy` 的运行端口 - `Caddy` 服务端），目的地址是 `127.0.0.1:57721`（`IP` 地址为我们本机的 `IP`，端口为 `浏览器` 发起请求时使用的的随机端口 - `浏览器` 客户端）。
+
+我们可以在响应结果中看到，我们在 `Caddyfile` 设置的首部信息 `Access-Control-Allow-*` 被添加在了响应结果中，响应结果中有这三个首部就可以通过浏览器的同源策略限制。我们在响应首部中可以看到两个 `Server` 首部，一个是我们本地的 `Caddy` 服务自动添加，另一个可能是目的服务器上的 `Caddy` 服务器所添加。最后，数据被正常返回，我们在浏览器的控制台也可以看到请求成功啦！（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/29.png)
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/30.png)
+
+从上图看出，我们通过 `Caddy` 的反向代理功能，解决了跨域问题！
+
+我们最后来通过一张图帮助大家理解上面的流程吧！（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+
+> 图有点大，建议点击查看原图，这样可以看到更多细节。
+
+## 使用 `Caddy` 搭建反向代理服务器
+
+在这一章我们将会使用 `Caddy` 搭建反向代理服务器，并且支持我们常用的 `SPA - history` 路由模式。这也是 `nginx` 一直在做的事情，我们将使用 `Caddy` 更轻松地完成这项工作。
+
+使用 `Caddy` 搭建反向代理服务器的思路和解决跨域问题的思路是差不多的，都是使用 `reverse_proxy` 属性。
+
