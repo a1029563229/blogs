@@ -219,3 +219,41 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 在这一章我们将会使用 `Caddy` 搭建反向代理服务器，并且支持我们常用的 `SPA - history` 路由模式。这也是 `nginx` 一直在做的事情，我们将使用 `Caddy` 更轻松地完成这项工作。
 
 使用 `Caddy` 搭建反向代理服务器的思路和解决跨域问题的思路是差不多的，都是使用 `reverse_proxy` 属性。
+
+我们想要实现的效果是，在访问 `http://www.caddy-test.com` 域名时，将其反向代理到我们的本地服务 `http://localhost:3000` 上。
+
+我们先在 `http://localhost:3000` 服务加上一些样式，修改后效果如下图
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+
+我们从上图可以看出，我们的服务允许在本地的 `3000` 端口上，我们使用 `/list` 路径访问了一个列表页。
+
+此时我们打开 `http://www.caddy-test.com/list`（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+
+从上图可以看出，由于这个域名尚未注册，所以导致我们的 `DNS` 查询失败啦！
+
+### 配置 `hosts` 文件
+
+我们在本地开发时，我们想要使某个域名能够返回指定 `IP` 映射，我们只需要配置 `hosts` 文件即可。我们在 `hosts` 文件中添加这条记录：
+
+> 不同系统的 `hosts` 文件配置方法在本文的 `最后一节`。
+
+```bash
+127.0.0.1 www.caddy-test.com
+```
+
+这一条记录的意思是，当匹配到 `www.caddy-test.com` 域名时，返回 `IP - 127.0.0.1`（本机 `IP`）。我们在配置好了 `hosts` 文件后，我们再次打开 `http://www.caddy-test.com/list`（如下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+
+从上图可以看出，我们此时的页面是一片空白。这是因为在解析了域名和端口后，浏览器最终访问到了 `127.0.0.1:80` 上的 `Caddy` 服务（我们在第一节的时候运行了 `Caddy`），而 `Caddy` 服务对这条域名的访问并没有做配置，从而导致了这个问题。接下来，我们进行 `Caddyfile` 的配置。
+
+> 扩展阅读：
+> 
+> 如果此时访问 `http://www.caddy-test.com:3000/list`（指定端口）会发现页面可访问，也可能返回了 `Invalid Host header` 字符串（这是因为 `webpack` 自带的一些安全策略）。
+> 
+> 这是因为在指定了端口后，我们的访问地址就变成了 `127.0.0.1:3000`，直接访问指定端口的服务。
+> 
+> 这样的方式既不安全（需要暴露可访问端口）也不优雅（带个端口号太难记啦）。

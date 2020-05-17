@@ -1,18 +1,14 @@
 <template>
-  <div id="app"></div>
+  <section id="app">
+    <router-view />
+  </section>
 </template>
 
 <script>
 export default {
   name: "App",
 
-  mounted() {
-    fetch("http://proxy.dev-api-mall.jt-gmall.com/vegetable/list?page=1&pageSize=20")
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-      });
-  }
+  mounted() {}
 };
 </script>
 

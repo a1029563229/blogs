@@ -1,8 +1,26 @@
 import Vue from 'vue'
-import App from './App.vue'
+import VueRouter from "vue-router";
+import Antd from "ant-design-vue";
+import "ant-design-vue/dist/antd.min.css";
 
+import App from './App.vue'
+import List from "./pages/list.vue";
+
+Vue.use(VueRouter);
+Vue.use(Antd);
 Vue.config.productionTip = false
+
+const router = new VueRouter({
+  mode: "history",
+  routes: [
+    {
+      path: "/list",
+      component: List
+    }
+  ]
+})
 
 new Vue({
   render: h => h(App),
+  router,
 }).$mount('#app')
