@@ -12,7 +12,7 @@
 
 大家好呀~
 
-本篇文章主要是安利一个对前端更友好的 `web` 服务器 `Caddy`，顺便通过 `Caddy` 的实战使用来解决跨域请求、反向代理问题，并通过图文来解析其原理。
+本篇文章主要是安利一个对前端更友好的 `web` 服务器 `Caddy`，我们会介绍 `Caddy` 的基本使用，并通过图文来解析其原理。
 
 `Caddy` 是唯一一个在默认情况下自动使用 `HTTPS` 的 `Web` 服务器，可以用来完成跨域请求、反向代理、静态文件服务器、部署 `History SPA` 应用、负载均衡等等功能，在可读性、可维护性和易用性方面都做的很好，对前端更友好！
 
@@ -22,19 +22,19 @@
 
 > 本文讨论的 `代理` 仅限于 `HTTP 代理`，不涉及其他协议。
 
-在介绍 `Caddy` 之前，我们先介绍一下反向代理是什么，反向代理可以帮我们做什么事情。先看要不要，再决定用不用。
+`Caddy` 是一个简单好用的 `Web` 服务器，`反向代理` 是它的一个核心功能。所以，在介绍 `Caddy` 之前，我们先介绍一下 `反向代理` 是什么，`反向代理` 可以帮我们做什么事情。
 
-我们先来了解一下正向代理，正向代理就是在客户端与服务器之间实现一个代理服务器，客户端的所有请求先经过代理服务器，由代理服务器再去请求服务器，请求成功后再由代理服务器将服务器响应发回至客户端。
+我们先来了解一下正向代理，正向代理就是在客户端与服务器之间实现一个代理服务器，客户端的所有请求先经过代理服务器，由代理服务器再去请求真实服务器，请求成功后再由代理服务器将真实服务器的响应结果发回至客户端。
 
-正向代理的经典案例就是公司内部的 VPN 代理，远程开发需要先连接 VPN，再由 VPN 连接公司服务器。只有连接 VPN 才能正常访问公司服务器，目的是为了防止一些非法连接，拒绝除 VPN 外的所有外网连接。
+正向代理的经典案例就是公司内部的 `VPN` 代理，企业员工在 `远程开发` 时需要先连接 `VPN`，再由 `VPN` 连接至公司服务器。这样做可以防止一些陌生连接，拒绝除 `VPN` 外的所有外网连接，只有连接 `VPN` 才能正常访问公司服务器。
 
 我们来画一张图帮助大家理解什么是 `正向代理`（见下图）
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/1.png)
 
-而反向代理正好相反，反向代理一般是在服务器端，客户端发起的网络请求先被反向代理服务器收到，再由反向代理服务器决定转发到某个具体的服务。换而言之，反向代理服务器将决定客户端最终访问到的目标服务器，常见的反向代理案例有负载均衡、CDN 加速。
+而反向代理正好相反，反向代理一般是在服务器端，客户端发起的网络请求首先被反向代理服务器收到，再由反向代理服务器决定转发到某个具体的服务。换而言之，反向代理服务器将决定客户端最终访问到的目标服务器，常见的反向代理案例有负载均衡、CDN 加速。
 
-我们在实际开发中，可以使用反向代理来解决 `前端跨域问题`、`模拟生产环境` 等等，我们本篇教程也是主要介绍这两个功能的使用。
+我们在实际开发中，可以使用反向代理来 `解决前端跨域问题`、`部署前端服务` 等等，我们本篇教程也是主要介绍这两个功能的使用。
 
 我们来画一张图帮助大家理解什么是 `反向代理`（见下图）
 
@@ -44,23 +44,17 @@
 
 ### Caddy 的优势
 
-我们在实际开发中，可以使用 `Caddy` 来完成跨域请求、反向代理、静态文件服务器、部署 `History SPA` 应用、负载均衡等等功能，使用 `Caddy` 来做这些工作的好处是我们可以使用一套方案解决本地开发和生产环境的跨域问题和开发问题。
+我们在实际开发中，可以使用 `Caddy` 来搭建反向代理服务器，从而完成跨域请求、静态文件服务器、部署 `History SPA` 应用、负载均衡等等功能，使用 `Caddy` 来做这些工作的好处是我们通过几行配置文件就可以完成这些工作，非常的简单易用。
 
-我们来做个横向对比，在日常开发中我们通常使用 `webpack` 解决开发环境的跨域问题，使用 `nginx` 解决生产环境的跨域问题。
+在日常开发中我们通常使用 `webpack` 解决开发环境的跨域和请求转发问题，`webpack` 的 `proxy` 选项可以解决大部分跨域和请求转发问题，但是对 `history` 路由的支持性较差，并且组内开发的成员之间的配置可能会导致冲突，造成额外的维护成本。
 
-`webpack` 的 `proxy` 选项可以解决大部分跨域问题，但是对 `history` 路由的支持性较差，并且组内开发的成员之间的配置可能会导致冲突，属于额外的维护成本。
+使用 `nginx` 可以解决这些问题，但是 `nginx` 比较复杂，对前端人员并不是特别友好。在学习 `nginx` 的过程中我们可能会渐行渐远，忘记了我们的初衷只是为了解决跨域和请求转发问题。
 
-在生产环境使用的 `nginx` 又是另一套方案，需要在本地开发和生产环境都解决一次跨域问题，这属于重复劳动。
-
-需要解决这个问题也很简单，那就是本地开发和生产环境都使用 `nginx` 搭建反向代理服务器解决跨域问题。
-
-但是 `nginx` 对前端人员并不是特别友好，在学习 `nginx` 的过程中我们可能会渐行渐远，忘记了我们的初衷只是为了解决跨域问题。
-
-`Caddy` 使用 `Go` 语言编写，在性能上不逊色于 `nginx`，而在配置上要比 `nginx` 简单很多，对前端更友好。
-
-使用简单，跨平台性强，对前端人员友好，成为我选择 `Caddy` 的理由。
+`Caddy` 使用 `Go` 语言编写，跨平台性强，配置文件具有高可读性，对前端更友好。在可读性、可维护性和易用性方面的优势成为了选择 `Caddy` 的理由。
 
 ## 安装 `Caddy`
+
+介绍了那么多，我们差不多可以进入到实战部分了，先从 `安装` 开始吧！
 
 `Caddy` 目前有 `1.0` 和 `2.0` 两个大版本，本文是针对 `2.0` 版本的教程，如果需要使用 `1.0` 版本的话建议查看 [Caddy 1.0 官方文档](https://caddyserver.com/v1/)。
 
@@ -68,7 +62,7 @@
 
 > Mac 非常适合开发者，欢迎广大开发者加入 Mac 大家庭。
 
-首先我们需要[下载 `caddy`](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_mac_amd64.tar.gz)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
+首先我们需要[下载 Caddy](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_mac_amd64.tar.gz)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
 
 由于 `Caddy` 由 `go` 编写，`go` 编译后的文件可以直接执行，所以我们下载完成后我们直接解压到自己的目录，比如 `~/bin/` 目录。然后我们加上一个映射就可以使用啦，我们使用 `vi ~/.bash_profile` 命令编辑文件，添加下面这行代码：
 
@@ -88,7 +82,7 @@ source ~/.bash_profile
 
 ### Windows 平台
 
-首先我们需要[下载 `caddy`](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_windows_amd64.zip)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
+首先我们需要[下载 Caddy](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_windows_amd64.zip)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
 
 ### Linux 平台
 
@@ -102,11 +96,11 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 ## 使用 `Caddy` 解决跨域问题
 
-我们先使用 `Caddy` 来解决一个经典跨域问题，我们以一个[简单 `Demo`](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) 为例。在该案例中，我们使用 `fetch` 发起一个网络请求，请求一个网络资源（见下图）
+我们先使用 `Caddy` 来解决一个前端最常见的跨域问题，我们以一个[简单 Demo](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) 为例。在该案例中，我们使用 `fetch` 发起一个网络请求，请求一个网络资源（见下图）
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/16.png)
 
-从上图我们可以看出，我们使用 `fetch` 发起了一个网络请求，最后将请求的结果打印出来。现在，我们打开浏览器，查看请求结果（见下图）。
+从上图我们可以看出，我们在使用 `fetch` 发起了一个网络请求后，将请求的结果打印出来。现在，我们打开浏览器，查看请求结果（见下图）。
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/17.png)
 
@@ -114,37 +108,50 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 > 同源策略是一个重要的安全策略，它用于限制一个 `origin` 的文档如何能与另一个源的资源进行交互，在使用 `XMLHttpRequest` 或 `fetch` 时则会受到同源策略的约束。
 
-我们需要解决这个问题的话，需要服务端返回指定的响应头，这些响应头可以通过浏览器的 `同源策略` 检测。
+我们想要解决这个问题的话，需要服务端返回指定的响应头（`Access-Control-Allow-*`），这些响应头可以通过浏览器的 `同源策略` 检测。
 
-需要服务端配置响应头的话，需要后端人员配合，由前端推动后端的工作  在效率上是不高的，可能有些后端人员难以配合（可能是异地、第三方接口...）。
+如果需要在服务端配置响应头的话，则需要后端人员配合，由前端推动后端的工作在效率上是不高的，还可能有些后端人员难以配合（可能是异地、第三方接口、不知道跨域是啥...）。
 
-我们现在来使用 `caddy` 解决这个问题，我们需要通过简单的两步来解决这个跨域问题：
+我们现在来使用 `Caddy` 解决这个问题，我们需要通过简单的两步来解决这个跨域问题：
 
-- 配置 `Caddyfile` （`caddy` 的配置文件），启动 `caddy`；
+- 配置 `Caddyfile` （`Caddy` 的配置文件），启动 `Caddy`；
 - 配置 `hosts` 文件；
 
 ### 配置 `Caddyfile`
 
-`Caddyfile` 是 `caddy` 的配置文件，我们在根目录下新建文件 `Caddyfile`（见下图）：
+`Caddyfile` 是 `Caddy` 的配置文件，我们在 `Demo 的根目录` 下新建文件 `Caddyfile`，添加下面几行代码
+
+```bash
+http://proxy.dev-api-mall.jt-gmall.com {
+  reverse_proxy http://dev-api-mall.jt-gmall.com {
+    header_up Host dev-api-mall.jt-gmall.com
+    header_down Access-Control-Allow-Origin *
+    header_down Access-Control-Allow-Methods *
+    header_down Access-Control-Allow-Headers *
+  }
+}
+```
+
+我们对这几行配置进行简单的解析（见下图）：
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/18.png)
 
-我们来分析一下上面三行核心配置代码的含义吧，解析如下：
+我们来分析一下上面几行核心配置代码的含义吧，解析如下：
 
 - `第 1 行`：拦截对 `http://proxy.dev-api-mall.jt-gmall.com` 这条 `url` 的访问请求，进行内部逻辑处理；
-- `第 2 行`：拦截了 `http://proxy.dev-api-mall.jt-gmall.com` 的请求后，将其转发（反向代理）到 `http://dev-api-mall.jt-gmall.com`（我们请求的目标地址）；
-- `第 3 行`：转发请求时，带上首部 `host`，值为 `dev-api-mall.jt-mall.com`，这一步的目的是为了让目标服务器上的反向代理能够识别请求源；
-- `第 4~6 行`：响应结果时，加上 `Access-Control-Allow-*` 首部信息，这样可以通过浏览器的 `同源策略` 检测；
+- `第 2 行`：将 `拦截的请求` 转发（反向代理）到 `http://dev-api-mall.jt-gmall.com`（我们的目标地址）；
+- `第 3 行`：在转发请求时，添加首部字段 `Host: dev-api-mall.jt-mall.com`，这一步的目的是为了让目标服务器能够识别请求源；
+- `第 4~6 行`：在响应结果时，添加 `Access-Control-Allow-*: *` 等多个首部字段信息，这样可以通过浏览器的 `同源策略` 检测；
 
-我们使用嵌套结构的几行代码就可以将 `Caddyfile` 配置完成啦！
+我们通过嵌套结构的几行代码就可以将 `Caddyfile` 配置完成啦！
 
 ### 配置 `hosts` 文件
 
-我们将我们请求的地址修改为 `http://proxy.dev-api-mall.jt-gmall.com`，代码实现如下：
+在配置好 `Caddyfile` 后，我们将我们请求的地址修改为 `http://proxy.dev-api-mall.jt-gmall.com`，代码实现如下：
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/19.png)
 
-我们使用 `caddy run --watch` 命令运行 `caddy`（运行 `caddy` 时请保证 `80` 端口是空闲的），`caddy` 运行成功后将会输出下面的结果（见下图）
+我们在命令行工具使用 `caddy run --watch` 命令运行 `caddy`（运行 `caddy` 时请保证 `80` 端口是空闲的），`caddy` 运行成功后将会输出下面的结果（见下图）
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/22.png)
 
@@ -154,29 +161,32 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 从上图可以看出，我们的请求失败了，这是因为我们在访问代理地址（`http://proxy.dev-api-mall.jt-gmall.com`）时，由于这个域名没有注册，将会导致 `DNS` 解析失败，最终导致请求失败。
 
-此时我们只需要配置 `hosts` 文件，指定这条 `url` 的地址为本机即可，在 `hosts` 文件中添加下面这条记录：
-
-> `hosts` 文件是一个操作系统文件，以表的形式存储了 主机名 和 IP 地址，用于查找主机名称。
->
-> 不同系统的 `hosts` 文件配置方法在本文的 `最后一节`。
+此时我们只需要配置 `hosts` 文件，将这条 `hostname` 的 `IP`  地址指向本机即可，在 `hosts` 文件中添加下面这条记录：
 
 ```bash
 127.0.0.1 proxy.dev-api-mall.jt-gmall.com
 ```
 
-配置好了 `hosts` 文件后，我们刷新页面，看到我们的请求结果被打印在控制台了！（见下图）
+> `hosts` 文件是一个操作系统文件，以表的形式存储了 主机名 和 `IP` 地址，用于查找主机名称。
+>
+> 这条记录代表的是在访问 `proxy.dev-api-mall.jt-gmall.com` 时，将 `IP` 地址解析为 `127.0.0.1`（本机）。
+> 
+> 不同系统的 `hosts` 文件配置方法在本文的 `最后一节`。
+
+
+配置好了 `hosts` 文件后，我们刷新浏览器，可以看到我们的请求结果被打印在控制台了！（见下图）
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/21.png)
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/23.png)
 
-我们从上图可以看出，我们通过 `caddy` 的反向代理解决了跨域问题，并且更好的模拟了真实环境的网络请求。
+我们从上图可以看出，我们通过 `Caddy` 的反向代理功能解决了跨域问题，并且更好的模拟了真实环境的网络请求。
 
 ### 原理解析
 
 我们来简单梳理一遍流程，分析一下 `Caddy` 做了什么，帮助我们解决了跨域问题。
 
-我们从客户-服务端的视角来进行解析，我们的浏览器就是客户端，`Caddy` 和目标服务器都属于服务端。
+我们从客户-服务端的视角来进行解析，我们的浏览器就是客户端，`Caddy` 同时作为服务端与客户端，目标服务器属于服务端。
 
 #### 浏览器 - 客户端
 
@@ -184,17 +194,19 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 在解析出了 `hostname` 后，浏览器读取主机的 `hosts` 文件配置，查询是否匹配，此时将命中我们在 `hosts` 文件中设置的 `127.0.0.1 proxy.dev-api-mall.jt-gmall.com` 规则，将域名解析为 `IP` 地址 - `127.0.0.1`，也就是本机地址。
 
-将域名解析完成后，浏览器解析到请求的端口为空，请求协议为 `http`，然后使用 `http` 的默认端口 `80` 与 `IP` 地址创建了网络套接字 `127.0.0.1:80`。
+将域名解析完成后，浏览器解析到请求的端口为空，请求协议为 `http`，然后使用 `http` 的默认端口 `80` 与 `IP` 地址创建了网络套接字 `127.0.0.1:80`（如下图）。
 
-创建好了网络套接字后，浏览器按照 `http` 协议标准封装好请求信息，与目标地址 `127.0.0.1:80` 创建 `TCP` 连接后，将数据分组（`segment`） 发送给服务端。
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/49.png)
+
+创建好了网络套接字后，浏览器将与目标地址 `127.0.0.1:80`（我们运行的 `Caddy` 服务） 创建 `TCP` 连接，然后按照 `http` 协议标准封装好请求信息，以数据分组（`segment`）的形式发送给服务端。
 
 #### `Caddy` - 服务端 + 客户端
 
-我们的 `Caddy` 服务（服务端）运行在本地端口 `80` 上，对应的地址就是 `127.0.0.1:80`，所以 `Caddy` 服务收到了这个 `TCP` 连接请求，`Caddy` 将 `TCP` 的数据分组（`segment`）解析后，解析到了 `http` 请求（见下图）。
+我们的 `Caddy` 服务（服务端）运行在本地端口 `80` 上，对应的地址就是 `127.0.0.1:80`。所以， `Caddy` 服务收到了这个 `TCP` 连接请求，`Caddy` 将 `TCP` 的数据分组（`segment`）解析后，解析到了 `http` 请求（见下图）。
 
 ![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/24.png)
 
-从上面可以看出，我们的请求源是 `127.0.0.1:57721`（浏览器使用的随机端口），目的地址是 `127.0.0.1:80`（`Caddy` 运行端口）。我们的 `Host` 请求头为 `proxy.xxx`（代理地址），请求来源（发起方）是 `http://localhost:3000`（我们的本地服务）。
+从上面可以看出，我们的请求源是 `127.0.0.1:57721`（`IP` 地址为我们本机的 `IP`，端口为 `浏览器` 发起请求时使用的的随机端口 - `浏览器` 客户端），目的地址是 `127.0.0.1:80`（`IP` 地址为我们本机的 `IP`，端口为 `Caddy` 的运行端口 - `Caddy` 服务端）。我们的 `Host` 请求头为 `proxy.xxx`（代理地址），请求来源（发起方）是 `http://localhost:3000`（我们的本地服务）。
 
 `Caddy` 收到了这个 `http` 请求后，解析到协议为 `http1.1`，`Host` 为 `proxy.dev-api-mall.jt-gmall.com`，然后开始匹配内部规则，最终匹配到下面这条配置规则。（见下图）
 
@@ -379,8 +391,6 @@ http://localhost:3000 {
 最后，我们使用 `Caddy` 完成了跨域请求、反向代理、静态文件服务器、部署 `History SPA` 应用、负载均衡多种功能。
 
 `Caddy` 是唯一一个在默认情况下自动使用 `HTTPS` 的 `Web` 服务器，与 `nginx` 相比，`Caddy` 可能会慢一些，但是在可读性、可维护性和易用性方面都要好一些，它的配置文件 `Caddyfile` 简单好用，对前端更友好！
-
-从上图可以看出，我们把不同技术栈 `Vue、React、Angular、Jquery...` 的微应用都已经接入到主应用基座中啦！
 
 ## 最后一件事
 
