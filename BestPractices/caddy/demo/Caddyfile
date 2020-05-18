@@ -6,3 +6,27 @@ http://proxy.dev-api-mall.jt-gmall.com {
     header_down Access-Control-Allow-Headers *
   }
 }
+
+http://www.caddy-test.com {
+  reverse_proxy localhost:3000 localhost:4000 localhost:5000 {
+    header_up Host localhost
+  }
+}
+
+http://localhost:3000 {
+  file_server
+  root * ./dist
+  try_files {path} /index.html
+}
+
+http://localhost:4000 {
+  file_server
+  root * ./dist2
+  try_files {path} /index.html
+}
+
+http://localhost:5000 {
+  file_server
+  root * ./dist3
+  try_files {path} /index.html
+}

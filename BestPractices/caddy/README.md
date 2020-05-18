@@ -1,6 +1,24 @@
-# 图文并茂教你搭建反向代理服务器 - Caddy 安装使用教程
+# 图解跨域请求、反向代理原理，对前端更友好的 Caddy 安装使用教程
+
+## 写在开头
+
+本文采用图文结合的方式进行原理解析，有概念解释也有结合实战，帮助大家去理解一些概念性的知识，并了解 `Caddy` 的基本使用（见下图）。
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/48.png)
+
+本人计划在近几年将持续输出深度好文，如果对这类文章感兴趣的话，还请您点个 `关注` 和 `赞` 支持一下吧！
 
 ## 引言
+
+大家好呀~
+
+本篇文章主要是安利一个对前端更友好的 `web` 服务器 `Caddy`，顺便通过 `Caddy` 的实战使用来解决跨域请求、反向代理问题，并通过图文来解析其原理。
+
+`Caddy` 是唯一一个在默认情况下自动使用 `HTTPS` 的 `Web` 服务器，可以用来完成跨域请求、反向代理、静态文件服务器、部署 `History SPA` 应用、负载均衡等等功能，在可读性、可维护性和易用性方面都做的很好，对前端更友好！
+
+> 如果你还是不太理解 `Caddy` 到底是用来做什么的，那你可以把它简单理解为对前端更友好的 `nginx`。
+
+## 反向代理
 
 > 本文讨论的 `代理` 仅限于 `HTTP 代理`，不涉及其他协议。
 
@@ -26,7 +44,7 @@
 
 ### Caddy 的优势
 
-我们在实际开发中，可以使用 `Caddy` 来解决 `前端跨域问题`、`模拟生产环境`、`转发请求`，使用 `Caddy` 来做这些工作的好处是我们可以使用一套方案解决本地开发和生产环境的跨域问题和开发问题。
+我们在实际开发中，可以使用 `Caddy` 来完成跨域请求、反向代理、静态文件服务器、部署 `History SPA` 应用、负载均衡等等功能，使用 `Caddy` 来做这些工作的好处是我们可以使用一套方案解决本地开发和生产环境的跨域问题和开发问题。
 
 我们来做个横向对比，在日常开发中我们通常使用 `webpack` 解决开发环境的跨域问题，使用 `nginx` 解决生产环境的跨域问题。
 
@@ -224,13 +242,13 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 我们先在 `http://localhost:3000` 服务加上一些样式，修改后效果如下图
 
-![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/33.png)
 
 我们从上图可以看出，我们的服务允许在本地的 `3000` 端口上，我们使用 `/list` 路径访问了一个列表页。
 
 此时我们打开 `http://www.caddy-test.com/list`（见下图）
 
-![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/34.png)
 
 从上图可以看出，由于这个域名尚未注册，所以导致我们的 `DNS` 查询失败啦！
 
@@ -246,14 +264,130 @@ Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装
 
 这一条记录的意思是，当匹配到 `www.caddy-test.com` 域名时，返回 `IP - 127.0.0.1`（本机 `IP`）。我们在配置好了 `hosts` 文件后，我们再次打开 `http://www.caddy-test.com/list`（如下图）
 
-![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/32.png)
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/35.png)
 
 从上图可以看出，我们此时的页面是一片空白。这是因为在解析了域名和端口后，浏览器最终访问到了 `127.0.0.1:80` 上的 `Caddy` 服务（我们在第一节的时候运行了 `Caddy`），而 `Caddy` 服务对这条域名的访问并没有做配置，从而导致了这个问题。接下来，我们进行 `Caddyfile` 的配置。
 
 > 扩展阅读：
-> 
-> 如果此时访问 `http://www.caddy-test.com:3000/list`（指定端口）会发现页面可访问，也可能返回了 `Invalid Host header` 字符串（这是因为 `webpack` 自带的一些安全策略）。
-> 
+>
+> 如果此时访问 `http://www.caddy-test.com:3000/list`（指定端口）会发现页面可访问，也可能返回了 `Invalid Host header` 字符串（这是因为被 `webpack` 自带的一些安全策略拦截了正确的响应结果，但是我们已经成功访问到了服务）。
+>
 > 这是因为在指定了端口后，我们的访问地址就变成了 `127.0.0.1:3000`，直接访问指定端口的服务。
-> 
+>
 > 这样的方式既不安全（需要暴露可访问端口）也不优雅（带个端口号太难记啦）。
+
+### 配置 `Caddyfile`
+
+我们现在需要配置我们的 `Caddyfile`，配置如下：
+
+```bash
+http://www.caddy-test.com {
+  reverse_proxy localhost:3000 {
+    header_up Host localhost
+  }
+}
+```
+
+> 由于我们启动 `Caddy` 的命令加上了 `--watch`，所以此时我们的 `Caddy` 将会检测到 `Caddyfile` 的变化后自动重启。
+
+我们现在再打开 `http://www.caddy-test.com/list` 就可以看到，我们的页面可以正常访问啦（见下图）！
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/36.png)
+
+从上图可以看出，在我们访问我们配置的测试域名时，展示了我们在本地 `3000` 端口运行的服务所返回的页面，我们的反向代理就配置成功啦！
+
+> 扩展阅读：
+>
+> 如果我们的域名不是配置在 `hosts` 文件中，而是注册在 `真正的` 域名注册机构，那我们的 `Caddy` 服务就是运行在不同环境中的 `真实` 反向代理服务器啦！
+
+接下来我们对 `Caddyfile` 配置文件进行逐行解析（见下图）。
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/37.png)
+
+我们来逐行解析一下：
+  - `第 10 行`：拦截对 `http://www.caddy-test.com` 这条 `url` 的访问请求，进行内部逻辑处理；
+  - `第 11 行`：拦截了 `http://proxy.dev-api-mall.jt-gmall.com` 的请求后，将其转发（反向代理）到 `localhost:3000`（我们的本地服务）；
+  - `第 12 行`：转发请求时，带上首部 `host`，值为 `localhost`，这一步的目的是为了通过 `webpack` 脚手架自带的 `Host` 首部安全检查；
+
+### 原理解析
+
+其实反向代理的原理和解决跨域问题的原理是一样的，我们这里直接用一张图来进行解释吧（见下图）。
+
+## 使用 `Caddy` 部署 `SPA - History` 路由模式项目
+
+目前前端的两种路由模式主要分为 `hash` 和 `history` 模式两种。`hash` 模式是指通过地址栏 `URL` 中的 `#` 符号区分路由，而 `history` 模式就与我们平时看到的路由没有区别，在单页（`SPA`）应用中使用 `history` 路由模式需要服务器配置支持。
+
+我们在开发过程中可以通过 `webpack` 来配置 `history` 路由模式，在我们将应用打包后，我们也可以通过 `Caddy` 进行配置，使我们的 `Caddy` 服务器可以支持 `history` 路由模式的 `SPA` 应用。
+
+首先，我们在 `SPA` 应用中配置 `history` 路由模式，然后使用打包命令 `npm run build` （不同技术栈的打包大同小异）将我们的应用打包，最后项目的目录层级看起来像是这样的（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/41.png)
+
+我们构建好的代码在 `dist` 目录下，我们的 `Caddyfile` 与 `dist` 处于同一目录下，接下来我们配置一下 `Caddyfile`，配置如下：
+
+```bash
+http://localhost:3000 {
+  file_server
+  root * ./dist
+  try_files {path} /index.html
+}
+```
+
+配置完成后，我们打开浏览器，输入 `http://localhost:3000/list`，会发现我们的页面成功渲染啦（见下图）！
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/42.png)
+
+我们简单剖析一下这几行配置（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/43.png)
+
+我们来进行逐行解析一下：
+
+- `第 16 行`：拦截对 `http://localhost:3000` 这条 `url` 的访问请求，进行内部逻辑处理（在测试或生产环境时，这里应该配置一个真实域名）；
+- `第 17 行`：启用静态文件服务器；
+- `第 18 行`：静态文件服务器访问的根目录在 `./dist` - 在 `dist` 文件夹外的内容无法访问；
+- `第 19 行`：这行代码是处理 `history` 路由模式的关键 - 如果 `URL` 匹配不到任何静态资源，将会返回 `index.html`（解决 `404` 问题）；
+
+从上面可以看出，使用 `Caddy` 管理静态文件还是比较简单的。这里还涉及了一些服务器运维的知识，先不作展开啦，有兴趣的童鞋可以自己去了解一下。
+
+## 使用 `Caddy` 进行负载均衡
+
+使用 `Caddy` 进行负载均衡也是建立在反向代理的基础之上，我们将 `Demo` 分别在三个端口运行（模拟多个服务器运行的多个实例），最后运行效果如下：
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/40.png)
+
+从上图可以看出，我们启动了三个同样的 `Demo` 服务，使用网站的 `title` 来进行区分。
+
+使用 `Caddy` 做负载均衡，只需要将多个服务挂在同一个 `reverse_proxy` 属性下即可（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/44.png)
+
+在配置完成后，我们打开浏览器，输入 `http://www.caddy-test.com`，然后多刷新几次，看看效果（见下图）：
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/45.png)
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/46.png)
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/47.png)
+
+从上面三张图可以看出，在不断刷新的过程中，`Caddy` 自动将我们的请求随机分流分配到某个服务上，从而达到负载均衡的效果。
+
+当然，实际生产环境的负载均衡要比文中描述的复杂的多，有需要的童鞋最好自己去了解一下。负载均衡并不是本教程的重点，不作展开讨论。
+
+## 小结
+
+最后，我们使用 `Caddy` 完成了跨域请求、反向代理、静态文件服务器、部署 `History SPA` 应用、负载均衡多种功能。
+
+`Caddy` 是唯一一个在默认情况下自动使用 `HTTPS` 的 `Web` 服务器，与 `nginx` 相比，`Caddy` 可能会慢一些，但是在可读性、可维护性和易用性方面都要好一些，它的配置文件 `Caddyfile` 简单好用，对前端更友好！
+
+从上图可以看出，我们把不同技术栈 `Vue、React、Angular、Jquery...` 的微应用都已经接入到主应用基座中啦！
+
+## 最后一件事
+
+如果您已经看到这里了，希望您还是点个 `赞` 再走吧~
+
+您的 `点赞` 是对作者的最大鼓励，也可以让更多人看到本篇文章！
+
+
+
+[github 地址](https://github.com/a1029563229/Blogs/tree/master)
