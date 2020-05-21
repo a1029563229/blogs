@@ -58,11 +58,13 @@
 
 `Caddy` 目前有 `1.0` 和 `2.0` 两个大版本，本文是针对 `2.0` 版本的教程，如果需要使用 `1.0` 版本的话建议查看 [Caddy 1.0 官方文档](https://caddyserver.com/v1/)。
 
+> 如果想要先了解 `Caddy` 好不好用，可以先跳过 `安装` 这一节。
+
 ### Mac 平台
 
 > Mac 非常适合开发者，欢迎广大开发者加入 Mac 大家庭。
 
-首先我们需要[下载 Caddy](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_mac_amd64.tar.gz)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
+首先我们需要[下载 Caddy](https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_mac_amd64.tar.gz)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
 
 由于 `Caddy` 由 `go` 编写，`go` 编译后的文件可以直接执行，所以我们下载完成后我们直接解压到自己的目录，比如 `~/bin/` 目录。然后我们加上一个映射就可以使用啦，我们使用 `vi ~/.bash_profile` 命令编辑文件，添加下面这行代码：
 
@@ -82,13 +84,45 @@ source ~/.bash_profile
 
 ### Windows 平台
 
-首先我们需要[下载 Caddy](https://github.com/caddyserver/caddy/releases/download/v2.0.0-rc.3/caddy_2.0.0-rc.3_windows_amd64.zip)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
+首先我们需要[下载 Caddy](https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_windows_amd64.zip)，你也可以去 [官方地址](https://github.com/caddyserver/caddy/releases) 下载最新版本。
+
+下载完成后，解压到你的常用目录（路径最好别带中文），然后我们复制 `Caddy` 所在目录的路径（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/57.png)
+
+然后，我们使用 `Win + E` 唤起文件管理器，然后右键点击我的电脑，点击 `属性`（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/54.png)
+
+然后，我们选择 `高级`，点击 `环境变量`（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/55.png)
+
+然后我们在弹出的窗口中，选中 `Path` 这一栏（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/56.png)
+
+然后，我们在弹出的窗口中点击新建，将我们复制的 `Caddy` 目录路径粘贴进去（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/58.png)
+
+最后，我们点击 `确定`，保存设置。我们在命令行中输入 `caddy`，安装成功啦！（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/59.png)
 
 ### Linux 平台
 
-Linux 平台的安装与 Mac 平台的安装步骤类似，只是下载的安装包和映射命令的方法不同，这里不作复述了。
+首先我们使用 `curl` 命令下载 `Caddy` 的安装包，如下
 
-如果对这块内容有需要的话请在评论区留言，作者会根据大家需求补全这一块的内容。
+```bash
+curl -OL https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.tar.gz
+```
+
+> 大家根据自己的需要下载对应版本的安装包。
+
+我们使用 `tar zxvf caddy_2.0.0_linux_amd64.tar.gz` 解压文件，解压后的 `caddy` 文件是可执行文件，我们再配置相应的映射，将命令映射到全局即可（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/60.png)
 
 ## `Caddy` 使用教程
 
@@ -274,7 +308,7 @@ http://proxy.dev-api-mall.jt-gmall.com {
 
 这条记录表示，当匹配到 `www.caddy-test.com` 域名时，返回 `IP` 地址 `127.0.0.1`（本机 `IP`）。我们在配置好了 `hosts` 文件后，我们再次打开 `http://www.caddy-test.com/list`（如下图）
 
-![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/35.png)
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/61.png)
 
 从上图可以看出，我们此时的页面是一片空白。这是因为在解析了域名和端口后，浏览器最终访问到了 `127.0.0.1:80` 上的 `Caddy` 服务（我们在第一节的时候运行了 `Caddy`），而 `Caddy` 服务对这条域名的访问并没有做配置，无法做出正确响应。接下来，我们将会进行 `Caddyfile` 的配置。
 
@@ -389,6 +423,39 @@ http://localhost:3000 {
 从上面三张图可以看出，在不断刷新的过程中，`Caddy` 自动将我们的请求随机分流分配到某个服务上，从而达到负载均衡的效果。
 
 注意，实际生产环境的负载均衡要比文中描述的复杂的多，有需要的童鞋最好自己去了解一下。负载均衡并不是本教程的重点，就不作展开讨论了。
+
+## 不同平台的 `hosts` 文件配置
+
+如果你知道 `hosts` 文件如何配置，那么你可以跳过本节内容~
+
+### Mac
+
+Mac 修改 `hosts` 文件很简单，使用 `vi` 命令即可，如下：
+
+```bash
+# 可能需要 root 权限
+sudo vi /etc/hosts
+```
+
+在命令行输入命令行，键盘 `i` 可进入编辑模式，编辑完成后使用 `Esc` 键退出编辑模式。
+
+最后，同时按下 `shift + :` 键，输入 `wq!` 即可保存更改。
+
+### Linux
+
+与 `Mac` 的方法类似，不做复述。
+
+### Windows
+
+首先使用 `Win + R` 键唤起 `运行` 输入框（如下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/51.png)
+
+然后我们输入 `C:\Windows\System32\drivers\etc\hosts` 后按下 `确定` 按钮（见下图）
+
+![caddy](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/caddy/52.png)
+
+点击 `确定` 按钮后，选择使用 `记事本` 打开，然后进行修改、保存就可以啦（可能需要管理员权限）。
 
 ## 小结
 
