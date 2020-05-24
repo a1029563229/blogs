@@ -12,8 +12,8 @@
 
 + [React 服务端渲染实战，Next 最佳实践](https://github.com/a1029563229/Blogs/tree/master/Introduction/react-ssr)
 + [基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Start.md) `hot!!!`
-+ [基于 qiankun 的微前端最佳实践（万字长文） - 部署发布篇（草稿-起稿）](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 + [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Communication.md) `new`
++ [基于 qiankun 的微前端最佳实践（万字长文） - 部署发布篇（草稿-起稿）](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 
 ### 其他
 
