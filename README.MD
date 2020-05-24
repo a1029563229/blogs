@@ -17,7 +17,7 @@
 
 ### 其他
 
-+ [图解跨域请求、反向代理原理，对前端更友好的反向代理服务器 - Caddy（草稿-待发布）](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy)
++ [图解跨域请求、反向代理原理，对前端更友好的反向代理服务器 - Caddy](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) `new`
 + [AST（Abstract Syntax Tree，抽象语法树）](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)
 + [GraphQL 查询字符串的组装](https://github.com/a1029563229/Blogs/tree/master/Introduction/graphql/graphql-query)
 + [使用 Sentry 平台处理异常日志](https://github.com/a1029563229/Blogs/tree/master/Introduction/Sentry)
