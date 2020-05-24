@@ -6,7 +6,7 @@
 
 通常来说，大家对图片的兴趣要大于对文字的兴趣，图片本身也比文字能激发自由联想的能力。所以，我的博客也会持续以图文结合、图解分析等形式，分享我对技术的理解。
 
-如果喜欢这类风格的博客，请点亮 `star` 鼓励一下吧！
+如果喜欢这类风格的博客，请帮忙点亮 `star` 鼓励一下吧！
 
 ![personal](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/6.png)
 
