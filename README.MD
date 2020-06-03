@@ -13,7 +13,6 @@
 ## 最新/最受欢迎
 
 + [图解跨域请求、反向代理原理，对前端更友好的反向代理服务器 - Caddy](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) `new`
-+ [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Communication.md) `new`
 + [基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Start.md) `hot!!!`
 + [万字长文+图文并茂+全面解析微前端框架 qiankun（乾坤） 源码 - qiankun 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/qiankun/1.md) `hot!`
 
@@ -35,6 +34,10 @@
 ### 计算机网络
 
 + [图解跨域请求、反向代理原理，对前端更友好的反向代理服务器 - Caddy](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) `new`
+
+### 前端自动化
+
++ [万字长文+图文并茂+全面解析脚手架 vue-cli 源码（草稿-起稿）](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vue-cli/1.md)
 
 ### 其他
 
