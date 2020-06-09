@@ -230,6 +230,24 @@ yarn build
 
 在将我们的主应用和微应用全部打包完成后，我们将介绍如何使用 `Nodejs` 完成微前端架构的部署。
 
+`Nodejs` 可以使我们更好的理解 `HTTP` 服务是如何搭建的，同时也是可以作为生产方案使用的。
+
+### 搭建 HTTP 服务器
+
+首先，我们以 [实战案例 - feature-deploy-node 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy-node) 为例，我们项目构建后的目录如下图。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/qiankun-deploy/1.png)
+
+我们先搭建一个简单的 `HTTP` 服务，使得我们的主应用可以被访问，我们需要先安装相关依赖，命令如下：
+
+```bash
+yarn add express -S
+```
+
+在安装完了 `express` 后，我们添加文件 `server.js`，代码实现如下：
+
+
+
 ## 总结
 
 本文还在编辑中，如果对发布部署这块的需求比较紧急，可以参照 [实战案例 - feature-deploy-node 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy-node) 的 `deployed` 目录下的 `Caddy` 部署方案和 [Caddy 实战教程](https://github.com/a1029563229/Blogs/tree/master/BestPractices/caddy) 来进行部署。
