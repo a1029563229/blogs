@@ -172,3 +172,35 @@ C 语言中没有规定有符号数采用哪种表示，但几乎所有的机器
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/4.png)
 
+### 补码的非
+
+原理：补码的非
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/5.png)
+
+对于任意整数，计算表达式 -x 和 ~x + 1 得到的结果完全一样（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/6.png)
+
+### 无符号乘法
+
+原理：无符号数乘法（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/7.png)
+
+原理：补码乘法（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/8.png)
+
+对于无符号和补码乘法来说，乘法运算的位级表示都是一样的。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/9.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/10.png)
+
+### 乘以常数
+
+#### 乘以 2 的幂
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/11.png)
+
