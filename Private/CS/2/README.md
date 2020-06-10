@@ -144,5 +144,31 @@ C 语言中没有规定有符号数采用哪种表示，但几乎所有的机器
 
 补码数值的符号扩展论证（如下图）
 
-### 截断数字
+### 关于有符号数和无符号数的建议
+
+有符号数到无符号数的转换可能会导致错误和漏洞，避免这类错误的一种方式就是不使用无符号数。（例如 Java 只支持有符号数，并且要求以补码运算来实现）
+
+## 整数运算
+
+### 无符号加法
+
+整数运算的“字长膨胀”表示，要想完整地表示算术运算的结果，我们不能对字长做任何限制。
+
+原理：无符号数加法（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/1.png)
+
+模数加法形成了一种数学结构，称为阿贝尔群，也就是说，它是可交换的和可结合的。它有一个单位元 0，并且每个元素有一个加法逆元。让我们考虑 w 位的无符号数的集合，执行加法运算 +_w^u。对于每个值 x，必然有某个值 -x_w^u 满足 -x_w^u + x_w^u = 0。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/2.png)
+
+### 补码加法
+
+原理：补码加法（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/3.png)
+
+补码加法案例（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/4.png)
 
