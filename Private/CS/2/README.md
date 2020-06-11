@@ -200,7 +200,75 @@ C 语言中没有规定有符号数采用哪种表示，但几乎所有的机器
 
 ### 乘以常数
 
+以往，在大多数机器上，整数乘法指令相当慢，需要 10 个或更多的时钟周期，然而其他整数运算（例如加法、减法和位级运算和移位）只需要 1 个时钟周期。
+
 #### 乘以 2 的幂
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/11.png)
+
+#### 与 2 的幂相乘的无符号乘法
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/12.png)
+
+#### 与 2 的幂相乘的补码算法
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/13.png)
+
+无论是无符号运算还是补码运算，乘以 2 的幂都可能会导致溢出。
+
+由于整数乘法比移位和加法的代码要大得多，许多 C 语言编译器试图以移位、加法和减法的组合来消除许多整数乘以常数的情况。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/14.png)
+
+选择使用移位、加法和减法的组合，还是使用一条乘法指令，取决于这些指令的相对速度，而这些是与机器高度相关的。大多数编译器只在需要少量移位、加法和减法就足够的情况下才使用这种优化。
+
+### 除以 2 的幂
+
+在大多数机器上，整数除法要比整数乘法更慢 —— 需要 30 个或更多的时钟周期。
+
+#### 除以 2 的幂的无符号除法
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/15.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/16.png)
+
+#### 除以 2 的幂的补码算法，向下舍入
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/17.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/18.png)
+
+#### 除以 2 的幂的补码算法，向上舍入
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/19.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/20.png)
+
+同乘法不同，我们不能用除以 2 的幂的除法来表示除以任意常数 K 的除法。
+
+### 关于整数运算的最后思考
+
+计算机执行的 `“整数”` 运算其实是一种模运算形式。表示数字的有限字长限制了可能的值的取值范围，结果运算可能溢出。
+
+## 浮点数
+
+浮点表示对形如 V = x * 2^y 的有理数进行编码。
+
+### 二进制小数
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/21.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/22.png)
+
+### IEEE 浮点数表示
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/23.png)
+
+给定位表示，根据 exp 的值，被编码的值可以分成三种不同的情况（最后一种情况有两个变种）（下图说明了单精度的情况）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/24.png)
+
+- 情况1：规格化的值
+
+这是最普遍的情况。当 exp 的位模式既不全为 0（数值 0），也不全为 1（单精度数值为 255，双精度数值为 2047 时），都属于这类情况。在这种情况中，阶码字段被解释为以偏置（biased）形式表示的有符号整数。由此产生的指数范围，对于单精度是 -126~+127，而对于双精度是 -1022~+1023。
 
