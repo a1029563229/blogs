@@ -198,3 +198,35 @@ C 操作符 `&`（成为 “取址” 操作符）创建一个指针，在本例
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/69.png)
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/70.png)
+
+### 访问条件码
+
+条件码通常不会直接读取，常用的使用方法有三种：
+
+  - 可以根据条件码的某种组合，将一个字节设置为 0 或者 1；
+  - 可以条件跳转到程序的某个其他的部分；
+  - 可以有条件地传送数据；
+
+根据条件码的某种组合，将一个字节设置为 0 或者 1，这一整类指令称为 SET 指令（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/71.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/72.png)
+
+### 跳转指令
+
+`跳转(jump)` 指令会导致执行切换到程序中一个全新的位置。在汇编代码中，这些跳转的目的地通常用一个标号（label）标明（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/73.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/74.png)
+
+### 将条件表达式来实现条件分支
+
+用条件表达式和语句从 C 语言翻译成机器代码，最常用的方式是结合有条件和无条件跳转。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/75.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/76.png)
+
