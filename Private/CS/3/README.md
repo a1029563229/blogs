@@ -165,4 +165,36 @@ C 操作符 `&`（成为 “取址” 操作符）创建一个指针，在本例
 
 ### 加载有效地址
 
-加载有效地址（load effective address）指令 leaq 实际上是 movq 指令的变形。
+加载有效地址（load effective address）指令 leaq 实际上是 movq 指令的变形。该指令并不是从指定的位置读入数据，而是将有效地址写入到目的操作数，目的操作数必须是一个寄存器。（下图是案例）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/66.png)
+
+### 一元和二元操作
+
+一元操作只有一个操作数，既是源又是目的。这个操作数可以是一个寄存器，也可以是一个内存位置。比如说，指令 `incq(%rsp)` 会使栈顶的 8 字节元素加 1。（类似于 ++ 运算符）
+
+二元操作有两个操作数，第二个操作数既是源又是目的（类似于赋值运算符，x += y）。第一个操作数可以立即数、寄存器或内存位置，第二个操作数可以是寄存器或是内存位置。
+
+### 移位操作
+
+移位操作有两个操作数，先给出移位量，然后第二项给出的是要移位的数。
+
+下图是一个执行算术操作的函数示例（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/67.png)
+
+在上面这个案例中，寄存器 `%rax` 中的值先后对应于程序值 3 * z、z * 48 和 t4（作为返回值）。通常，编译器产生的代码中，会用一个寄存器存放多个程序值，还会在寄存器之间传送程序值。
+
+
+## 控制
+
+机器代码提供两种基本的低级机制来实现有条件的行为：测试数据值，然后根据测试的结果来改变控制流或者数据流。
+
+### 条件码
+
+除了整数寄存器，CPU 还维护着一组单个位的条件码（condition code）寄存器，它们描述了最近的算术或逻辑操作的属性。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/68.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/69.png)
+
