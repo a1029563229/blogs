@@ -52,6 +52,8 @@
 
 下面是不同机器上的字节表示（如下图）。
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/90.png)
+
 ### 表示字符串
 
 在使用 ASCII 码作为字符码的任何系统上都将得到相同的结果，与字节顺序和字节大小规则无关。因而，文本数据比二进制数据具有更强的平台独立性。
@@ -77,9 +79,13 @@ C 语言的一个很有用的特性就是它支持按位布尔运算。实际上
 
 确定一个位级表达式的结果最好的办法，就是将十六进制的参数扩展成二进制表示并执行二进制运算，然后再转换回十六进制。（如下图）
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/91.png)
+
 ### C 语言中的逻辑运算
 
 C 语言还提供了一组逻辑运算符 ||、&& 和 !，分别对应命题逻辑中的 OR、AND 和 NOT 运算。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/92.png)
 
 ### C 语言中的移位运算
 
@@ -91,15 +97,25 @@ C 语言还提供了一组移位运算，向左或向右移位模式：
 
 案例（如下图）
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/93.png)
+
 ## 整数表示
 
 我们描述用位来编码整数的两种不同的方式：一种只能表示非负数，而另一种能够表示负数、零和正数。
 
 下面列出了我们引入的数学术语，用于精确定义和描述计算机如何编码和操作整数。（如下图）
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/95.png)
+
 ### 整型数据类型
 
 C 语言标准规定了每种数据类型必须能够表示的最小的取值范围。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/96.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/97.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/98.png)
 
 > C 和 C++ 都支持有符号（默认）和无符号数。Java 只支持有符号数。
 
@@ -107,11 +123,17 @@ C 语言标准规定了每种数据类型必须能够表示的最小的取值范
 
 假设有一个整数数据类型有 w 位。我们可以将位向量写成 x^→，表示整个向量，或者写成 [x^w-1, x^w-2, ..., x^0]，表示向量中的每一位。把 x^→ 看做一个二进制表示的数，就获得了 x^→ 的无符号表示。在这个编码中，每个位 x^i 都取值为 0 或 1，后一种取值意味着数值 2^i 应为数字值的一部分。（如下图）
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/100.png)
+
 ### 补码编码
 
 有时候，我们希望表示负数值。最常见的有符号数的计算机表示方式就是补码（two's component）形式。在这个定义中，数字的最高有效位解释为负权（negative weight）。我们用函数 B2Tw（Binary to Two's component 的缩写，长度为 w）来表示（如下图）
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/101.png)
+
 最高有效位 x^w-1 也称为符号位，它的权重为 -2^w-1，是无符号表示中权重的负数。符号数被设置为 1 时，表示值为负，而当设置为 0 时，值为非负。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/104.png)
 
 w 位补码所能表示的最小值是 -2^w-1，所能表示的最大值是 2^w-1 - 1。以长度 4 为例，所能表示的最小值为 -8，最大值为 7。
 
@@ -126,6 +148,8 @@ C 语言标准并没有要求使用补码形式来表示有符号整数，但是
 C 语言允许在不同的数字数据类型之间做强制类型转换。例如，假如变量 x 声明为 int，u 声明为 unsigned。表达式 `(unsigned)x` 会将 x 的值转换为无符号数值，而 `int(x)` 会将 x 的值转换为有符号整数。
 
 强制类型转换时，结果保持位值不变，只是改变了解释这些位的方式。—— 数值可能会变，但是位模式不变。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/105.png)
 
 #### 公式
 
@@ -150,6 +174,8 @@ U2T_w(x) = B2T_w(U2B_w(x))：输入 0 ~ UMax_w 的数值，将其转换为 TMin_
 C 语言中没有规定有符号数采用哪种表示，但几乎所有的机器都采用补码。大多数的数字都默认是有符号的，要创建一个无符号常量，必须加上后缀字符 “U” 或者 “u”。
 
 当执行一个运算时，如果它的一个运算数是有符号的而另一个运算数是无符号的，那么 C 语言会隐式地将有符号参数强制类型转换成无符号数，并假设这两个数都是非负的，然后来执行这个计算。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/112.png)
 
 ### 扩展一个数字的位展示
 
