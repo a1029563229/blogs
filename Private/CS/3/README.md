@@ -250,7 +250,38 @@ C 操作符 `&`（成为 “取址” 操作符）创建一个指针，在本例
 
 ### 循环
 
+#### do while
+
 C 语言提供了多种循环结构，即 `do-while、while 和 for`。汇编中没有响应的指令存在，可以用条件测试和跳转组合起来实现循环的效果（如下图）。
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/80.png)
+
+> 根据我们的经验，GCC 常常做的一些变换，非但不能带来性能好处，反而甚至可能降低代码性能。
+
+#### while
+
+第一种方法，叫做跳转到中间（jump to middle）（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/113.png)
+
+第二种方法，叫做 `guarded-do`。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/114.png)
+
+#### for
+
+GCC 为 for 循环产生的代码是 while 循环的两种翻译之一，这取决于优化的等级。
+
+
+### switch 语句
+
+switch（开关）语句可以根据一个整数索引值进行多重分支（multiway branching）。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/115.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/116.png)
+
+
+
+## 过程
 
