@@ -216,4 +216,51 @@ $ git commit -m "Story 182: Fix benchmarks for speed"
 
 ### 跳过使用暂存区域
 
-使用 `git commit -a -m [msg]`，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 `git add` 步骤
+使用 `git commit -a -m [msg]`，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 `git add` 步骤，如下：
+
+```bash
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+    modified:   CONTRIBUTING.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git commit -a -m 'added new benchmarks'
+[master 83e38c7] added new benchmarks
+ 1 file changed, 5 insertions(+), 0 deletions(-)
+```
+
+
+## 移除文件
+
+要从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除（从暂存区域移除），然后提交。
+
+可以用 `git rm -f` 命令完成此项工作，并连带从工作目录中删除指定的文件，这样以后就不会出现在未跟踪文件清单中了。
+
+```bash
+git rm -f
+```
+
+另外一种情况是，我们想把文件从 Git 仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。（文件保留在磁盘，但是不让 Git 继续跟踪），可以使用 `--cached` 选项：
+
+```bash
+$ git rm -f --cached README
+```
+
+> `git rm` 也可以使用 `glob` 模式。
+
+```bash
+$ git rm log/\*.log
+```
+
+注意到星号 * 之前的反斜杠 \， 因为 Git 有它自己的文件模式扩展匹配方式，所以我们不用 shell 来帮忙展开。 此命令删除 log/ 目录下扩展名为 .log 的所有文件。 类似的比如：
+
+```
+$ git rm \*~
+```
+
+该命令会删除所有名字以 ~ 结尾的文件。
