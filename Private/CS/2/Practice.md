@@ -312,3 +312,38 @@ x | y 0111 1111
 | 无符号 | 0    |
 | 有符号 | 1    |
 | 无符号 | 0    |
+
+## 2.22
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/134.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/135.png)
+
+解：
+
+A.
+[1011] = -2^3 + 2^1 + 2^0 = -8 + 2 + 1 = -5
+
+B.
+[11011] = -2^4 + 2^3 + 2^1 + 2^0 = -2^3 + 2^1 + 2^0 = -5
+
+C.
+[111011] = -2^5 + 2^4 + 2^3 + 2^1 + 2^0 = -2^3 + 2^1 + 2^0 = -5
+
+## 2.23
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/136.png)
+
+解：
+
+A.
+
+| w          | func1(w) | func2(w) |
+| ---------- | -------- | -------- |
+| 0x00000076 |          |          |
+？
+
+B. ？
+
+## 2.24
+

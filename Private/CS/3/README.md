@@ -448,3 +448,36 @@ Linux 最新 GCC 版本提供的机制：
 1. 栈随机化：使得栈的位置在程序每次运行时都有变化。
 2. 栈破坏检测：在栈帧中任何局部缓冲区与栈状态之间存储一个特殊的 `哨兵值`（随机值），如果检测到该值发生改变，则程序异常终止。
 3. 限制可执行代码区域：限制哪些内存区域能够存放可执行代码。
+
+### 支持变长栈帧
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/137.png)
+
+
+## 浮点代码
+
+寄存器（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/138.png)
+
+### 浮点传送和转换操作
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/139.png)
+
+转换操作（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/140.png)
+
+不同浮点数转换（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/141.png)
+
+### 浮点运算操作
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/142.png)
+
+### 定义和使用浮点常数
+
+与整数运算操作不同，AVX 浮点操作不能以立即数值为操作数。相反，编译器必须为所有的常量值分配和初始化存储空间。然后代码再把这些值从内存读入。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/143.png)
