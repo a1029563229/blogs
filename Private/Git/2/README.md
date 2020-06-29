@@ -38,7 +38,6 @@ $ git clone git://github.com/schacon/grit.git mygrit
 
 > Git 支持许多数据传输协议。之前的例子使用的是 git:// 协议，不过你也可以使用 http(s):// 或者 user@server://path.git 表示的 SSH 传输协议。
 
-
 ## 记录每次更新到仓库
 
 工作目录下面的所有文件只有两种状态：已跟踪或未跟踪。
@@ -98,7 +97,7 @@ Changes not staged for commit:
     modified:   CONTRIBUTING.md
 ```
 
-文件 CONTRIBUTING.md 出现在 Changes not staged for commit 这行下面，说明已跟踪文件的内容发生了变化，但还没有放到暂存区。 
+文件 CONTRIBUTING.md 出现在 Changes not staged for commit 这行下面，说明已跟踪文件的内容发生了变化，但还没有放到暂存区。
 
 如果要暂存这次更新，需要运行 `git add` 命令。这是个多功能命令：可以用它开始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把所有冲突的文件标记为已解决状态等。
 
@@ -118,7 +117,6 @@ M  lib/simplegit.rb
 ```
 
 新添加的未跟踪文件前面有 ?? 标记，新添加到暂存区中的文件前面有 A 标记，修改过的文件前面有 M 标记。 输出中有两栏，左栏指明了暂存区的状态，右栏指明了工作区的状态。
-
 
 ## 忽略文件
 
@@ -160,7 +158,6 @@ doc/**/*.pdf
 >
 > 在最简单的情况下，一个仓库可能只根目录下有一个 .gitignore 文件，它递归地应用到整个仓库中。 然而，子目录下也可以有额外的 .gitignore 文件。子目录中的 .gitignore 文件中的规则只作用于它所在的目录中。 （Linux 内核的源码库拥有 206 个 .gitignore 文件。）
 
-
 ## 查看已暂存和未暂存的修改
 
 使用 `git diff` 可以通过文件补丁的格式更加具体地显示哪些行发生了改变（如下）。
@@ -198,7 +195,6 @@ index 0000000..03902a1
 +My Project
 ```
 
-
 ## 提交更新
 
 使用 `git commit -m`，可以将提交信息与命令放在同一行，如下：
@@ -234,7 +230,6 @@ $ git commit -a -m 'added new benchmarks'
  1 file changed, 5 insertions(+), 0 deletions(-)
 ```
 
-
 ## 移除文件
 
 要从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除（从暂存区域移除），然后提交。
@@ -257,10 +252,165 @@ $ git rm -f --cached README
 $ git rm log/\*.log
 ```
 
-注意到星号 * 之前的反斜杠 \， 因为 Git 有它自己的文件模式扩展匹配方式，所以我们不用 shell 来帮忙展开。 此命令删除 log/ 目录下扩展名为 .log 的所有文件。 类似的比如：
+注意到星号 \* 之前的反斜杠 \， 因为 Git 有它自己的文件模式扩展匹配方式，所以我们不用 shell 来帮忙展开。 此命令删除 log/ 目录下扩展名为 .log 的所有文件。 类似的比如：
 
 ```
 $ git rm \*~
 ```
 
 该命令会删除所有名字以 ~ 结尾的文件。
+
+## 查看提交历史
+
+运行 `git log` 命令查看提交历史，如下：
+
+```bash
+$ git log
+commit ca82a6dff817ec66f44342007202690a93763949
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Mon Mar 17 21:52:11 2008 -0700
+
+    changed the version number
+
+commit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Sat Mar 15 16:40:33 2008 -0700
+
+    removed unnecessary test
+
+commit a11bef06a3f659402fe7563abf99ad00de2209e6
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Sat Mar 15 10:31:28 2008 -0700
+
+    first commit
+```
+
+运行 `git log -p` 可以查看每次提交所引入的差异，如下：
+
+```bash
+$ git log -p -2
+commit ca82a6dff817ec66f44342007202690a93763949
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Mon Mar 17 21:52:11 2008 -0700
+
+    changed the version number
+
+diff --git a/Rakefile b/Rakefile
+index a874b73..8f94139 100644
+--- a/Rakefile
++++ b/Rakefile
+@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
+ spec = Gem::Specification.new do |s|
+     s.platform  =   Gem::Platform::RUBY
+     s.name      =   "simplegit"
+-    s.version   =   "0.1.0"
++    s.version   =   "0.1.1"
+     s.author    =   "Scott Chacon"
+     s.email     =   "schacon@gee-mail.com"
+     s.summary   =   "A simple gem for using Git in Ruby code."
+
+commit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Sat Mar 15 16:40:33 2008 -0700
+
+    removed unnecessary test
+
+diff --git a/lib/simplegit.rb b/lib/simplegit.rb
+index a0a60ae..47c6340 100644
+--- a/lib/simplegit.rb
++++ b/lib/simplegit.rb
+@@ -18,8 +18,3 @@ class SimpleGit
+     end
+
+ end
+-
+-if $0 == __FILE__
+-  git = SimpleGit.new
+-  puts git.show
+-end
+```
+
+运行 `git log --stat` 查看简略统计信息，如下：
+
+```bash
+$ git log --stat
+commit ca82a6dff817ec66f44342007202690a93763949
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Mon Mar 17 21:52:11 2008 -0700
+
+    changed the version number
+
+ Rakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Sat Mar 15 16:40:33 2008 -0700
+
+    removed unnecessary test
+
+ lib/simplegit.rb | 5 -----
+ 1 file changed, 5 deletions(-)
+
+commit a11bef06a3f659402fe7563abf99ad00de2209e6
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Sat Mar 15 10:31:28 2008 -0700
+
+    first commit
+
+ README           |  6 ++++++
+ Rakefile         | 23 +++++++++++++++++++++++
+ lib/simplegit.rb | 25 +++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
+```
+
+使用 `git log --pretty=format` 格式化输出，如下：
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/1.png)
+
+`git log` 的常用选项（如下图）：
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/2.png)
+
+限制 `git log` 输出的选项：
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/3.png)
+
+## Git 基础 - 撤销操作
+
+- 重新提交
+
+```bash
+$ git commit --amend
+```
+
+- 取消缓存的文件
+
+```bash
+$ git reset HEAD CONTRIBUTING.md
+Unstaged changes after reset:
+M	CONTRIBUTING.md
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+    renamed:    README.md -> README
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+    modified:   CONTRIBUTING.md
+```
+
+
+- 撤销修改
+
+$ git checkout -- CONTRIBUTING.md
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+    renamed:    README.md -> README

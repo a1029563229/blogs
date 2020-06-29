@@ -481,3 +481,4 @@ Linux 最新 GCC 版本提供的机制：
 与整数运算操作不同，AVX 浮点操作不能以立即数值为操作数。相反，编译器必须为所有的常量值分配和初始化存储空间。然后代码再把这些值从内存读入。
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/143.png)
+
