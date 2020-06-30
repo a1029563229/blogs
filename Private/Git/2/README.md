@@ -378,13 +378,13 @@ Date:   Sat Mar 15 10:31:28 2008 -0700
 
 ## Git 基础 - 撤销操作
 
-- 重新提交
+- 重新提交 > `git commit --amend`
 
 ```bash
 $ git commit --amend
 ```
 
-- 取消缓存的文件
+- 取消缓存的文件 > `git reset HEAD [file]`
 
 ```bash
 $ git reset HEAD CONTRIBUTING.md
@@ -404,13 +404,246 @@ Changes not staged for commit:
     modified:   CONTRIBUTING.md
 ```
 
-
 - 撤销修改
 
 $ git checkout -- CONTRIBUTING.md
 $ git status
 On branch master
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+(use "git reset HEAD <file>..." to unstage)
 
     renamed:    README.md -> README
+
+## Git 基础 - 远程仓库的使用
+
+- 查看远程仓库 > `git remote -v`
+
+```bash
+$ git remote -v
+origin	https://github.com/schacon/ticgit (fetch)
+origin	https://github.com/schacon/ticgit (push)
+```
+
+- 添加远程仓库 > `git remote add <shortname> <url>`
+
+```bash
+$ git remote
+origin
+$ git remote add pb https://github.com/paulboone/ticgit
+$ git remote -v
+origin	https://github.com/schacon/ticgit (fetch)
+origin	https://github.com/schacon/ticgit (push)
+pb	https://github.com/paulboone/ticgit (fetch)
+pb	https://github.com/paulboone/ticgit (push)
+```
+
+- 拉取远程仓库 > `git fetch <remote>`
+
+```bash
+$ git fetch pb
+remote: Counting objects: 43, done.
+remote: Compressing objects: 100% (36/36), done.
+remote: Total 43 (delta 10), reused 31 (delta 5)
+Unpacking objects: 100% (43/43), done.
+From https://github.com/paulboone/ticgit
+ * [new branch]      master     -> pb/master
+ * [new branch]      ticgit     -> pb/ticgit
+```
+
+现在 Paul 的 master 分支可以在本地通过 `pb/master` 访问到——你可以将它合并到自己的某个分支中。
+
+注意：
+
+`git fetch` 命令只会将数据下载到你的本地仓库——它并不会自动合并或修改你当前的工作。
+
+如果你的当前分支设置了跟踪远程分支，那么可以用 `git pull` 命令来自动抓取后合并该远程分支到当前分支。
+
+- 推送到远程仓库 > `git push <remote> <branch>`
+
+```bash
+$ git push origin master
+```
+
+只有当你有所克隆服务器的写入权限，并且之前没有人推送过时，这条命令才能生效。 当你和其他人在同一时间克隆，他们先推送到上游然后你再推送到上游，你的推送就会毫无疑问地被拒绝。 你必须先抓取他们的工作并将其合并进你的工作后才能推送。
+
+- 查看某个远程仓库 > `git remote show <remote>`
+
+```bash
+$ git remote show origin
+* remote origin
+  Fetch URL: https://github.com/schacon/ticgit
+  Push  URL: https://github.com/schacon/ticgit
+  HEAD branch: master
+  Remote branches:
+    master                               tracked
+    dev-branch                           tracked
+  Local branch configured for 'git pull':
+    master merges with remote master
+  Local ref configured for 'git push':
+    master pushes to master (up to date)
+```
+
+- 重命名远程仓库 > `git remote rename`
+
+```bash
+$ git remote rename pb paul
+$ git remote
+origin
+paul
+```
+
+- 删除远程仓库 > `git remote rm`
+
+```bash
+$ git remote rm paul
+$ git remote
+origin
+```
+
+## Git 基础 - 打标签
+
+像其他版本控制系统（VCS）一样，Git 可以给仓库历史中的某一个提交打上标签，以示重要。 比较有代表性的是人们会使用这个功能来标记发布结点（ v1.0 、 v2.0 等等）。
+
+-- 列出标签 > `git tag`
+
+```bash
+$ git tag
+v1.0
+v2.0
+```
+
+-- 查找标签 > `git tag -l`
+
+```bash
+$ git tag -l "v1.8.5*"
+v1.8.5
+v1.8.5-rc0
+v1.8.5-rc1
+v1.8.5-rc2
+v1.8.5-rc3
+v1.8.5.1
+v1.8.5.2
+v1.8.5.3
+v1.8.5.4
+v1.8.5.5
+```
+
+### 创建标签
+
+Git 支持两种标签：轻量标签与附注标签。
+
+轻量标签很想一个不会改变的分支 —— 它只是某个特定提交的引用。
+
+而附注标签是存储在 Git 数据库中的一个完整对象， 它们是可以被校验的，其中包含打标签者的名字、电子邮件地址、日期时间， 此外还有一个标签信息，并且可以使用 GNU Privacy Guard （GPG）签名并验证。 通常会建议创建附注标签，这样你可以拥有以上所有信息。但是如果你只是想用一个临时的标签， 或者因为某些原因不想要保存这些信息，那么也可以用轻量标签。
+
+-- 创建附注标签 > `git tag -a [tag] -m [description]`
+
+```bash
+$ git tag -a v1.4 -m "my version 1.4"
+$ git tag
+v0.1
+v1.3
+v1.4
+```
+
+-- 查看标签信息与提交信息 > `git show [tag]`
+
+```bash
+$ git show v1.4
+tag v1.4
+Tagger: Ben Straub <ben@straub.cc>
+Date:   Sat May 3 20:19:12 2014 -0700
+
+my version 1.4
+
+commit ca82a6dff817ec66f44342007202690a93763949
+Author: Scott Chacon <schacon@gee-mail.com>
+Date:   Mon Mar 17 21:52:11 2008 -0700
+
+    changed the version number
+```
+
+-- 创建轻量标签 > `git tag [tag]`
+
+```bash
+$ git tag v1.4-lw
+$ git tag
+v0.1
+v1.3
+v1.4
+v1.4-lw
+v1.5
+```
+
+-- 给过去的提交打标签 > `git tag -a [tag] [commitId]`
+
+```bash
+$ git tag -a v1.2 9fceb02
+```
+
+### 共享标签
+
+默认情况下，`git push` 命令并不会传送标签到远程仓库服务器上。 在创建完标签后你必须显式地推送标签到共享服务器上。
+
+-- 推送单个标签 > `git push origin <tagname>`
+
+```bash
+$ git push origin v1.5
+Counting objects: 14, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (12/12), done.
+Writing objects: 100% (14/14), 2.05 KiB | 0 bytes/s, done.
+Total 14 (delta 3), reused 0 (delta 0)
+To git@github.com:schacon/simplegit.git
+ * [new tag]         v1.5 -> v1.5
+```
+
+-- 推送多个标签 > `git push --tags`
+
+```bash
+$ git push origin --tags
+Counting objects: 1, done.
+Writing objects: 100% (1/1), 160 bytes | 0 bytes/s, done.
+Total 1 (delta 0), reused 0 (delta 0)
+To git@github.com:schacon/simplegit.git
+ * [new tag]         v1.4 -> v1.4
+ * [new tag]         v1.4-lw -> v1.4-lw
+```
+
+-- 删除本地仓库上的标签 > `git tag -d <tagname>`
+
+```bash
+$ git tag -d v1.4-lw
+Deleted tag 'v1.4-lw' (was e7d5add)
+```
+
+-- 删除远程仓库上的标签 > `git push origin --delete <tagname>`
+
+```bash
+$ git push origin --delete <tagname>
+```
+
+
+## Git 基础 - Git 别名
+
+Git 并不会在你输入部分命令时自动推断出你想要的命令。 如果不想每次都输入完整的 Git 命令，可以通过 git config 文件来轻松地为每一个命令设置一个别名。
+
+```bash
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.ci commit
+$ git config --global alias.st status
+```
+
+在创建你认为应该存在的命令时这个技术会很有用。 例如，为了解决取消暂存文件的易用性问题，可以向 Git 中添加你自己的取消暂存别名：
+
+```bash
+$ git config --global alias.unstage 'reset HEAD --'
+```
+
+这会使下面的两个命令等价：
+
+```bash
+$ git unstage fileA
+$ git reset HEAD -- fileA
+```
