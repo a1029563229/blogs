@@ -341,9 +341,32 @@ A.
 | w          | func1(w) | func2(w) |
 | ---------- | -------- | -------- |
 | 0x00000076 |          |          |
+
 ？
 
 B. ？
 
 ## 2.24
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/149.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/150.png)
+
+解：
+
+| 十六进制 |        | 无符号 |        | 补码   |
+| -------- | ------ | ------ | ------ | ------ |
+| 原始值   | 截断值 | 原始值 | 截断值 | 原始值 | 截断值 |
+| 0        | 0      | 0      | 0      | 0      | 0 |
+| 2        | 2      | 2      | 2      | 2      | 2 |
+| 9        | 1      | 9      | 1      | -7     | 1 |
+| B        | 3      | 11     | 3      | -5     | 3 |
+| F        | 7      | 15     | 7      | -1     | 7 |
+
+## 2.25
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/151.png)
+
+解：
+
+因为将 `length` 设置为 0 时，`length - 1` 将会发生溢出，最终计算出来的值是 `无符号数最大值 - 1`，然后导致数组取值
