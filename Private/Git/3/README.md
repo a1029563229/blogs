@@ -57,3 +57,34 @@ f30ab (HEAD -> master, testing) add feature #32 - ability to add new formats to 
 $ git checkout testing
 ```
 
+### HEAD 指向当前所在分支的好处
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/9.png)
+
+> 注意：分支切换会改变你工作目录中的文件。在切换分支时，一定要注意你共走目录里的文件会被改变。如果是切换到一个较旧的分支，你的工作目录会恢复到该分支最后一次提交时的样子。如果 Git 不能干净利落地完成这个任务，它将禁止切换分支。
+
+你你可以在不同分支间不断地来回切换和工作，并在时机成熟时将它们合并起来。而所有这些工作，你需要的命令只有 `branch`、`checkout` 和 `commit`（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/10.png)
+
+-- 查看分支分叉历史 > `git log --oneline --decorate --graph --all`
+
+```bash
+$ git log --oneline --decorate --graph --all
+* c2b9e (HEAD, master) made other changes
+| * 87ab2 (testing) made a change
+|/
+* f30ab add feature #32 - ability to add new formats to the
+* 34ac2 fixed bug #1328 - stack overflow under certain conditions
+* 98ca9 initial commit of my project
+```
+
+由于 Git 的分支实质上仅是包含所指对象校验和（长度为 40 的 SHA-1 值字符串）的文件，所以它的创建和销毁都异常高效。
+
+> 这与过去大多数版本控制系统形成了鲜明的对比，它们在创建分支时，将所有的项目文件都复制一遍，并保存到一个特定的目录。完成这样繁琐的过程通常需要很久，这取决于项目的规模。
+>
+> 而在 Git 中，任何规模的项目都能在瞬间创建新分支。同时，由于每次提交都会记录父对象，所以寻找恰当的合并基础（即共同祖先）也是同样的简单和高效。这些高效的特性使得 Git 股利开发人员频繁地创建和使用分支。
+
+
+-- 创建新分支的同时切换过去 > `git checkout -b <newbranchname>`
+
