@@ -89,3 +89,9 @@ $ git log --oneline --decorate --graph --all
 -- 创建新分支的同时切换过去 > `git checkout -b <newbranchname>`
 
 
+## Git 分支 - 分支的新建与合并
+
+当你试图合并两个分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者时，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分期 —— 这就叫做 “快进（fast-forward）”（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/11.png)
+
