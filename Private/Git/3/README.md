@@ -97,6 +97,8 @@ $ git log --oneline --decorate --graph --all
 
 -- 删除分支 > `git branch -d [branchname]`
 
+-- 强制删除分支 > `git branch -D [branchname]`
+
 ```bash
 $ git branch -d hotfix
 Deleted branch hotfix (3a0874c).
@@ -120,3 +122,56 @@ index.html |    1 +
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/12.png)
 
 如果 Git 在做合并时发生冲突，将会暂停下来，等待你去解决合并产生的冲突，并提交。
+
+## Git 分支 - 分支管理
+
+-- 查看分支 > `git branch`
+
+```bash
+$ git branch
+  iss53
+* master
+  testing
+```
+
+> 注意：`master` 分支前的 `*` 字符：它代表现在检出的那一个分支（也就是说，当前 `HEAD` 指针所指向的分支）。
+
+
+-- 查看每一个分支的最后一次提交 > `git branch -v`
+
+```bash
+$ git branch -v
+  iss53   93b412c fix javascript issue
+* master  7a98805 Merge branch 'iss53'
+  testing 782fd34 add scott to the author list in the readmes
+```
+
+-- 查看已被合并到当前分支的分支 > `git branch --merged`
+
+```bash
+$ git branch --merged
+  iss53
+* master
+```
+
+-- 查看未合并工作的分支 > `git branch --no-merged`
+
+```bash
+$ git branch --no-merged
+  testing
+```
+
+## Git 分支 - 分支开发工作流
+
+在整个项目开发周期的不同阶段，你可以同时拥有多个开发的分支；你可以定期地把某些主题合并入其他分支中。
+
+许多使用 Git 的开发者都喜欢使用这种方式来工作，比如只在 `master` 分支上保留完全稳定的代码——有可能仅仅是已经发布或即将发布的代码。 他们还有一些名为 `develop` 或者 `next` 的平行分支，被用来做后续开发或者测试稳定性——这些分支不必保持绝对稳定，但是一旦达到稳定状态，它们就可以被合并入 `master` 分支了。 
+
+稳定分支的指针总是在提交历史中落后一大截，而前沿分支的指针往往比较靠前（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/13.png)
+
+通常把他们想象成流水线（work silos）可能更好理解一点，那些经过测试考验的提交会被甄选到更加稳定的流水线上去（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/14.png)
+
