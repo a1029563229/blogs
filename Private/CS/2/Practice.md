@@ -406,3 +406,4 @@ int strlonger(char *s, char *t) {
 ## 2.27
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/153.png)
+

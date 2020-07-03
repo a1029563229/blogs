@@ -95,3 +95,28 @@ $ git log --oneline --decorate --graph --all
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/11.png)
 
+-- 删除分支 > `git branch -d [branchname]`
+
+```bash
+$ git branch -d hotfix
+Deleted branch hotfix (3a0874c).
+```
+
+-- 切换分支 > `git checkout [branchname]`
+
+-- 合并分支 > `git merge [branchname]`
+
+```bash
+$ git checkout master
+Switched to branch 'master'
+$ git merge iss53
+Merge made by the 'recursive' strategy.
+index.html |    1 +
+1 file changed, 1 insertion(+)
+```
+
+当合并分支时遇到不同的祖先，Git 会先寻找共同祖先，然后做一个简单的三方合并，并将此次三方合并的结果做了一个新的快照并且创建一个新的提交指向它（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/12.png)
+
+如果 Git 在做合并时发生冲突
