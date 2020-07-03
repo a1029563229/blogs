@@ -119,4 +119,4 @@ index.html |    1 +
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/12.png)
 
-如果 Git 在做合并时发生冲突
+如果 Git 在做合并时发生冲突，将会暂停下来，等待你去解决合并产生的冲突，并提交。
