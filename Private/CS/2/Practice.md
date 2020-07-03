@@ -369,4 +369,40 @@ B. ？
 
 解：
 
-因为将 `length` 设置为 0 时，`length - 1` 将会发生溢出，最终计算出来的值是 `无符号数最大值 - 1`，然后导致数组取值
+因为将 `length` 设置为 0 时，`length - 1` 将会发生溢出，最终计算出来的值是 `无符号数最大值 - 1`，然后导致数组取值内存引用错误。
+
+将代码修改为：
+
+```cpp
+float sum_elements(float a[], unsigned length) {
+    int i;
+    float result = 0;
+    if (length == 0) return result;
+
+    for (i = 0; i < length - 1; i++)
+        result += a[i];
+    return result;
+}
+```
+
+## 2.26
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/152.png)
+
+解：
+
+A. 当字符串 s 的长度小于字符串 t 的长度时会产生不正确的结果。
+
+B. 因为 `size_t` 的类型为 `unsigned`，在 `s < t` 时，计算将发生溢出，得到的结果始终 > 0，该结果不符合预期。
+
+C. 代码调整如下：
+
+```cpp
+int strlonger(char *s, char *t) {
+  return strlen(s) > strlen(t);
+}
+```
+
+## 2.27
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/153.png)
