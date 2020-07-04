@@ -407,3 +407,235 @@ int strlonger(char *s, char *t) {
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/153.png)
 
+解：
+
+```cpp
+int uadd_ok(unsigned x, unsigned y) {
+    unsigned z = x + y;
+    if (z > x && z > y) {
+        return 1;
+    }
+    return 0;
+}
+```
+
+## 2.28
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/154.png)
+
+解：
+
+| x        |        | 加法逆元 x |          |
+| -------- | ------ | ---------- | -------- |
+| 十六进制 | 十进制 | 十进制     | 十六进制 |
+| 0        | 0      | 0          | 0        |
+| 5        | 5      | 11         | B        |
+| 8        | 8      | 8          | 8        |
+| D        | 13     | 3          | 3        |
+| F        | 15     | 1          | 1        |
+
+## 2.29
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/155.png)
+
+| x             | y             | x+y            | x+5ty         | 情况   |
+| ------------- | ------------- | -------------- | ------------- | ------ |
+| [10100] > -12 | [10001] > -15 | [100101] > -27 | [00101] > 5   | 负溢出 |
+| [11000] > -8  | [11000] > -8  | [110000] > -16 | [10000] > -16 | 正常   |
+| [10111] > -9  | [01000] > 8   | [11111] > -1   | [11111] > -1  | 正常   |
+| [00010] > 2   | [00101] > 5   | [00111] > 7    | [00111] > 7   | 正常   |
+| [01100] > 12  | [00100] > 4   | [010000] > 16  | [10000] > -16 | 正溢出 |
+| [11111] > -1  | [01111] > 15  | [101110] > -18 | [01110] > 14  | 正常   |
+
+## 2.30
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/156.png)
+
+解：
+
+```cpp
+int tadd_ok(int x, int y) {
+    int sum = x + y;
+    if (x > 0 && y > 0 && sum <= 0) {
+        return 0;
+    }
+
+    if (x < 0 && y < 0 && sum >= 0) {
+        return 0;
+    }
+
+    return 1;
+}
+```
+
+## 2.31
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/157.png)
+
+解：
+
+在补码运算中，该函数将始终返回 1。
+
+## 2.32
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/158.png)
+
+？
+
+## 2.33
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/159.png)
+
+| x        |        | -t4x   |          |
+| -------- | ------ | ------ | -------- |
+| 十六进制 | 十进制 | 十进制 | 十六进制 |
+| 0        | 0      | 0      | 0        |
+| 5        | 5      | -5     | -5       |
+| 8        | 8      | -8     | -8       |
+| D        | 13     | -13    | -D       |
+| F        | 15     | -15    | -F       |
+
+## 2.34
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/160.png)
+
+| 模式   | x          | y          | x\*y          | 截断的 x\*y |
+| ------ | ---------- | ---------- | ------------- | ----------- |
+| 无符号 | 4 > [100]  | 5 > [101]  | 20 > [10100]  | 4 > [100]   |
+| 补码   | -4 > [100] | -3 > [101] | 12 > [1100]   | -4 > [100]  |
+| 无符号 | 2 > [010]  | 7 > [111]  | 14 > [1110]   | 6 > [110]   |
+| 补码   | 2 > [010]  | -1 > [111] | -2 > [110]    | -2 > [110]  |
+| 无符号 | 6 > [110]  | 6 > [110]  | 36 > [100100] | 4 > [100]   |
+| 补码   | -2 > [110] | -2 > [110] | 4 > [0100]    | -4 > [100]  |
+
+## 2.35
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/161.png)
+
+?
+
+## 2.36
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/162.png)
+
+?
+
+## 2.37
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/163.png)
+
+解：
+
+A. 消除了负溢出。
+
+B. 对溢出做检查，如下。
+
+```cpp
+uint64_t asize = ele_cnt * (unit64_t) ele_size;
+if (asize < ele_cnt || asize < ele_size) return NULL;
+```
+
+## 2.38
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/164.png)
+
+解：
+
+当 b 等于 0 时，可以计算 a 的 1、2、4、8 倍数。
+
+当 a、k 为任意可能的值时，可以计算 a 的 2^k + b 倍数。
+
+## 2.39
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/165.png)
+
+解：
+
+x << n
+
+## 2.40
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/166.png)
+
+解：
+
+| K   | 移位 | 加法/减法 | 表达式              |
+| --- | ---- | --------- | ------------------- |
+| 6   | 2    | 1         | x << 2 + x << 1     |
+| 31  | 1    | 1         | x << 5 - x          |
+| -6  | 2    | 1         | x << -2 + x << -1   |
+| 55  | 2    | 2         | x << 6 - x << 3 - x |
+
+## 2.41
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/167.png)
+
+解：
+
+选择使用移位、加法和减法的组合，还是使用一条乘法指令，取决于这些指令的相对速度，而这些是与机器高度相关的。大多数编译器只在需要少量移位、加法和减法就足够的时候才使用这种优化。
+
+## 2.42
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/168.png)
+
+```cpp
+int div16(int x) {
+    return x >> 4;
+}
+```
+
+## 2.43
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/169.png)
+
+解：
+
+M = 2^5 - 1 = 31;
+
+N = 8;
+
+## 2.44
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/170.png)
+
+？
+
+## 2.45
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/171.png)
+
+| 小数值 | 二进制表示 | 十进制表示 |
+| ------ | ---------- | ---------- |
+| 1/8    | 0.001      | 0.125      |
+| 3/4    | 0.11       | 0.75       |
+| 25/16  | 1.1001     | 1.5625     |
+| 171/16 | 10.1011    | 10.6875    |
+| 9/8    | 1.001      | 1.125      |
+| 47/8   | 5.111      | 5.875      |
+| 19/16  | 1.0011     | 1.1875     |
+
+## 2.46
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/172.png)
+
+解：
+
+A. 0.1 - x 的二进制表示是：0.[0]\_24 11 [0011]~2
+
+B. ?
+
+C. ?
+
+D. ?
+
+## 2.47
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/173.png)
+
+解：
+
+Baisc
+
+| 位      | e   | E   | 2^E | f   | M   | 2^E \* M | V   | 十进制 |
+| ------- | --- | --- | --- | --- | --- | -------- | --- | ------ |
+| 0 00 00 | 0 | 0| 
