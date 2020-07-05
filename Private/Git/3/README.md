@@ -37,8 +37,7 @@ $ git branch testing
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/7.png)
 
-
-Git 通过一个名为 `HEAD`  的特殊指针指向当前所在的本地分支（可以将 `HEAD`  想象为当前分支的别名）（如下图）。
+Git 通过一个名为 `HEAD` 的特殊指针指向当前所在的本地分支（可以将 `HEAD` 想象为当前分支的别名）（如下图）。
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/8.png)
 
@@ -85,9 +84,7 @@ $ git log --oneline --decorate --graph --all
 >
 > 而在 Git 中，任何规模的项目都能在瞬间创建新分支。同时，由于每次提交都会记录父对象，所以寻找恰当的合并基础（即共同祖先）也是同样的简单和高效。这些高效的特性使得 Git 股利开发人员频繁地创建和使用分支。
 
-
 -- 创建新分支的同时切换过去 > `git checkout -b <newbranchname>`
-
 
 ## Git 分支 - 分支的新建与合并
 
@@ -136,7 +133,6 @@ $ git branch
 
 > 注意：`master` 分支前的 `*` 字符：它代表现在检出的那一个分支（也就是说，当前 `HEAD` 指针所指向的分支）。
 
-
 -- 查看每一个分支的最后一次提交 > `git branch -v`
 
 ```bash
@@ -165,7 +161,7 @@ $ git branch --no-merged
 
 在整个项目开发周期的不同阶段，你可以同时拥有多个开发的分支；你可以定期地把某些主题合并入其他分支中。
 
-许多使用 Git 的开发者都喜欢使用这种方式来工作，比如只在 `master` 分支上保留完全稳定的代码——有可能仅仅是已经发布或即将发布的代码。 他们还有一些名为 `develop` 或者 `next` 的平行分支，被用来做后续开发或者测试稳定性——这些分支不必保持绝对稳定，但是一旦达到稳定状态，它们就可以被合并入 `master` 分支了。 
+许多使用 Git 的开发者都喜欢使用这种方式来工作，比如只在 `master` 分支上保留完全稳定的代码——有可能仅仅是已经发布或即将发布的代码。 他们还有一些名为 `develop` 或者 `next` 的平行分支，被用来做后续开发或者测试稳定性——这些分支不必保持绝对稳定，但是一旦达到稳定状态，它们就可以被合并入 `master` 分支了。
 
 稳定分支的指针总是在提交历史中落后一大截，而前沿分支的指针往往比较靠前（如下图）。
 
@@ -175,3 +171,50 @@ $ git branch --no-merged
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/14.png)
 
+## Git 分支 - 远程分支
+
+远程引用是对远程仓库的引用（指针），包括分支、标签等等。
+
+-- 获取远程引用的完整列表 > `git ls-remote`
+
+-- 获取远程分支信息 > `git remote show <remote>`
+
+远程跟踪分支是远程分支状态的引用。它们以 `<remote>/<branch>` 的形式命名。
+
+> “origin” 并无特殊含义: 远程仓库名字 “origin” 与分支名字 “master” 一样，在 Git 中并没有任何特别的含义一样。 同时 “master” 是当你运行 git init 时默认的起始分支名字，原因仅仅是它的广泛使用， “origin” 是当你运行 git clone 时默认的远程仓库名字。 如果你运行 git clone -o booyah，那么你默认的远程分支名字将会是 booyah/master。
+
+如下图：
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/15.png)
+
+
+-- 同步远程仓库数据 > `git fetch <remote>`
+
+这个命令查找 `origin` 是哪一个服务器，从中抓取本地没有的数据，并且更新本地数据库，移动 `origin/master` 指针到更新之后的位置（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/16.png)
+
+如果你在本地的 `master` 分支做了一些工作，在同一段时间内有其他人推送提交远程 `master` 分支，只要你不拉取服务器的数据，你的 `origin/master` 指针就不会移动。
+
+-- 添加新的远程仓库 > `git remote add`
+
+-- 推送本地分支到远程分支 > `git push <remote> <branch>`
+
+```bash
+$ git push origin serverfix
+Counting objects: 24, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (15/15), done.
+Writing objects: 100% (24/24), 1.91 KiB | 0 bytes/s, done.
+Total 24 (delta 2), reused 0 (delta 0)
+To https://github.com/schacon/simplegit
+ * [new branch]      serverfix -> serverfix
+```
+
+可以运行 `git push origin serverfix:awesomebranch` 来将本地的 `serverfix` 分支推送到远程仓库上的 `awesomebranch` 分支。
+
+> 如何避免每次输入密码：如果你正在使用 HTTPS URL 来推送，Git 服务器会询问用户名与密码。 默认情况下它会在终端中提示服务器是否允许你进行推送。
+>
+> 如果不想在每一次推送时都输入用户名与密码，你可以设置一个 “credential cache”。 最简单的方式就是将其保存在内存中几分钟，可以简单地运行 git config --global credential.helper cache 来设置它。
+
+设置
