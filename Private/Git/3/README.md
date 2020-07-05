@@ -270,7 +270,7 @@ To https://github.com/schacon/simplegit
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/17.png)
 
-### 通过合并操作来整合分叉的历史
+### 通过合并操作来整合分叉的历史1
 
 你可以提取在 `C4` 中引入的补丁和修改，然后在 `C3` 的基础上应用一次。在 `Git` 中，这种操作就叫做`变基（rebase）`.
 
