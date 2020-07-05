@@ -217,4 +217,59 @@ To https://github.com/schacon/simplegit
 >
 > 如果不想在每一次推送时都输入用户名与密码，你可以设置一个 “credential cache”。 最简单的方式就是将其保存在内存中几分钟，可以简单地运行 git config --global credential.helper cache 来设置它。
 
-设置
+-- 设置 `https` 身份验证缓存 > `git config --global credential.helper cache`
+
+-- 创建一个基于远程分支的本地分支 > `git checkout -b <branchname> <remote>/<branchname>`
+
+```bash
+$ git checkout -b serverfix origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+```
+
+从一个远程跟踪分支检出一个本地分支会自动创建所谓的 “跟踪分支”（它跟踪的分支叫做“上游分支”）。跟踪分支是与远程分支有关系的本地分支。如果在一个跟踪分支上输入 `git pull`，Git 能自动地识别去哪个服务器上抓取、合并到哪个分支。
+
+-- 跟踪远程分支 > `git checkout --track <remote>/<branch>`
+
+```bash
+$ git checkout --track origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+```
+
+由于这个操作太常见了，该捷径本身还有一个捷径。如果你尝试检出的分支(a) 不存在且 (b) 刚好只有一个名字与之匹配的远程分支，那么 Git 就会为你创建一个跟踪分支：
+
+```bash
+$ git checkout serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+```
+
+-- 设置已有分支跟踪一个刚刚拉取下来的远程分支、修改上游分支 > `git branch -u <remote>/<branch>`、`git branch --set-upstream-to <remote>/<branch>`
+
+```bash
+$ git branch -u origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+```
+
+-- 查看所有跟踪分支 > `git branch -vv`
+
+-- 拉取所有远程服务器 > `git fetch --all`
+
+-- 删除远程分支 > `git push origin --delete <branch>`
+
+```bash
+$ git push origin --delete serverfix
+To https://github.com/schacon/simplegit
+ - [deleted]         serverfix
+```
+
+## Git 分支 - 变基
+
+在 Git 中整合来自不同分支的修改主要有两种方法： `merge` 和 `rebase`。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/17.png)
+
+### 通过合并操作来整合分叉的历史
+
+你可以提取在 `C4` 中引入的补丁和修改，然后在 `C3` 的基础上应用一次。在 `Git` 中，这种操作就叫做`变基（rebase）`.
