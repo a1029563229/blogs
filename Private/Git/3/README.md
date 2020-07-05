@@ -264,7 +264,7 @@ To https://github.com/schacon/simplegit
  - [deleted]         serverfix
 ```
 
-## Git 分支 - 变基
+## Git 分支 - 变基1
 
 在 Git 中整合来自不同分支的修改主要有两种方法： `merge` 和 `rebase`。
 
