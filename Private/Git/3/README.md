@@ -264,15 +264,36 @@ To https://github.com/schacon/simplegit
  - [deleted]         serverfix
 ```
 
-## Git 分支 - 变基1
+## Git 分支 - 变基
 
 在 Git 中整合来自不同分支的修改主要有两种方法： `merge` 和 `rebase`。
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/17.png)
 
-### 通过合并操作来整合分叉的历史1
+### 通过合并操作来整合分叉的历史
 
 你可以提取在 `C4` 中引入的补丁和修改，然后在 `C3` 的基础上应用一次。在 `Git` 中，这种操作就叫做`变基（rebase）`.
 
+在这个例子中，你可以检出 `experiment` 分支，然后将它变基到 `master` 分支上：
 
+```bash
+$ git checkout experiment
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: added staged command
+```
 
+它的原理是首先找到这两个分支（即当前分支 `experiment`、变基操作的目标基底分支 `master`）的最近共同祖先 `C2`，然后对比当前分支相对于该祖先的历次提交，提取相应的修改并存为临时文件，然后将当前分支指向目标基底 `C3`，最后以此将之前另存为临时文件的修改依序使用（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/18.png)
+
+现在回到 `master` 分支，进行一次快进合并。
+
+```bash
+$ git checkout master
+$ git merge experiment
+```
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/19.png)
+
+此时，`C4'` 指向的快照就和前面例子中 `C5` 指向的快照一模一样了。这两种整合方法的最终结果没有任何区别，但是变基使得提交历史更加正解。你在查看一个经过变基的分支的历史记录时会发现，尽管实际的开发工作是并行的，但它们看上去就像是串行的意义，提交历史是一条直线没有分叉。
