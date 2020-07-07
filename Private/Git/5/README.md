@@ -23,3 +23,4 @@ Git 允许多个远程仓库存在，使得这样一种工作流称为可能：�
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/22.png)
 
+-- 生成构建号 > `git describe <branchname>`
