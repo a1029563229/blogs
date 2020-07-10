@@ -132,3 +132,128 @@ Would remove tmp/
 ## 搜索
 
 -- 查看某个版本引入的内容 > `git log -S [string] --oneline`
+
+-- 查看文件的每一次变更 > `git log -L [file]`
+
+## 重写历史
+
+在满意之前不要推送你的工作：Git 的基本原则之一是,由于克隆中有很多工作是本地的,因此你可以在本地随便重写历史记录。然而一旦推送了你的工作，那就完全是另一回事了，除非你有充分的理由进行更改，否则应该将推送的工作视为最终结果。简而言之，在对它感到满意并准备与他人分享之前，应当避免推送你的工作。
+
+-- 修改最近一次提交的提交信息 > `git commit --amend`
+
+> 注意：如果已经推送了最后一次提交，就不要修正它。
+
+-- 修改最近一次提交的暂存内容 > `git commit --amend --no-edit`
+
+### 修改多个提交信息
+
+-- 修改最近的 n 次提交 > `git rebase -i HEAD~[n]`
+
+> 注意：不要涉及任何已经推送到中央服务器的提交——这样坐会产生一次变更的两次版本，因而使他人困惑。
+
+```bash
+$ git rebase -i HEAD~3
+
+pick f7f3f6d changed my name a bit
+pick 310154e updated README formatting and added blame
+pick a5f4a0d added cat-file
+
+# Rebase 710f0f8..a5f4a0d onto 710f0f8
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup <commit> = like "squash", but discard this commit's log message
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified). Use -c <commit> to reword the commit message.
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+```
+
+#### 修改提交信息
+
+修改提交信息，只需要将每一次提交前面的 `pick` 改为 `edit`。例如，只想修改第三次提交信息，可以像下面这样修改文件：
+
+```bash
+edit f7f3f6d changed my name a bit
+pick 310154e updated README formatting and added blame
+pick a5f4a0d added cat-file
+```
+
+当保存并退出编辑器时，Git 将你待会列表中的最后一次提交，把你送回命令行并提示以下信息：
+
+```bash
+$ git rebase -i HEAD~3
+Stopped at f7f3f6d... changed my name a bit
+You can amend the commit now, with
+
+       git commit --amend
+
+Once you're satisfied with your changes, run
+
+       git rebase --continue
+```
+
+这些指令准确地告诉你该做什么。输入
+
+```bash
+$ git commit --amend
+```
+
+修改提交信息，然后退出编辑器。然后，运行
+
+```bash
+$ git rebase --continue
+```
+
+这个命令将会自动地应用另外两个提交，然后就完成了。 如果需要将不止一处的 `pick` 改为 `edit`，需要在每一个修改为 `edit` 的提交上重复这些步骤。 每一次，Git 将会停止，让你修正提交，然后继续直到完成。
+
+#### 合并提交
+
+指定 `squash` 可以将多次提交变为一个提交，可以这样修改脚本：
+
+```bash
+pick f7f3f6d changed my name a bit
+squash 310154e updated README formatting and added blame
+squash a5f4a0d added cat-file
+```
+
+当保存并退出编辑器时，Git 应用所有的三次修改然后将你放到编辑器中来合并三次提交信息：
+
+```bash
+# This is a combination of 3 commits.
+# The first commit's message is:
+changed my name a bit
+
+# This is the 2nd commit message:
+
+updated README formatting and added blame
+
+# This is the 3rd commit message:
+
+added cat-file
+```
+
+当你保存之后，你就拥有了一个包含前三次提交的全部变更的提交。
+
+-- 撤销最近一次提交 > `git rest HEAD^`
+
+#### 核武器级选项：filter-branch
+
+可以通过脚本的方式改写大量提交。
+
