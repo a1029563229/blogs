@@ -257,3 +257,46 @@ added cat-file
 
 可以通过脚本的方式改写大量提交。
 
+## 重置揭秘
+
+HEAD 是当前分支引用的指针，它总是指向该分支上的最后一次提交。HEAD 就是该分支上的最后一次提交的快照。
+
+-- 查看快照 > `git cat-file -p HEAD`
+
+-- 查看文件快照 > `git ls-tree -r HEAD`
+
+```bash
+$ git cat-file -p HEAD
+tree cfda3bf379e4f8dba8717dee55aab78aef7f4daf
+author Scott Chacon  1301511835 -0700
+committer Scott Chacon  1301511835 -0700
+
+initial commit
+
+$ git ls-tree -r HEAD
+100644 blob a906cb2a4a904a152...   README
+100644 blob 8f94139338f9404f2...   Rakefile
+040000 tree 99f1a6d12cb4b6f19...   lib
+```
+
+索引就是你的 `预期的下一次提交`，我们也会将这个概念引用为 Git 的“暂存区”，这就是当你运行 `git commit` 时 Git 看起来的样子。
+
+Git 将上一次检出到工作目录中的所有文件填充到索引区，它们看起来就像最初被检出时的样子。之后你会将其中一些文件替换成新版本，接着通过 `git commit` 将它们转换为树来用做新的提交。
+
+-- 显示索引当前的样子 > `git ls-files`
+
+```bash
+$ git ls-files -s
+100644 a906cb2a4a904a152e80877d4088654daad0c859 0	README
+100644 8f94139338f9404f26296befa88755fc2598c289 0	Rakefile
+100644 47c6340d6459e05787f644c2447d2595f5d3a54b 0	lib/simplegit.rb
+```
+
+最后，你就有了自己的 `工作目录`（通常也叫 `工作区`）。另外两棵树以一种高效但并不直观的方式，将它们的内容存储在 `.git` 文件夹中。工作目录会将它们解包为实际的文件以便编辑。你可以把工作目录当做沙盒。在你将修改提交到暂存区并记录到历史之前，可以随意更改（如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/27.png)
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/28.png)
+
+-- 仅修改 HEAD > `git reset --soft`
+
