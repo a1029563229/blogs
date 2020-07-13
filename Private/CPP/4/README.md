@@ -62,3 +62,38 @@ enum spectrum { red, orange, yellow }
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cpp/18.png)
 
+#### 声明和初始化指针
+
+声明如下：
+
+```cpp
+int * p_updates
+```
+
+这表明，`*p_updates` 的类型为 `int`。由于 * 运算符被用于指针，因此 `p_updates` 变量本身必须是指针。我们说 `p_updates` 指向 `int` 类型，我们还说 `p_updates` 的类型是指向 `int` 的指针，或 `int*`。可以这样说，`p_updates` 是指针（地址），而 `*p_updates` 是 `int`，而不是指针。
+
+在 C++ 中，`int*` 是一种符合类型，是指向 `int` 的指针。
+
+在 C++ 创建指针时，计算机将分配用来存储地址的内存，但不会分配用来存储指针所指向的数据的内存。
+
+#### 使用 new 来分配内存
+
+```cpp
+int *pn = new int;
+```
+
+`new int` 告诉程序，需要适合存储 `int` 的内存。`new` 运算符根据类型来确定需要多少字节的内存。然后，它找到这样的内存，并返回其地址。接下来，将地址赋给 `pn`，`pn` 是被声明为指向 `int` 的指针。现在，`pn` 是地址，而 `*pn` 是存储在那里的值。
+
+为一个数据对象（可以是结构，也可以是基本类型）获得并指定分配内存的通用格式如下：
+
+```cpp
+typeName *pointer_name = new typeName;
+```
+
+由于程序知道指针的类型，所以 `cout` 知道要读取多少字节以及如何解释它们。
+
+`new` 分配的内存块通常与常规变量声明分配的内存块不同。常规变量被存储在被称为 `栈(stack)` 的内存区域中，而 `new` 从被称为 `堆（heap）` 或 `自由存储区(free store)` 的内存区域分配内存。
+
+#### 使用 delete 释放内存
+
+delete 运算符可以在使用完内存后，将其归还给内存池。

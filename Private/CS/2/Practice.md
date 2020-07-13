@@ -771,3 +771,76 @@ C.
 
 d 先从 `double` 转换成 `float`，因为范围要小一些，所以值可能溢出为正无穷或负无穷。另外，由于精确度较小，它还可能被舍入，值在转换的过程中可能会发生改变。
 
+
+D.
+
+该表达式始终为真。
+
+当 float 被转换为 double 类型时，因为 double 有更大的范围（也就是可表示值的范围），也有更高的精度（也就是有效位数），所以能够保留精确的数值。
+
+再由 double 转换回来时，精度不会丢失。
+
+E.
+
+？
+
+F.
+
+1.0 / 2 = 0.5; 
+1 / 2.0 = 0;
+
+两者不相等。
+
+G.
+
+d*d 可能会发生溢出，所以该表达式并不始终为真。
+
+H.
+
+该表达式并不始终为真。
+
+
+## 2.55
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/181.png)
+
+解：
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/182.png)
+
+## 2.56
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/183.png)
+
+解：
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/182.png)
+
+## 2.57
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/184.png)
+
+```cpp
+void show_short(short x) {
+    show_bytes((byte_pointer) &x, sizeof(short));
+}
+
+void show_long(long x) {
+    show_bytes((byte_pointer) &x, sizeof(long));
+}
+
+void show_double(double x) {
+    show_bytes((byte_pointer) &x, sizeof(double));
+}
+```
+
+## 2.58
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/185.png)
+
+解：？
+
+## 2.59
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cs/186.png)
+

@@ -298,5 +298,56 @@ $ git ls-files -s
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/28.png)
 
--- 仅修改 HEAD > `git reset --soft`
+-- 仅修改 HEAD > `git reset --soft HEAD`
+
+-- 修改索引 > `git reset --hard HEAD`
+
+注意：`--hard` 标记是 `reset` 命令唯一的危险用法。如果文件已经提交过，那么可以通过 `reflog` 来找回它；但是若该文件还未提交，Git 仍会覆盖它从而导致无法恢复。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/git/29.png)
+
+## 高级合并
+
+-- 退出合并 > `git merge --abort`
+
+```bash
+$ git status -sb
+## master
+UU hello.rb
+
+$ git merge --abort
+
+$ git status -sb
+## master
+```
+
+-- 忽略空白修改 > `git merge -Xignore-space-change whitespace`
+
+```bash
+$ git merge -Xignore-space-change whitespace
+Auto-merging hello.rb
+Merge made by the 'recursive' strategy.
+ hello.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+-- 检出多方提交 > `git checkout --conflict=diff3 [file]`
+
+## Rerere
+
+`git rerere` 功能是一个隐藏的功能。它允许你让 `Git` 记住解决一个块冲突的方法，这样在下一次看到相同冲突时，Git 可以为你自动地解决它。
+
+## 使用 Git 调试
+
+## 子模块
+
+-- 添加新的子模块 > `git submodule add [remote]`
+
+`.gitmodules` 文件中的 URL 是人们首先尝试克隆/拉取的地方，因此请尽可能确保你使用的 URL 大家都能访问。
+
+-- 初始化子模块 > `git submodule init`
+
+-- 更新子模块 > `git submodule update`
+
+-- clone 时自动更新子模块 > `git clone --recurse-submodules`
 
