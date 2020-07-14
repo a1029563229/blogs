@@ -350,3 +350,14 @@ Merge made by the 'recursive' strategy.
 -- 更新子模块 > `git submodule update`
 
 -- clone 时自动更新子模块 > `git clone --recurse-submodules`
+
+## 打包
+
+`git bundle`
+
+## 替换
+
+替换提交历史
+
+## 凭证存储
+
