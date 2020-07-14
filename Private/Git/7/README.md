@@ -347,11 +347,6 @@ Merge made by the 'recursive' strategy.
 
 -- 初始化子模块 > `git submodule init`
 
-
-
 -- 更新子模块 > `git submodule update`
 
 -- clone 时自动更新子模块 > `git clone --recurse-submodules`
-
-
-
