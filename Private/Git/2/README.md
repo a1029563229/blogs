@@ -236,11 +236,15 @@ $ git commit -a -m 'added new benchmarks'
 
 可以用 `git rm -f` 命令完成此项工作，并连带从工作目录中删除指定的文件，这样以后就不会出现在未跟踪文件清单中了。
 
+-- 移除文件 > `git rm -f`
+
 ```bash
 git rm -f
 ```
 
 另外一种情况是，我们想把文件从 Git 仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。（文件保留在磁盘，但是不让 Git 继续跟踪），可以使用 `--cached` 选项：
+
+-- 在仓库中移除 > `git rm -f --cached`
 
 ```bash
 $ git rm -f --cached README
@@ -466,7 +470,7 @@ $ git push origin master
 
 只有当你有所克隆服务器的写入权限，并且之前没有人推送过时，这条命令才能生效。 当你和其他人在同一时间克隆，他们先推送到上游然后你再推送到上游，你的推送就会毫无疑问地被拒绝。 你必须先抓取他们的工作并将其合并进你的工作后才能推送。
 
-- 查看某个远程仓库 > `git remote show <remote>`
+-- 查看某个远程仓库 > `git remote show <remote>`
 
 ```bash
 $ git remote show origin
@@ -483,7 +487,7 @@ $ git remote show origin
     master pushes to master (up to date)
 ```
 
-- 重命名远程仓库 > `git remote rename`
+-- 重命名远程仓库 > `git remote rename`
 
 ```bash
 $ git remote rename pb paul
