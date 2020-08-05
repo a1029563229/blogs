@@ -131,6 +131,146 @@ cacheable(flag = true: boolean)
 
 `this.emitFile`：产生一个文件。
 
+`this.fs`：用于访问 `compilation` 的 `inputFileSystem` 属性。
+
+## loader-utils
+
+loader 工具函数集合。
+
+### 获取 loader 的选项
+
+`loaderUtils.getOptions(this)`
+
+返回的 `options` 是一个只读对象。
+
+### parseQuery
+
+解析 `query` 参数。
+
+```js
+const params = loaderUtils.parseQuery(this.resourceQuery); // resource: `file?param1=foo`
+if (params.param1 === "foo") {
+	// do something
+}
+```
+
+### stringifyRequest
+
+将文件路径解析为相对路径。
+
+```js
+loaderUtils.stringifyRequest(this, "./test.js");
+// "\"./test.js\""
+
+loaderUtils.stringifyRequest(this, ".\\test.js");
+// "\"./test.js\""
+
+loaderUtils.stringifyRequest(this, "test");
+// "\"test\""
+
+loaderUtils.stringifyRequest(this, "test/lib/index.js");
+// "\"test/lib/index.js\""
+
+loaderUtils.stringifyRequest(this, "otherLoader?andConfig!test?someConfig");
+// "\"otherLoader?andConfig!test?someConfig\""
+
+loaderUtils.stringifyRequest(this, require.resolve("test"));
+// "\"../node_modules/some-loader/lib/test.js\""
+
+loaderUtils.stringifyRequest(this, "C:\\module\\test.js");
+// "\"../../test.js\"" (on Windows, in case the module and the request are on the same drive)
+
+loaderUtils.stringifyRequest(this, "C:\\module\\test.js");
+// "\"C:\\module\\test.js\"" (on Windows, in case the module and the request are on different drives)
+
+loaderUtils.stringifyRequest(this, "\\\\network-drive\\test.js");
+// "\"\\\\network-drive\\\\test.js\"" (on Windows, in case the module and the request are on different drives)
+```
+
+### urlToRequest
+
+将请求 URL 转化为 webpack 的模块请求。
+
+```js
+const url = "~path/to/module.js";
+const request = loaderUtils.urlToRequest(url); // "path/to/module.js"
+```
+
+### interpolateName
+
+使用多个占位符和/或正则表达式插入文件名模板。
+
+```js
+// loaderContext.resourcePath = "/absolute/path/to/app/js/javascript.js"
+loaderUtils.interpolateName(loaderContext, "js/[hash].script.[ext]", { content: ... });
+// => js/9473fdd0d880a43c21b7778d34872157.script.js
+
+// loaderContext.resourcePath = "/absolute/path/to/app/js/javascript.js"
+// loaderContext.resourceQuery = "?foo=bar"
+loaderUtils.interpolateName(loaderContext, "js/[hash].script.[ext][query]", { content: ... });
+// => js/9473fdd0d880a43c21b7778d34872157.script.js?foo=bar
+
+// loaderContext.resourcePath = "/absolute/path/to/app/js/javascript.js"
+loaderUtils.interpolateName(loaderContext, "js/[contenthash].script.[ext]", { content: ... });
+// => js/9473fdd0d880a43c21b7778d34872157.script.js
+
+// loaderContext.resourcePath = "/absolute/path/to/app/page.html"
+loaderUtils.interpolateName(loaderContext, "html-[hash:6].html", { content: ... });
+// => html-9473fd.html
+
+// loaderContext.resourcePath = "/absolute/path/to/app/flash.txt"
+loaderUtils.interpolateName(loaderContext, "[hash]", { content: ... });
+// => c31e9820c001c9c4a86bce33ce43b679
+
+// loaderContext.resourcePath = "/absolute/path/to/app/img/image.gif"
+loaderUtils.interpolateName(loaderContext, "[emoji]", { content: ... });
+// => 👍
+
+// loaderContext.resourcePath = "/absolute/path/to/app/img/image.gif"
+loaderUtils.interpolateName(loaderContext, "[emoji:4]", { content: ... });
+// => 🙍🏢📤🐝
+
+// loaderContext.resourcePath = "/absolute/path/to/app/img/image.png"
+loaderUtils.interpolateName(loaderContext, "[sha512:hash:base64:7].[ext]", { content: ... });
+// => 2BKDTjl.png
+// use sha512 hash instead of md4 and with only 7 chars of base64
+
+// loaderContext.resourcePath = "/absolute/path/to/app/img/myself.png"
+// loaderContext.query.name =
+loaderUtils.interpolateName(loaderContext, "picture.png");
+// => picture.png
+
+// loaderContext.resourcePath = "/absolute/path/to/app/dir/file.png"
+loaderUtils.interpolateName(loaderContext, "[path][name].[ext]?[hash]", { content: ... });
+// => /app/dir/file.png?9473fdd0d880a43c21b7778d34872157
+
+// loaderContext.resourcePath = "/absolute/path/to/app/js/page-home.js"
+loaderUtils.interpolateName(loaderContext, "script-[1].[ext]", { regExp: "page-(.*)\\.js", content: ... });
+// => script-home.js
+
+// loaderContext.resourcePath = "/absolute/path/to/app/js/javascript.js"
+// loaderContext.resourceQuery = "?foo=bar"
+loaderUtils.interpolateName(
+  loaderContext, 
+  (resourcePath, resourceQuery) => { 
+    // resourcePath - `/app/js/javascript.js`
+    // resourceQuery - `?foo=bar`
+
+    return "js/[hash].script.[ext]"; 
+  }, 
+  { content: ... }
+);
+// => js/9473fdd0d880a43c21b7778d34872157.script.js
+```
+
+### getHashDigest
+
+获取一个 hash 值
+
+```js
+const digestString = loaderUtils.getHashDigest(buffer, hashType, digestType, maxLength);
+```
+
 ## 编写一个 loader
 
 `loader` 是导出为一个函数的 `node` 模块。该函数在 `loader` 转换资源的时候调用。给定的函数将调用 `loader API`，并通过 `this` 上下文访问。
