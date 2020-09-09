@@ -120,7 +120,7 @@ vscode 有很多 `Gi1t` 管理的插件，可以帮助你来管理 `Git` 仓库�
 
 ## 番外
 
-## 在 vscode 里画流程图 - draw.io
+### 在 vscode 里画流程图 - draw.io
 
 安装 `draw.io` 后，新建一个 `helloworld.drawio`，就可以在 `vscode` 里面画流程图啦（如下图）！
 
@@ -128,7 +128,7 @@ vscode 有很多 `Gi1t` 管理的插件，可以帮助你来管理 `Git` 仓库�
 
 用来画一些简单的流程图还是不错的，`vscode` 全栈工程师。
 
-## 彩虹屁 - Rainbow Fart
+### 彩虹屁 - Rainbow Fart
 
 `Rainbow Fart` 是个鼓励师插件，在你敲代码的时候一直鼓励你，语音包可以选择声音甜美的小姐姐。
 
