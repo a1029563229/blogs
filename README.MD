@@ -12,15 +12,16 @@
 
 ## 最新/最受欢迎
 
-+ [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
++ [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md) `new`
++ [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `hot!!`
 + [基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Start.md) `hot!!!`
-+ [万字长文+图文并茂+全面解析微前端框架 qiankun（乾坤） 源码 - qiankun 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/qiankun/1.md) `hot!`
 
 ## 前端
 
 ### 微前端
 
 + [基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Start.md) `hot!!!`
++ [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 + [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Communication.md)
 + [万字长文+图文并茂+全面解析微前端框架 qiankun（乾坤） 源码 - qiankun 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/qiankun/1.md) `hot!`
 + [基于 qiankun 的微前端最佳实践（万字长文） - 部署发布篇（草稿-起稿）](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
