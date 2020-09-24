@@ -7,8 +7,8 @@
 微前端系列文章：
 
 - [基于 qiankun 的微前端最佳实践（万字长文） - 从 0 到 1 篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Start.md)
-- [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 - [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Communication.md)
+- [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 - [万字长文+图文并茂+全面解析微前端框架 qiankun 源码 - qiankun 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/qiankun/1.md)
 
 本系列其他文章计划一到两个月内完成，点个 `关注` 不迷路。
@@ -23,7 +23,9 @@
 
 大家好~我们是明源云链前端团队，我们使用 `qiankun` 进行微前端架构改造已经半年有余，已在生产环境得到成功验证。因此，本文介绍的 `微前端应用部署发布方案`，可以放心食用啦。
 
-公司项目不对外，所以下面给大家展示我们的 [Demo 案例](http://main-micro.jt-gmall.com) （效果如下图）。
+由于公司项目不对外开放，所以下面给大家展示我们的 [Demo 案例](http://main-micro.jt-gmall.com)（Demo 服务器带宽比较低，可能访问起来比较慢）（效果如下图）。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/qiankun-deploy/9.gif)
 
 OK，话不多说，我们进入到正文吧~
 
@@ -180,7 +182,7 @@ yarn build:test
 
 到这里，我们的主应用就构建打包好了，接下来我们介绍各个技术栈的微应用构建打包过程。
 
-### `Vue` 微应用构建打包
+### Vue 微应用构建打包
 
 我们以 [实战案例 - feature-deploy 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy) 为例，我们进入到 `micro-app-vue` 目录，直接使用 `vue-cli` 官方的打包命令构建打包即可，在命令行运行：
 
@@ -194,7 +196,7 @@ yarn build
 
 到这里，我们的 `Vue` 微应用构建打包就完成啦！
 
-### `React` 微应用构建打包
+### React 微应用构建打包
 
 我们以 [实战案例 - feature-deploy 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy) 为例，我们进入到 `micro-app-react` 目录，直接使用打包命令构建打包即可，在命令行运行：
 
@@ -208,7 +210,7 @@ yarn build
 
 到这里，我们的 `React` 微应用构建打包就完成啦！
 
-### `Angular` 微应用构建打包
+### Angular 微应用构建打包
 
 我们以 [实战案例 - feature-deploy 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy) 为例，我们进入到 `micro-app-angular` 目录，直接使用打包命令构建打包即可，在命令行运行：
 
@@ -222,13 +224,13 @@ yarn build
 
 到这里，我们的 `Angular` 微应用构建打包就完成啦！
 
-### `Static` 微应用构建打包
+### Static 微应用构建打包
 
 我们以 [实战案例 - feature-deploy 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy) 为例，由于 `Static` 微应用没有使用脚手架，所以我们直接将 `static` 目录移动到根目录下的 `deployed` 目录下，并重命名为 `micro-app-static`，目录结构如下（见下图）
 
 ![micro](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/qiankun_practice/48.png)
 
-## `Nginx` 服务器部署方案
+## Nginx 服务器部署方案
 
 在将我们的主应用和微应用全部打包完成后，我们将介绍如何使用 `Nginx` 完成微前端架构的部署。
 
@@ -238,11 +240,7 @@ yarn build
 
 ### 搭建 HTTP 服务器 - 运行主应用
 
-首先，我们以 [实战案例 - feature-deploy 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy) 为例，我们项目构建后的目录如下图。
-
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/qiankun-deploy/1.png)
-
-我们先搭建一个简单的 `HTTP` 服务，使得我们的主应用可以被访问，我们在 `deployed` 目录下新建一个 `nginx.conf` 配置文件，添加如下配置：
+首先，我们以 [实战案例 - feature-deploy 分支](https://github.com/a1029563229/micro-front-template/tree/feature-deploy) 为例，先搭建一个简单的 `HTTP` 服务，使得我们的主应用可以被访问，我们在 `deployed` 目录下新建一个 `nginx.conf` 配置文件，添加如下配置：
 
 ```nginx
 worker_processes  1;   # Nginx 进程数，一般设置为和 CPU 核数一样
@@ -384,7 +382,7 @@ types {
 
 ```bash
 # -c 后面跟着的是你的 nginx 配置文件路径，记得配置正确的路径
-nginx -s reload -c /Users/Macxdouble/project/myy/micro-front/deployed/nginx.conf 
+nginx -c /Users/Macxdouble/project/myy/micro-front/deployed/nginx.conf 
 ```
 
 启动完成后，打开浏览器 `http://localhost:9999` 查看效果（如下图）：
@@ -539,8 +537,6 @@ nginx -s reload -c /Users/Macxdouble/project/myy/micro-front/deployed/nginx.conf
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/qiankun-deploy/5.png)
 
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/qiankun-deploy/6.png)
-
 ok 啦，`nginx` 服务部署大功告成！
 
 > 注意注意，敲黑板：如果是需要把服务部署到真实服务器，只需要把所有的 `localhost` 都换成真实注册的域名即可，其他配置都可以复用噢！
@@ -583,7 +579,7 @@ caddy run --watch
 
 ### 搭建 HTTP 服务器 - 运行子应用
 
-子应用和主应用的 `nginx` 配置基本上是一致的，唯一不同的是子应用需要配置允许跨域访问。这是因为我们的微前端架构需要通过 `ajax` 请求子应用资源，所以需要配置跨域，通过 `同源策略` 的限制。
+子应用和主应用的 `Caddy` 配置基本上是一致的，唯一不同的是子应用需要配置允许跨域访问。这是因为我们的微前端架构需要通过 `ajax` 请求子应用资源，所以需要配置跨域，通过 `同源策略` 的限制。
 
 接下来我们配置子应用的 `Caddy` 配置，我们四个子应用需要配置（完整配置如下）：
 
@@ -656,21 +652,10 @@ ok 啦，`Caddy` 服务部署大功告成！
 
 [Caddy 官网](https://caddyserver.com)
 
-## 求贤若渴
+## 最后一件事
 
-明源云链前端团队是个充满激情的团队，明源云也是对技术非常重视的公司。
+如果您已经看到这里了，希望您还是点个赞再走吧~
 
-我们有完善的福利：六险一金 +（丰厚）年终奖 + 带薪休假 + 通讯补贴
+您的点赞是对作者的最大鼓励，也可以让更多人看到本篇文章！
 
-我们的工作氛围：弹性工作，扁平结构，崇尚以解决问题为核心、简单高效的互联网文化，鼓励技术创新分享，每年举办黑客马拉松（最高奖 3W 奖金）、极客大赛、移动社群等技术性赛事
-
-我们有人文关怀：花式下午茶（每周都有）、生日礼金、免费旅游、活动经费、结婚礼金、免费体检
-
-我们还有丰富的业余社团活动：篮球、足球、瑜伽、羽毛球、台球、棋牌赛
-
-我们招聘的岗位有：`前端工程师`、`测试工程师`、`Java 工程师`、`PHP 工程师`
-
-我们的 Base 有：`深圳`、`武汉`
-
-心动了吗？如果你已经做好准备，那么请投出你的简历到邮箱 `lit31@mingyuanyun.com`，明源云期待你的加入！
-
+如果觉得本文对您有帮助，请帮忙在 [github](https://github.com/a1029563229/Blogs) 上点亮 `star` 鼓励一下吧！
