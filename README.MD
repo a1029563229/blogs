@@ -42,6 +42,7 @@
 ### 其他
 
 + [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
++ [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites) `new`
 + [AST（Abstract Syntax Tree，抽象语法树）](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)
 + [GraphQL 查询字符串的组装](https://github.com/a1029563229/Blogs/tree/master/Introduction/graphql/graphql-query)
 + [使用 Sentry 平台处理异常日志](https://github.com/a1029563229/Blogs/tree/master/Introduction/Sentry)
