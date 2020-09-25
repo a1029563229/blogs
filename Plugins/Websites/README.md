@@ -52,7 +52,7 @@ CodePen 中有很多成熟的案例，我们前端开发中最常用到 `Flex` �
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/share/websites/12.png)
 
-从上图可以看出，左边是代码编辑区和运行区，右边就是文档。
+从上图可以看出，左边是 `代码编辑区` 和 `运行区`，右边就是 `使用文档`。
 
 OMG，还有比这更好的编程体验吗！用它！
 
