@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-05 10:07:04
- * @LastEditTime: 2020-10-13 16:47:36
+ * @LastEditTime: 2020-10-13 16:56:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /Blogs/README.MD
@@ -20,7 +20,7 @@
 
 ## 最新/最受欢迎
 
-+ [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
++ [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/BestPractices/bilibili/Banner.md) `new`
 + [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites) `hot!!`
 
 ## 前端
@@ -48,7 +48,7 @@
 
 ### 其他
 
-+ [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
++ [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/BestPractices/bilibili/Banner.md) `new`
 + [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins)
 + [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites)
 + [AST（Abstract Syntax Tree，抽象语法树）](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)

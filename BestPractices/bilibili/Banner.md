@@ -408,6 +408,8 @@ function setRightImgStyle(offsetRatio) {
 
 这个案例是在某次学习（发呆）的时候发现 `B站` 的秋季主题挺有意思的，这里分享出来给大家，用几张图片组合出这么一个创意交互，也是挺有趣的~
 
+最后，附上 [源码地址](https://github.com/a1029563229/Blogs/tree/master/BestPractices/bilibili/)
+
 ## 求贤若渴
 
 明源云链前端团队是个充满激情的团队，明源云也是对技术非常重视的公司。
