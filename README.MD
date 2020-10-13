@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-05 10:07:04
+ * @LastEditTime: 2020-10-13 16:47:36
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /Blogs/README.MD
+-->
 # 博客文章收录
 
 > 专注前端深度学习，图解各种技术原理。
@@ -12,9 +20,8 @@
 
 ## 最新/最受欢迎
 
-+ [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites) `new`
-+ [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md) `new`
-+ [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `hot!!`
++ [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
++ [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites) `hot!!`
 
 ## 前端
 
@@ -41,8 +48,9 @@
 
 ### 其他
 
-+ [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
-+ [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites) `new`
++ [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins) `new`
++ [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins)
++ [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites)
 + [AST（Abstract Syntax Tree，抽象语法树）](https://github.com/a1029563229/Blogs/tree/master/Introduction/ast)
 + [GraphQL 查询字符串的组装](https://github.com/a1029563229/Blogs/tree/master/Introduction/graphql/graphql-query)
 + [使用 Sentry 平台处理异常日志](https://github.com/a1029563229/Blogs/tree/master/Introduction/Sentry)

@@ -1,12 +1,14 @@
-# 从 B 站的秋季主题中学习到 CSS 的妙用
+# 从 B 站的秋季主题中学习 “图层组合动画”
+
+大家好，我们是明源云前端团队。
 
 众所周知，[B 站](https://www.bilibili.com/) 是个适合学习的好网站，我们团队的小伙伴也是经常上 `B站` 学习。
 
-在某天上 `B站` 学习的时候，发现 `B站` 已经开启了秋季主题，并且在头图的这个交互上还内有乾坤。随着我们的鼠标变换位置，头图也跟随着我们的鼠标位置进行变换，配上秋季主题，显得特别治愈。（如下图）
+某一天在 `B站` 学习的时候，发现 `B站` 已经开启了秋季主题，并且在头图的这个交互上还内有乾坤。随着我们的鼠标变换位置，头图也跟随着我们的鼠标位置进行变换，配上秋季主题，显得特别治愈。（如下图）
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/bilibili/2.gif)
 
-接下来我们来试着实现这种动画效果吧！
+小编对这个交互也是挺感兴趣的，那接下来我们直接进入主题，来试着实现这种动画效果吧！
 
 ## 原理分析
 
@@ -16,10 +18,10 @@
 
 除此之外，还有个小女孩的 `眨眼` 特效，是通过切换图片来实现的。所以我们实现的步骤分解为四步：
 
-1. 获取对应的图片
-2. 将图片按照效果图，摆放在对应的位置，设置默认的高斯模糊
-3. 通过切换图片制作 `眨眼` 特效
-4. 根据鼠标位置切换图片位置和高斯模糊
+1. 获取对应的图片；
+2. 将图片按照效果图，摆放在对应的位置，设置默认的高斯模糊；
+3. 通过切换图片制作 `眨眼` 特效；
+4. 根据鼠标位置切换图片位置和高斯模糊；
 
 那我们遵循上面的步骤，开始制作吧！
 
@@ -126,12 +128,13 @@ setInterval(() => {
 
 从上图可以看出，我们将多张图片堆叠后，已经有初步的雏形了，接下来我们来设置默认的高斯模糊吧。
 
-由于我们的位置偏移和高斯模糊在后面需要涉及到交互，所以我们直接使用 `JS` 进行设置，这里我们借助一下 `Jquery`，在 `body` 后引入 `jquery`，然后写入我们的 `javscript` 脚本（如下）。
+由于我们的位置偏移和高斯模糊在后面需要涉及到交互，所以我们直接使用 `JS` 进行设置，这里我们借助一下 `Jquery`，在 `body` 后引入 `jquery`，然后写入我们的 `javascript` 脚本（如下）。
 
 ```html
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.js"></script>
 <script>
   const imgList = $(".img-list .layer img");
+  // 默认的位置偏移与高斯模糊值
   const defaultStyles = [
     { translateX: 0, translateY: 0, blur: 4 },
     { translateX: 0, translateY: 0, blur: 0 },
@@ -141,7 +144,7 @@ setInterval(() => {
     { translateX: 0, translateY: 0, blur: 6 },
   ];
 
-  function setImgStyle(offset = 0) {
+  function setDefaultImgStyle() {
     for (let i = 0; i < imgList.length; i++) {
       const imgItem = imgList[i];
       const defaultStyle = defaultStyles[i];
@@ -155,8 +158,7 @@ setInterval(() => {
       });
     }
   }
-
-  setImgStyle(0);
+  setDefaultImgStyle();
 </script>
 ```
 
@@ -168,7 +170,7 @@ setInterval(() => {
 
 我们的静态页面已经制作的差不多了，接下来我们来用 `JS` 简单实现 `眨眼` 特效吧。
 
-这个比较简单，我们只需要设置一个定时器，每 3 秒切换一下第二张图片即可，代码实现如下：
+这个比较简单，我们只需要设置一个定时器，每 3 秒切换一次图片集即可，代码实现如下：
 
 ```js
 function setShakeAnimation() {
@@ -209,9 +211,7 @@ setShakeAnimation();
 
 最后，我们来为我们的图层合集添加上交互效果吧！
 
-### 高斯模糊效果
-
-我们从 `B站` 原有的交互中可以发现，当我们把鼠标放上去左右移动时，图片发生了位置和模糊度的变化。所以我们先把鼠标移动的事件监听加上，代码实现如下：
+我们从 `B站` 原有的交互中可以发现，当我们把鼠标放上去左右移动时，图片发生了位置和高斯模糊度的变化。所以我们先把鼠标移动的事件监听加上，代码实现如下：
 
 ```js
 // 屏幕宽度
@@ -256,26 +256,52 @@ $(".img-list").mouseenter((e) => {
 
 位置变化的效果如下表所示。
 
-| 图片序号 | 初始值（位置） | 从最右侧到最左侧（位置） | 从最左侧到最右侧（位置） |
-| -------- | -------------- | ------------------------ | ------------------------ |
-| 1        | 0              | 0                        | 0                        |
-| 2        | 0              | -9                       | 9                        |
-| 3        | -50            | -80                      | 21                       |
-| 4        | 0              | -36                      | 35                       |
-| 5        | 0              | -78                      | 77                       |
-| 6        | 0              | -97                      | 96                       |
+| 图片序号 | 初始值（X 轴位置） | 从最右侧到最左侧（X 轴位置） | 从最左侧到最右侧（X 轴位置） |
+| -------- | ------------------ | ---------------------------- | ---------------------------- |
+| 1        | 0                  | 0                            | 0                            |
+| 2        | 0                  | -9                           | 9                            |
+| 3        | -50                | -80                          | 21                           |
+| 4        | 0                  | -36                          | 35                           |
+| 5        | 0                  | -78                          | 77                           |
+| 6        | 0                  | -97                          | 96                           |
 
 根据上面两张表，我们就可以开始写代码啦，代码实现如下：
 
 ```js
+// 鼠标左移后的最终目标位置
 const leftStyles = [
-  { translateX: 0, translateY: 0, blur: 0 },
-  { translateX: -9, translateY: 0, blur: 10 },
-  { translateX: -80, translateY: 0, blur: 5 },
-  { translateX: -36, translateY: 4.2, blur: 13 },
-  { translateX: -78, translateY: -1.8, blur: 14 },
-  { translateX: -97, translateY: 0, blur: 12 },
+  {
+    translateX: 0,
+    translateY: 0,
+    blur: 0,
+  },
+  {
+    translateX: -9,
+    translateY: 0,
+    blur: 10,
+  },
+  {
+    translateX: -80,
+    translateY: 0,
+    blur: 5,
+  },
+  {
+    translateX: -36,
+    translateY: 4.2,
+    blur: 13,
+  },
+  {
+    translateX: -78,
+    translateY: -1.8,
+    blur: 14,
+  },
+  {
+    translateX: -97,
+    translateY: 0,
+    blur: 12,
+  },
 ];
+
 function setLeftImgStyle(offsetRatio) {
   for (let i = 0; i < imgList.length; i++) {
     const imgItem = imgList[i];
@@ -285,10 +311,11 @@ function setLeftImgStyle(offsetRatio) {
       blur: defaultBlur,
     } = defaultStyles[i];
     const leftStyle = leftStyles[i];
-    const blur = (leftStyle.blur - defaultBlur) * offsetRatio + defaultBlur;
+    // 根据移动比例计算最终坐标和高斯模糊值
     const translateX =
       (leftStyle.translateX - defaultTranslateX) * offsetRatio +
       defaultTranslateX;
+    const blur = (leftStyle.blur - defaultBlur) * offsetRatio + defaultBlur;
 
     // 设置位置偏移以及高斯模糊
     $(imgItem).css({
@@ -300,14 +327,40 @@ function setLeftImgStyle(offsetRatio) {
   }
 }
 
+// 鼠标右移后的最终目标位置
 const rightStyles = [
-  { translateX: 0, translateY: 0, blur: 8 },
-  { translateX: 9, translateY: 0, blur: 8 },
-  { translateX: 21, translateY: 0, blur: 4 },
-  { translateX: 35, translateY: 4.2, blur: [0, 4] },
-  { translateX: 77, translateY: -1.8, blur: [0, 4] },
-  { translateX: 96, translateY: 0, blur: 0 },
+  {
+    translateX: 0,
+    translateY: 0,
+    blur: 8,
+  },
+  {
+    translateX: 9,
+    translateY: 0,
+    blur: 8,
+  },
+  {
+    translateX: 21,
+    translateY: 0,
+    blur: 4,
+  },
+  {
+    translateX: 35,
+    translateY: 4.2,
+    blur: [0, 4],
+  },
+  {
+    translateX: 77,
+    translateY: -1.8,
+    blur: [0, 4],
+  },
+  {
+    translateX: 96,
+    translateY: 0,
+    blur: 0,
+  },
 ];
+
 function setRightImgStyle(offsetRatio) {
   for (let i = 0; i < imgList.length; i++) {
     const imgItem = imgList[i];
@@ -319,6 +372,10 @@ function setRightImgStyle(offsetRatio) {
     const rightStyle = rightStyles[i];
     let rightBlur = rightStyle.blur;
     let blur = defaultBlur;
+    // 根据移动比例计算最终坐标和高斯模糊值
+    const translateX =
+      (rightStyle.translateX - defaultTranslateX) * offsetRatio +
+      defaultTranslateX;
     if (Array.isArray(rightBlur)) {
       const targetBlur = offsetRatio < 0.5 ? rightBlur[0] : rightBlur[1];
       const ratio =
@@ -328,9 +385,6 @@ function setRightImgStyle(offsetRatio) {
     } else {
       blur = (rightBlur - defaultBlur) * offsetRatio + defaultBlur;
     }
-    const translateX =
-      (rightStyle.translateX - defaultTranslateX) * offsetRatio +
-      defaultTranslateX;
     // 设置位置偏移以及高斯模糊
     $(imgItem).css({
       // 位置偏移
@@ -341,3 +395,35 @@ function setRightImgStyle(offsetRatio) {
   }
 }
 ```
+
+在上面的代码实现中，我们在鼠标左移右移的过程中添加了图片位置偏移与高斯模糊值，最后我们实现的效果就和 `B站` 的原版很相近了！（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/bilibili/11.gif)
+
+好了，大功告成啦！
+
+## 总结
+
+经过简单的步骤分析，我们将几张图片组合起来就模拟出了 `B站` 的秋季主题效果啦！
+
+这个案例是在某次学习（发呆）的时候发现 `B站` 的秋季主题挺有意思的，这里分享出来给大家，用几张图片组合出这么一个创意交互，也是挺有趣的~
+
+## 求贤若渴
+
+明源云链前端团队是个充满激情的团队，明源云也是对技术非常重视的公司。
+
+我们有完善的福利：六险一金 +（丰厚）年终奖 + 带薪休假 + 通讯补贴
+
+我们的工作氛围：弹性工作，扁平结构，崇尚以解决问题为核心、简单高效的互联网文化，鼓励技术创新分享，每年举办黑客马拉松（最高奖 3W 奖金）、极客大赛、移动社群等技术性赛事
+
+我们有人文关怀：花式下午茶（每周都有）、生日礼金、免费旅游、活动经费、结婚礼金、免费体检
+
+我们还有丰富的业余社团活动：篮球、足球、瑜伽、羽毛球、台球、棋牌赛
+
+我们招聘的岗位有：`（中高级）前端工程师`、`（中高级）测试工程师`、`（中高级）Java 工程师`、`（中高级）PHP 工程师`。
+
+Base：`深圳`、`武汉`。
+
+欢迎投递简历到邮箱 `lit31@mingyuanyun.com`，或者添加下面微信备注 `明源云` 进行咨询吧！
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/bilibili/12.png)
