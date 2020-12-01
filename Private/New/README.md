@@ -28,4 +28,10 @@ exports.getPromptModules = () => {
 
 ## Css
 
+### 水印相关
+
 `pointer-events` CSS 属性指定在什么情况下 (如果有) 某个特定的图形元素可以成为鼠标事件的 target。
+
+使用 `userSelect` 属性，可以让文字无法被选中。
+
+`MutationObserver`，能够监控元素的改动。
