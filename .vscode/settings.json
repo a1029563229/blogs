@@ -9,7 +9,10 @@
   "cSpell.ignoreWords": [
     "newbranchname",
     "oneline",
+    "preload",
     "tagname",
-    "untracked"
+    "tarojs",
+    "untracked",
+    "weapp"
   ],
 }

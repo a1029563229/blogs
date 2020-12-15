@@ -130,7 +130,7 @@ npm i @tarojs/extend
 然后再需要使用文件引入 $ 即可：
 
 ```js
-import { $ } from '@tarojs/extend'
+import { $ } from "@tarojs/extend";
 ```
 
 ## 渲染 HTML
@@ -144,11 +144,107 @@ import { $ } from '@tarojs/extend'
 为了让内置的标签样式起作用，我们还需要将 HTML 容器的 CSS 类设置为 `.taro_html`:
 
 ```js
+import "@tarojs/taro/html.css";
+
+function helloWorld() {
+  const html = `<h1 style="color: red">Wallace is way taller than other reporters.</h1>`;
+
+  return (
+    <View
+      className="taro_html"
+      dangerouslySetInnerHTML={{ __html: html }}
+    ></View>
+  );
+}
+```
+
+### 绑定事件
+
+出于作用域和安全因素考虑，Taro 会把 HTML 字符串中的事件和 JavaScript 全部清除。但我们仍然有办法给 HTML 绑定事件：
+
+```js
 import '@tarojs/taro/html.css'
 
 function helloWorld() {
-  const html = `<h1 style="color: red">Wallace is way taller than other reporters.</h1>`
+  const html = `<h1 id="test">Wallace is way taller than other reporters.</h1>`
+
+  useEffect(() => {
+    const el = document.getElementById('test')
+    function testOnTap (event) {
+      // do something
+      ...
+    }
+    el.addEventListener('tap', testOnTap)
+
+    return () => {
+      el.removeEventListener('tap', testOnTap)
+    }
+  }, [])
 
   return <View className="taro_html" dangerouslySetInnerHTML={{ __html: html }}></View>
 }
 ```
+
+## 使用 CSS-in-JS
+
+我们可以通过 `linaria` 实现同样的功能，`linaria` 主要提供以下特性：
+
+- 近似于 `styled-components` 的 API
+- 完整的 TypeScript 支持
+- 零运行时
+
+## 长列表渲染（虚拟列表）
+
+## 反向转换
+
+## 消息机制
+
+Taro 提供了 `Taro.Events` 来实现消息机制，使用时需要实例化它。
+
+## Taro.showNavigationBarLoading(option)
+
+在当前页面显示导航条加载动画
+
+## Taro.showTabBarRedDot(option)
+
+显示 tabBar 某一项的右上角的红点
+
+## Taro.loadFontFace(option)
+
+动态加载网络字体。文件地址需为下载类型。iOS 仅支持 https 格式文件地址。
+
+## Taro.startPullDownRefresh(option)
+
+开始下拉刷新。调用后触发下拉刷新动画，效果与用户手动下拉刷新一致。
+
+## Taro.pageScrollTo(option)
+
+将页面滚动到目标位置，支持选择器和滚动距离两种方式定位
+
+## Taro.onKeyboardHeightChange(callback)
+
+监听键盘高度变化
+
+## Taro.hideKeyboard(option)
+
+在 `input、textarea` 等 `focus` 拉起键盘之后，手动调用此接口收起键盘
+
+## Taro.getSelectedTextRange(option)
+
+在 input、textarea 等 focus 之后，获取输入框的光标位置。注意：只有在 focus 的时候调用此接口才有效。
+
+## RequestTask
+
+`abort`：中断请求任务
+
+## Taro.addInterceptor(callback)
+
+可以使用拦截器在请求发出前或发出后做一些额外操作。
+
+## 编译工作流与抽象语法树（AST）
+
+Taro 的核心部分就是将代码编译成其他端（H5、小程序、React Native 等）代码。一般来说，将一种结构化语言的代码编译成另一种类似的结构化语言的代码包括以下几个步骤：
+
+首先是 parse，将代码 解析`（Parse）`成 `抽象语法树（Abstract Syntex Tree）`，然后对 `AST` 进行 `遍历（traverse）`和 `替换(replace)`（这对于前端来说其实并不陌生，可以类比 DOM 树的操作），最后是 `生成（generate）`，根据新的 `AST` 生成编译后的代码。
+
+

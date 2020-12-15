@@ -35,3 +35,26 @@ exports.getPromptModules = () => {
 使用 `userSelect` 属性，可以让文字无法被选中。
 
 `MutationObserver`，能够监控元素的改动。
+
+### 模板操作库
+
+拷贝模版文件主要是使用 `jprichardson/node-fs-extra` 的 `copyTpl()` 方法，此方法使用 `ejs` 模板语法，可以将输入的内容插入到模版的对应位置：
+
+```js
+this.fs.copyTpl(
+  project,
+  path.join(projectPath, 'project.config.json',
+  {description,projectName}
+);
+```
+
+### 更新已经存在的文件内容
+
+更新已经存在的文件内容是很复杂的工作，最可靠的方法是把文件解析为 AST，然后再编辑。一些流行的 AST parser 包括：
+
+`Cheerio`：解析 HTML。
+`Babylon`：解析 JavaScript。
+对于 JSON 文件，使用原生的 JSON 对象方法。
+
+使用 `Regex` 解析一个代码文件是邪道，不要这么干，不要心存侥幸。
+
