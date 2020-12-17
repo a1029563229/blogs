@@ -58,3 +58,16 @@ this.fs.copyTpl(
 
 使用 `Regex` 解析一个代码文件是邪道，不要这么干，不要心存侥幸。
 
+### 动态引入插件库
+
+```js
+const fPath = resolve.sync(item, {
+  basedir: root,
+  extensions: [".js", ".ts"],
+});
+```
+
+### babel-register
+
+`babel-register` 模块改写 `require` 命令，为它加上一个钩子。此后，每当使用 `require` 加载.js、.jsx、.es 和.es6 后缀名的文件，就会先用 Babel 进行转码。
+
