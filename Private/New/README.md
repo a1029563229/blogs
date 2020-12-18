@@ -72,3 +72,5 @@ const fPath = resolve.sync(item, {
 `babel-register` 模块改写 `require` 命令，为它加上一个钩子。此后，每当使用 `require` 加载.js、.jsx、.es 和.es6 后缀名的文件，就会先用 Babel 进行转码。
 
 `Taro` 中注册组件的控制反转机制（Ioc）。
+
+`Taro-cli` 中的 `hooks` 机制。
