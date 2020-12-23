@@ -55,3 +55,37 @@
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/15.jpg)
 
+#### 架构分层
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/16.jpg)
+
+#### 沙箱隔离
+
+支持搭建不同技术栈、不同版本。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/17.jpg)
+
+### PasS 平台建设
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/18.jpg)
+
+#### 云端构建架构图
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/19.jpg)
+
+#### 代码回滚服务
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/20.jpg)
+
+#### 总结&展望
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/shared/21.jpg)
+
+#### QA
+
+icewark 和 iceluna 区别：icewark 偏源码方向链路，iceluna 主要定位在搭建产品。
+
+主导：前两年是技术驱动，近一年有设计师团队参与建设，目前还是主要由技术人员驱动的项目。
+
+组件间的业务逻辑交互：这是个难点，iceluna 是通过插件的能力来增强的，进行利灵活搭配，并不是自身提供的能力。
+
