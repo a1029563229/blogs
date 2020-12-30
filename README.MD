@@ -12,7 +12,7 @@
 
 ## 最新/最受欢迎
 
-- [使用 Node “多线程”处理高并发任务](https://github.com/a1029563229/Blogs/tree/master/BestPractices/node/concurrent) `new`
+- [使用 Node 处理 I/O 密集型任务](https://github.com/a1029563229/Blogs/tree/master/BestPractices/node/concurrent) `new`
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md) `new`
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md) `new`
 
@@ -57,7 +57,7 @@
 
 ### Nodejs
 
-- [使用 Node “多线程”处理高并发任务](https://github.com/a1029563229/Blogs/tree/master/BestPractices/node/concurrent)
+- [使用 Node 处理 I/O 密集型任务](https://github.com/a1029563229/Blogs/tree/master/BestPractices/node/concurrent)
 - [Express 的基本使用，前端进阶 Node 的第一课](https://github.com/a1029563229/Blogs/tree/master/Introduction/node/express/README.md)
 - [Node 源码解析 - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
 - [手把手教你用 Node 实现 HTTP 协议（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/http)
