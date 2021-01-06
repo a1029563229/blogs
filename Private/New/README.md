@@ -111,3 +111,13 @@ const fPath = resolve.sync(item, {
 
 如同上面提到的，如果所有代码都不包含副作用，我们就可以简单地将该属性标记为 `false`，来告知 webpack，它可以安全地删除未用到的 `export` 导出。
 
+### Webview
+
+Webview 是一个基于 webkit 的引擎，可以解析 DOM 元素，展示 html 页面的控件，它和浏览器展示页面的原理是相同的，所以可以把它当做浏览器来看待。
+
+Android 的 Webview 在低版本和高版本采用了不同的 webkit 版本内核，4.4 后直接使用了 Chrome。
+
+### 小程序
+
+小程序的 UI 视图和逻辑处理是用多个 webview 实现的，逻辑处理的 JS 代码全部加载到一个 JSCore 里面，称之为 AppService，整个小程序只有一个，并且整个生命周期常驻内存，而所有的视图（wxml 和 wxss）都是单独的 Webview 来承载，称之为 AppView。正是因为每个视图都是一个独立的 webview 进程，考虑到性能消耗，小程序不允许打开超过 5 个层级的页面，当然同是也是为了体验更好。
+
