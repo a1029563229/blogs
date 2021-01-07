@@ -121,3 +121,15 @@ Android 的 Webview 在低版本和高版本采用了不同的 webkit 版本内�
 
 小程序的 UI 视图和逻辑处理是用多个 webview 实现的，逻辑处理的 JS 代码全部加载到一个 JSCore 里面，称之为 AppService，整个小程序只有一个，并且整个生命周期常驻内存，而所有的视图（wxml 和 wxss）都是单独的 Webview 来承载，称之为 AppView。正是因为每个视图都是一个独立的 webview 进程，考虑到性能消耗，小程序不允许打开超过 5 个层级的页面，当然同是也是为了体验更好。
 
+### webpack-chain
+
+#### 什么是 webpack-chain
+
+`webpack-chain` 尝试通过可链式或顺流式的 API 创建和修改 webpack 配置。API 的 Key 部分可以由用户指定的名称引用，这有助于跨项目修改配置方式的标准化。应用一个链式 API 来生成和简化 2-4 版本的 webpack 的配置的修改。
+
+#### 为什么使用 webpack-chain？
+
+webpack 的核心配置的创建和修改基于有潜在难于处理的 Javascript 对象。虽然这对于配置单个项目来说还算 OK 的，但当你尝试跨项目共享这些对象并使其进行后续的修改就会变得混乱不堪。
+
+使用 `webpack-chain` 共享配置很简单，仅仅在导出配置和在传递给 webpack 之前调用 `.toConfig()` 方法将配置导出给 webpack 使用。
+
