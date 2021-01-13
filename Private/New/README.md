@@ -195,3 +195,26 @@ Code Splitting: 它表示将你的代码拆分成多个 bundle 或 chunk，之�
 ##### webpack target
 
 由于 JavaScript 即可以编写服务端代码也可以编写浏览器代码，所以 webpack 提供了多种部署 target，你可以在 webpack 的配置选项中进行设置。
+
+`devtool`: 此选项控制是否生成，以及如何生成 source map。
+
+#### 不同的 source map 模式的区别
+
+- eval：eval 模式会把每个 module 封装到 eval 里包裹起来执行，并且会在末尾追加注释。
+- source-map：该模式会把每个 module 封装到函数中执行，并且生成 `source-map` 文件，在 `output` 文件末尾添加对应的 `map` 注释。
+- hidden-source-map：相比较 `source-map` 模式，缺少了末尾的注释。
+- inline-source-map：在文件末尾处，sourceMap 作为 DataURL 的形式被内嵌进了 bundle 中，由于 sourceMap 的所有信息都被加到了 bundle 中，整个 bundle 文件变得硕大无比。
+- eval-module-map：和 `eval` 类似，但是把注释里的 `sourceMap` 都转换为了 `DataURL`。
+- cheap-source-map: 和 source-map 生成结果差不多。output 目录下的 index.js 内容一样。
+  但是 cheap-source-map 生成的 index.js.map 的内容却比 source-map 生成的 index.js.map 要少很多代码，我们对比一下上文 source-map 生成的 index.js.map 的结果，发现 source 属性里面少了列信息，只剩一个"webpack:///js/index.js"。
+- cheap-module-source-map：在 cheap-module-source-map 下 sourceMap 的内容更少了，sourceMap 的列信息减少了，可以看到 sourcesContent 也没有了。
+
+开发环境推荐：
+
+- eval-source-map：打包速度快，可追溯代码
+
+生产环境推荐：
+
+- cheap-module-source-map （这也是下版本 webpack 使用-d 命令启动 debug 模式时的默认选项）
+
+生产环境使用 sourcemap，可以把 `.map` 文件上传到内网，不发布到外网。
