@@ -218,3 +218,23 @@ Code Splitting: 它表示将你的代码拆分成多个 bundle 或 chunk，之�
 - cheap-module-source-map （这也是下版本 webpack 使用-d 命令启动 debug 模式时的默认选项）
 
 生产环境使用 sourcemap，可以把 `.map` 文件上传到内网，不发布到外网。
+
+#### webpack optimization
+
+从 `webpack 4` 开始，会根据你选择的 `mode` 来执行不同的优化，不过所有的优化还是可以通过 `optimization` 来手动配置的。
+
+##### optimization.minimize
+
+告知 `webpack` 使用 `TerserPlugin` 或其他在 `optimization.minimizer` 定义的插件来压缩 `bundle`。
+
+##### optimization.minimizer
+
+允许你通过提供一个或多个定制过的 `TerserPlugin` 实例，覆盖默认压缩工具（minimizer）。
+
+##### optimization.splitChunks
+
+对于动态导入模块，默认使用 webpack v4+ 提供的全新的通用分块策略。
+
+#### optimization.runtimeChunk
+
+将 `optimization.runtimeChunk` 设置为 `true` 或 `multiple`，会为每个只含有 `runtime` 的入口添加一个额外 `chunk`。
