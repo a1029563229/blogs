@@ -211,6 +211,33 @@ int main() {
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cpp/55.png)
 
+```cpp
+int main() {
+    int km;
+    double L;
+    cout << "Enter km: ";
+    cin >> km;
+    cout << "Enter L: ";
+    cin >> L;
+    double radio = double(km) / 100;
+    L = double(L) / radio;
+    cout << "100km cost oil " << L << "L" << endl;
+    return 0;
+}
+```
+
 ## 3.2.7
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/cpp/56.png)
+
+```cpp
+int main() {
+    double kmL;
+    cout << "Enter 100km/?L: ";
+    cin >> kmL;
+    double gl = double(kmL) / 3.875;
+    double miGL = 62.14 / gl;
+    cout << "100km/" << kmL << "L = " << miGL << "mi/1GL" << endl;
+    return 0;
+}
+```
