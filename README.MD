@@ -8,11 +8,11 @@
 
 如果喜欢这类风格的博客，请帮忙点亮 `star` 鼓励一下吧！
 
-![personal](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/blogs/other/6.png)
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/1.jpg)
 
 ## 最新/最受欢迎
 
-- [使用 Node 处理 I/O 密集型任务](https://github.com/a1029563229/Blogs/tree/master/BestPractices/node/concurrent) `new`
+- [Taro 源码解读 - miniRunner 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/4.md) `new`
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md) `new`
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md) `new`
 
@@ -44,6 +44,7 @@
 - [Taro 源码解读 - @tarojs/taro 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/1.md)
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md)
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md)
+- [Taro 源码解读 - miniRunner 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/4.md)
 - [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/BestPractices/bilibili/Banner.md)
 - [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins)
 - [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites)
