@@ -158,3 +158,47 @@ Plugin：扩展插件，在 Webpack 构建流程中的特定时机注入扩展�
 - 在功能流程完成后可以调用 `webpack` 提供的回调函数；
 
 在 `apply` 函数中，`webpack` 会传入一个 `compiler` 参数，这个对象包含了 `webpack` 环境所有的配置信息，包含 `options`、`loaders`、`plugins` 这些信息。这个对象在 `webpack` 启动时被实例化，它是全局为的，可以简单地把它理解为 `webpack` 实例。
+
+为了在指定生命周期做自定义的一些逻辑处理，我们需要在 compiler 暴露的钩子上指明我们的 tap 配置，一般这由一个字符串命名和一个回调函数组成。一般来说，compile 过程中会触发如下几个钩子：
+
+1. beforeRun
+2. run
+3. beforeCompile
+4. compile
+5. make
+6. seal
+
+假设我们想在 compiler.run() 之前处理逻辑，那么就要调用 beforeRun 钩子来处理：
+
+```js
+compiler.hooks.beforeRun.tap('testPlugin', (comp) => {
+  // ...
+});
+```
+
+而钩子 entryOption 表示在 webpack 选项中的 entry 配置项处理过之后，执行该插件，钩子 compilation 表示在编译创建之后，执行插件，更详细的 compiler 钩子列表可参见官方文档。
+
+说完 complier 我们再来看看 compilation。compilation 对象包含了当前的模块资源、编译生成资源、变化的文件等。当 webpack 以开发模式运行时，每当检测到一个文件变化，一次新的 compilation 将被创建。compilation 对象也提供了很多事件回调供插件做扩展。通过 compilation 也能读取到 compiler 对象。两者的区别在于，前者代表了整个 webpack 从启动到关闭的生命周期，而 compilation 只代表一次单独的编译。
+
+同样的，compilation 也对应有不同的钩子给开发者调用，具体可参见官方文档。
+
+不论是 compiler 还是 compilation 阶段，从上述举例的几个事件钩子中都可以看出，貌似是存在不同的类型。所以最后，我们再来看看这一块。
+
+> 根据插件所能触及到的 event hook(事件钩子)，对其进行分类。每个 event hook 都被预先定义为 synchronous hook(同步), asynchronous hook(异步), waterfall hook(瀑布), parallel hook(并行)，而在 webpack 内部会使用 call/callAsync 方法调用这些 hook。 —— webpack 中文文档
+
+其中同步钩子有以下几种，你在查询文档的时候可以在钩子名称后面找到对应的类型：
+
+- SyncHook(同步钩子) - SyncHook
+- Bail Hooks(保释钩子) - SyncBailHook
+- Waterfall Hooks(瀑布钩子) - SyncWaterfallHook
+
+异步钩子如下：
+
+- Async Series Hook(异步串行钩子) - AsyncSeriesHook
+- Async waterfall(异步瀑布钩子) - AsyncWaterfallHook
+- Async Series Bail - AsyncSeriesBailHook
+- Async Parallel - AsyncParallelHook
+- Async Series Bail - AsyncSeriesBailHook
+
+如果你不进一步追究，那么按照如下所示的方式对不同钩子进行 tap 处理即可，其中 tap 方法用于同步处理，异步方式则可以调用 tapAsync 方法或 tapPromise 方法。
+
