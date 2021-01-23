@@ -1,7 +1,7 @@
 const upload = () => {
   console.log("upload start");
 
-  console.log("schdule upload sdk");
+  console.log("schedule upload sdk");
   
   console.log("upload");
 }

@@ -1,4 +1,4 @@
-# webpack 系列之一文搞懂 webpack 懒加载机制
+# 一文搞懂 webpack 懒加载机制 —— webpack 系列
 
 本质上，webpack 是一个现代 `JavaScript` 应用程序的静态模块打包器 `(module bundler)`。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图 `(dependency graph)`，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 `bundle`。
 
@@ -18,5 +18,63 @@
 
 ## 项目基础配置
 
-我们先搭建一个基础的 webpack 配置，让其支持懒加载配置，然后我们直接通过打包后的代码来看看懒加载实现的效果。我们需要有个基础目录配置，[项目 Demo]() 目录结构如下：
+我们先搭建一个基础的 webpack 配置，让其支持懒加载配置，然后我们直接通过打包后的代码来看看懒加载实现的效果。我们需要有个基础目录配置，[项目 Demo](https://github.com/a1029563229/blogs/tree/master/Topic/Webpack/LazyLoad) 目录结构如下：
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/1.jpg)
+
+| 文件/目录           | 说明                         |
+| ------------------- | ---------------------------- |
+| `src`               | 入口文件、下载模块、上传模块 |
+| `index.html`        | `html` 模板文件              |
+| `webpack.config.js` | `webpack` 配置文件           |
+| `package.json`      | 项目说明文件                 |
+
+### 功能代码实现
+
+我们先来看看我们的功能代码实现吧，分别是 `download.js`、`upload.js`、`index.js`。
+
+```js
+// ./src/download.js
+const download = () => {
+  console.log("download start");
+
+  console.log("schedule download sdk");
+  
+  console.log("download");
+}
+
+export default download;
+```
+
+```js
+// ./src/upload.js
+const upload = () => {
+  console.log("upload start");
+
+  console.log("schedule upload sdk");
+  
+  console.log("upload");
+}
+
+export default upload;
+```
+
+```js
+// ./src/index.js
+import download from "./download";
+
+console.log("initial page");
+
+async function handlerUploadClick() {
+  const { default: upload } = await import("./upload");
+  upload();
+}
+
+async function handlerDownloadClick() {
+  download();
+}
+
+document.querySelector("#upload").addEventListener("click", handlerUploadClick, false)
+
+document.querySelector("#download").addEventListener("click", handlerDownloadClick, false)
+```

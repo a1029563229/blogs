@@ -4,12 +4,13 @@
   "description": "webpack lazy load",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "npm run clear && NODE_ENV=development webpack --config webpack.config.js",
+    "build": "npm run clear && NODE_ENV=development webpack --config webpack.config.js && cd dist && anywhere",
     "clear": "rm -rf ./dist"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "anywhere": "^1.5.0",
     "html-webpack-plugin": "^4.5.1",
     "webpack": "^5.17.0",
     "webpack-chain": "^6.5.1",
