@@ -66,7 +66,9 @@ import download from "./download";
 console.log("initial page");
 
 async function handlerUploadClick() {
+  // 动态加载 upload 模块，该模块的 default 属性就是 upload 方法
   const { default: upload } = await import("./upload");
+  // 调用 upload 方法
   upload();
 }
 
@@ -74,7 +76,38 @@ async function handlerDownloadClick() {
   download();
 }
 
+// 点击 upload 按钮时，调用上传方法
 document.querySelector("#upload").addEventListener("click", handlerUploadClick, false)
 
+// 点击 download 按钮时，调用下载方法
 document.querySelector("#download").addEventListener("click", handlerDownloadClick, false)
 ```
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Webpack LazyLoad</title>
+</head>
+
+<body>
+  <section>
+    <h1>Home</h1>
+    <button id="upload">Upload</button>
+    <button id="download">Download</button>
+  </section>
+</body>
+
+</html>
+```
+
+在我们的功能代码实现中，我们实现了一个 `html` 网页，其中有两个按钮，一个是上传按钮，一个是下载按钮（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/2.jpg)
+
+### 配置实现
