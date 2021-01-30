@@ -206,3 +206,151 @@ compiler.hooks.beforeRun.tap('testPlugin', (comp) => {
 
 首先搞明白： webpack里的代码分割是个什么鬼？ 它允许你将一个文件分割成多个文件。如果使用的好，它能大幅提升你的应用的性能。其原因是基于浏览器会缓存你的代码这一事实。每当你对某一文件做点改变，访问你站点的人们就要重新下载它。然而依赖却很少变动。如果你将（这些依赖）分离成单独的文件，访问者就无需多次重复下载它们了。
 
+## compilation
+
+Compilation 在解析过程中，会将解析后的模块记录在 modules 属性中，那么每一个模块实例又是什么呢？
+
+首先我们先回顾一下最开始的类图，我们会发现跟模块相关的类非常多，看起来类之间的关系也十分复杂，但其实只要记住下面的公式就很好理解：
+
+这个公式的解读是： 一个依赖对象（Dependency）经过对应的工厂对象（Factory）创建之后，就能够生成对应的模块实例（Module）。
+
+### 首先什么是 Dependency？
+
+我个人的理解是，还未被解析成模块实例的依赖对象。比如我们运行 webpack 时传入的入口模块，或者一个模块依赖的其他模块，都会先生成一个 Dependency 对象。作为基类的 Dependency 十分简单，内部只有一个 module 属性来记录最终生成的模块实例。但是它的派生类非常多，webpack 中有单独的文件夹（webpack/lib/dependencies）来存放所有的派生类，这里的每一个派生类都对应着一种依赖的场景。比如从 CommonJS 中require一个模块，那么会先生成 CommonJSRequireDependency。
+
+### 有了 Dependency 之后，如何找到对应的工厂对象呢？
+
+Dependecy 的每一个派生类在使用前，都会先确定对应的工厂对象，比如 SingleEntryDependency 对应的工厂对象是 NormalModuleFactory。这些信息全部是记录在 Compilation 对象的 dependencyFactories 属性中，这个属性是 ES6 中的 Map 对象。直接看下面的代码可能更容易理解：
+
+```js
+// https://github.com/webpack/webpack/blob/master/lib/SingleEntryPlugin.js
+class SingleEntryPlugin {
+    apply(compiler) {
+        compiler.plugin("compilation", (compilation, params) => {
+            const normalModuleFactory = params.normalModuleFactory;
+            // 这里记录了 SingleEntryDependency 对应的工厂对象是 NormalModuleFactory
+            compilation.dependencyFactories.set(SingleEntryDependency, normalModuleFactory);
+        });
+        compiler.plugin("make", (compilation, callback) => {
+            // 入口的模块会先变成一个 Dependency 对象
+            const dep = SingleEntryPlugin.createDependency(this.entry, this.name);
+            compilation.addEntry(this.context, dep, this.name, callback);
+        });
+    }
+}
+// https://github.com/webpack/webpack/blob/master/lib/Compilation.js
+class Compilation extends Tapable {
+    _addModuleChain(context, dependency, onModule, callback) {
+        // 其他代码..
+        // 开始构建时，通过 Compilation 的 dependenciesFactories 属性找到对应的工厂对象
+        const moduleFactory = this.dependencyFactories.get(dependency.constructor);
+        if(!moduleFactory) {
+            throw new Error(`No dependency factory available for this dependency type: ${dependency.constructor.name}`);
+        }
+        this.semaphore.acquire(() => {
+            // 调用工厂对象的 create 方法，dependency作为参数传入，最终生成模块实例
+            moduleFactory.create({
+                contextInfo: {
+                    issuer: "",
+                    compiler: this.compiler.name
+                },
+                context: context,
+                dependencies: [dependency] // 作为参数传入
+            }, (err, module) => {
+                // module就是生成的模块实例
+                // 其他代码..
+            })
+        })
+    }
+}
+```
+
+一种工厂对象只会生成一种模块，所以不同的模块实例都会有不同的工厂对象来生成。模块的生成过程我们在第一篇文章有讨论过，无非就是解析模块的 request，loaders等信息然后实例化。
+
+## webpack 文件编译流程
+
+webpack 编译流程（文件） -> plugin -> dependency -> module -> chunk -> template -> source code
+
+
+### 模块对象有哪些特性呢？
+
+同样在第一篇文章中，我们知道一个模块在实例化之后并不意味着构建就结束了，它还有一个内部构建的过程。所有的模块实例都有一个 build 方法，这个方法的作用是开始加载模块源码（并应用loaders），并且通过 js 解析器来完成依赖解析。这里要两个点要注意：
+
+  - 模块源码最终是保存在 _source 属性中，可以通过 _source.source() 来得到。注意在 build 之前 _source 是不存在的。
+  - js 解析器解析之后会记录所有的模块依赖，这些依赖其实会分为三种，分别记录在 variables，dependencies， blocks属性。模块构建之后的递归构建过程，其实就是读取这三个属性来重复上面的过程：依赖 => 工厂 => 模块
+
+我们再来看看这些模块类，从前面的类图看，它们是继承于 Module 类。这个类实际上才是我们平常用来跟 chunk 打交道的类对象，它内部有 _chunks 属性来记录后续所在的 chunk 信息，并且提供了很多相关的方法来操作这个对象：addChunk，removeChunk，isInChunk，mapChunks等。后面我们也会看到，Chunk 类与之对应。
+
+Module 类往上还会继承于 DependenciesBlock，这个是所有模块的基类，它包含了处理依赖所需要的属性和方法。上面所说的 variables，dependencies，blocks 也是这个基类拥有的三个属性。它们分别是：
+
+  - variables 对应需要对应的外部变量，比如 __filename，__dirname，process 等node环境下特有的变量
+  - dependencies 对应需要解析的其他普通模块，比如 require("./a") 中的 a 模块会先生成一个 CommonJSRequireDependency
+  - blocks 对应需要解析的代码块（最终会对应成一个 chunk），比如 require.ensure("./b")，这里的 b 会生成一个 DependenciesBlock 对象
+
+## Chunk
+
+讨论完 webpack 的模块之后，下面需要说明的是 Chunk 对象。关于 chunk 的生成，在第一篇文章中有涉及，这里不再赘述。
+
+chunk 只有一个相关类，而且并不复杂。Chunk 类内部的主要属性是 _modules，用来记录包含的所有模块对象，并且提供了很多方法来操作：addModule，removeModule，mapModules 等。
+
+另外有几个方法可能比较实用，这里也列出来：
+
+  - integrate 用来合并其他chunk
+  - split 用来生成新的子 chunk
+  - hasRuntime 判断是否是入口 chunk
+
+## Template
+
+Compilation 实例在生成最终文件时，需要将所有的 chunk 渲染（生成代码）出来，这个时候需要用到下面几个属性：
+
+  - mainTemplate 对应 MainTemplate 类，用来渲染入口 chunk
+  - chunkTemplate 对应 ChunkTemplate 类，用来传染非入口 chunk
+  - moduleTemplate 对应 ModuleTemplate，用来渲染 chunk 中的模块
+  - dependencyTemplates 记录每一个依赖类对应的模板
+
+首先 chunk 的渲染入口是 mainTemplate 和 chunkTemplate 的 render 方法。根据 chunk 是否是入口 chunk 来区分使用哪一个：
+
+```js
+// https://github.com/webpack/webpack/blob/master/lib/Compilation.js
+if(chunk.hasRuntime()) { // 入口chunk
+    source = this.mainTemplate.render(this.hash, chunk, this.moduleTemplate, this.dependencyTemplates);
+} else {
+    source = this.chunkTemplate.render(chunk, this.moduleTemplate, this.dependencyTemplates);
+}
+```
+
+两个类的 render 方法将生成不同的”包装代码”，MainTemplate 对应的入口 chunk 需要带有 webpack 的启动代码，所以会有一些函数的声明和启动。
+
+这两个类都只负责这些”包装代码”的生成，包装代码中间的每个模块代码，是通过调用 renderChunkModules 方法来生成的。这里的 renderChunkModules 是由他们的基类 Template 类提供，方法会遍历 chunk 中的模块，然后使用 ModuleTemplate 来渲染。
+
+```js
+// https://github.com/webpack/webpack/blob/master/lib/MainTemplate.js
+// MainTemplate的部分render方法：
+const source = new ConcatSource();
+source.add("/******/ (function(modules) { // webpackBootstrap\n");
+source.add(new PrefixSource("/******/", bootstrapSource));
+source.add("/******/ })\n");
+source.add("/************************************************************************/\n");
+source.add("/******/ (");
+// 调用 renderChunkModules 方法，遍历这个 chunk 的所有模块生成对应的代码
+const modules = this.renderChunkModules(chunk, moduleTemplate, dependencyTemplates, "/******/ ");
+source.add(this.applyPluginsWaterfall("modules", modules, chunk, hash, moduleTemplate, dependencyTemplates));
+source.add(")");
+// https://github.com/webpack/webpack/blob/master/lib/Template.js
+module.exports = class Template extends Tapable {
+    // 其他代码..
+    renderChunkModules(chunk, moduleTemplate, dependencyTemplates, prefix) {
+        // 其他代码..
+        var allModules = chunk.mapModules(function(module) {
+            return {
+                id: module.id,
+                // 调用 moduleTemplate.render 方法
+                source: moduleTemplate.render(module, dependencyTemplates, chunk)
+            };
+        });
+        // 其他代码..
+    }
+}
+```
+
+ModuleTemplate 做的事情跟 MainTemplate 类似，它同样只是生成”包装代码”来封装真正的模块代码，而真正的模块代码，是通过模块实例的 source 方法来提供。该方法会先读取 _source 属性，即模块内部构建时应用loaders之后生成的代码，然后使用 dependencyTemplates 来更新模块源码。
