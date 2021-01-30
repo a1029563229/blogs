@@ -12,8 +12,8 @@
 
 ## 最新/最受欢迎
 
+- [Taro 源码解读 - TaroMiniPlugin 上篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/5.md) `new`
 - [Taro 源码解读 - miniRunner 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/4.md) `new`
-- [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md) `new`
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md) `new`
 
 ## 前端
@@ -45,6 +45,7 @@
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md)
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md)
 - [Taro 源码解读 - miniRunner 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/4.md)
+- [Taro 源码解读 - TaroMiniPlugin 上篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/5.md)
 - [从 B 站的秋季主题中学习 “图层组合动画”](https://github.com/a1029563229/Blogs/tree/master/BestPractices/bilibili/Banner.md)
 - [盘一盘那些提效/创意的 vscode 插件](https://github.com/a1029563229/Blogs/tree/master/Plugins/VscodePlugins)
 - [盘一盘那些提效/创意的宝藏网站](https://github.com/a1029563229/Blogs/tree/master/Plugins/Websites)
