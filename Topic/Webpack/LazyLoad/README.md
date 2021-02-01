@@ -233,11 +233,25 @@ npm i webpack webpack-cli webpack-chain html-webpack-plugin anywhere -D
 
 最终，我们在 `dist/main.js` 中，找到了对该模块的定义。（如下图）
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/13.jpg)
 
-
-从上图可以看出，对该模块的定义，其实就是 `src/download.js` 的实现，被打包进了 `dist/main.js` 中。
+从上图可以看出，对该模块的定义，其实就是 `src/download.js` 的实现，被打包进了 `dist/main.js` 中，成为了 `__webpack_modules__` 对象的一部分。
 
 ### Upload 解析
 
 看完了 `download` 方法的打包实现，我们接下来看看懒加载的 `upload` 是如何实现的？
+
+我们先找到 `upload` 对应的函数调用（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/14.jpg)
+
+从上图可以看出，当点击上传按钮时，先使用 `__webpack_require__.e` 方法进行了一个加载操作，我们来看看这个方法所做的事情。
+
+该方法先拼接了这个模块对应的绝对路径（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/15.jpg)
+
+这个路径的文件其实就是我们打包后生成在 `dist` 目录的文件（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/16.jpg)
 
