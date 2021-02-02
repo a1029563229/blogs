@@ -1,6 +1,6 @@
 # 一文搞懂 webpack 懒加载机制 —— webpack 系列
 
-本质上，webpack 是一个现代 `JavaScript` 应用程序的静态模块打包器 `(module bundler)`。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图 `(dependency graph)`，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 `bundle`。
+webpack 是一个现代 `JavaScript` 应用程序的静态模块打包器 `(module bundler)`。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图 `(dependency graph)`，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 `bundle`。
 
 前端工程化演进到今天，webpack 做了很大的贡献。项目工程化带来了很多便捷，我们不再需要手动处理依赖之间的关系，也可以更方便的使用更多好用的框架，我们可以更关注业务本身，集中精力打造我们的产品。
 
@@ -10,7 +10,9 @@
 
 ## 实现背景
 
-我们先假设我们在完成一个真实的项目，这个项目中有上传下载功能。下载功能一般是打开一个链接，所以我们直接实现在主包中。而上传功能可能会使用到第三方 sdk，我们使用懒加载进行加载。只有在用户点击上传时，我们才会加载这个具备上传功能的包，来进行上传。
+我们先假设我们在完成一个真实的项目，这个项目中有上传下载功能。
+
+下载功能一般是打开一个链接，所以我们直接实现在主包中。而上传功能可能会使用到第三方 sdk，我们使用懒加载进行加载。只有在用户点击上传时，我们才会加载这个具备上传功能的包，来进行上传。
 
 > 上传下载功能可能会使用到一些第三方 sdk，而这些第三方 sdk 的体积往往非常大，并且这个功能所以这个功能做成懒加载实现是合理的。
 > 
@@ -106,9 +108,7 @@ document.querySelector("#download").addEventListener("click", handlerDownloadCli
 </html>
 ```
 
-在我们的功能代码实现中，我们实现了一个 `html` 网页，其中有两个按钮，一个是上传按钮，一个是下载按钮（如下图）
-
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/2.jpg)
+在我们的功能代码实现中，我们实现了一个 `html` 网页，其中有两个按钮，一个是上传按钮，一个是下载按钮。
 
 ### 配置实现
 
@@ -205,9 +205,9 @@ npm i webpack webpack-cli webpack-chain html-webpack-plugin anywhere -D
 
 懒加载的实现对前端来说，是性能优化专项必修课。可以说，项目越复杂，那么懒加载带来的好处就越大。
 
-下面我们可以来看看 `webpack` 编译后的代码，看看 `webpack` 是如何实现懒加载的。
-
 ## 实现分析
+
+下面我们可以来看看 `webpack` 编译后的代码，看看 `webpack` 是如何实现懒加载的。
 
 首先，我们查看主包文件，也就是 `dist/main.js`。在这个文件里找到我们在 `src/index.js` 中实现的初始化页面操作。（如下图）
 
@@ -255,3 +255,32 @@ npm i webpack webpack-cli webpack-chain html-webpack-plugin anywhere -D
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/16.jpg)
 
+然后使用动态插入 `script` 标签的方式，将对应的脚本文件插入到文档中。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/18.jpg)
+
+当 `upload` 对应的文件被插入后，将会自动执行。`src_upload_js.js` 脚本文件中将会执行 `webpackJsonpCallback` 方法，执行后将会在 `window` 的 `webpackChunklazyload` 数组插入刚才懒加载的模块。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/17.jpg)
+
+在执行该函数后，还会把 `upload` 模块注册在 `__webpack_modules__` 中，后面的调用流程就和调用 `download` 一样啦~（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/19.jpg)
+
+## 小结
+
+从一个简单的案例，我们了解到了 `webpack` 的懒加载实现。
+
+`webpack` 的懒加载实现在打包时会将懒加载的代码切割出去单独打包，然后在主包中进行按需加载，最后执行调用。
+
+我们最后用一张图来梳理一下懒加载的加载执行过程。（如下图）
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/webpack/20.jpg)
+
+## 最后一件事
+
+如果您已经看到这里了，希望您还是点个赞再走吧~
+
+您的点赞是对作者的最大鼓励，也可以让更多人看到本篇文章！
+
+如果觉得本文对您有帮助，请帮忙在 [github](https://github.com/a1029563229/Blogs) 上点亮 `star` 鼓励一下吧！
