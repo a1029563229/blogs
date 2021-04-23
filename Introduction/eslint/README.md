@@ -14,6 +14,8 @@
 
 Javascript 拥有其它语言所没有的灵活性，这种灵活性带来了代码效率的提升，但相应也使得代码编写具有很大的随意性。另外 Javascript 的隐式类型转换规则混乱，允许同名函数的重复定义，这就增加了代码中存在隐患的可能性。
 
+> 冷笑话：Javascript 权威指南和 Javascript 语言精粹的厚度区别。
+
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/eslint/Xnip2021-04-14_08-24-10.jpg)
 
 如果能够在代码提交测试之前发现这些潜在的错误，就能够极大地减轻测试人员的压力，减少软件项目的除错成本。可是 Javascript 作为解释型语言，解释器被内嵌在对应的客户端，对此表示无能为力，这个任务只能由专用的代码检查工具完成。
@@ -386,8 +388,7 @@ npx husky install && npx husky set .husky/pre-commit "npm run pre-commit"
 
 参考资料：
 
-- [Javascript的10个设计缺陷
-](http://www.ruanyifeng.com/blog/2011/06/10_design_defects_in_javascript.html)
+- [Javascript的10个设计缺陷](http://www.ruanyifeng.com/blog/2011/06/10_design_defects_in_javascript.html)
 - [eslint](https://eslint.org)
 - [standard](https://standardjs.com)
 - [prettier](https://prettier.io)
@@ -395,3 +396,11 @@ npx husky install && npx husky set .husky/pre-commit "npm run pre-commit"
 - [ESLint 在中大型团队(美团)的应用实践](https://tech.meituan.com/2019/08/01/eslint-application-practice-in-medium-and-large-teams.html)
 - [Why (and how) to use eslint in your project](https://medium.com/the-node-js-collection/why-and-how-to-use-eslint-in-your-project-742d0bc61ed7)
 - [Automate Your Coding Standard](https://97-things-every-x-should-know.gitbooks.io/97-things-every-programmer-should-know/content/en/thing_04/)
+
+## 最后一件事
+
+如果您已经看到这里了，希望您还是点个赞再走吧~
+
+您的点赞是对作者的最大鼓励，也可以让更多人看到本篇文章！
+
+如果觉得本文对您有帮助，请帮忙在 [github](https://github.com/a1029563229/Blogs) 上点亮 `star` 鼓励一下吧！
