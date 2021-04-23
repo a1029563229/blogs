@@ -1,4 +1,4 @@
-# 晒都斯的个人博客
+# 晒兜斯的个人博客
 
 > Stay Hungry Stay Foolish.
 
