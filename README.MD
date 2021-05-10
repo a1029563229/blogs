@@ -6,8 +6,6 @@
 
 如果喜欢这类风格的博客，请帮忙点亮 `star` 鼓励一下吧！
 
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/1.jpg)
-
 ## 最新/最受欢迎
 
 - [从项目规范（eslint + prettier）到自动化配置](https://github.com/a1029563229/Blogs/tree/master/Introduction/eslint) `new`
