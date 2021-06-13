@@ -8,9 +8,7 @@
 
 ## 最新/最受欢迎
 
-- [从项目规范（eslint + prettier）到自动化配置](https://github.com/a1029563229/Blogs/tree/master/Introduction/eslint) `new`
-- [一文搞懂 webpack 懒加载机制 —— webpack 系列](https://github.com/a1029563229/Blogs/tree/master/Topic/Webpack/LazyLoad) `new`
-- [Taro 源码解读 - TaroMiniPlugin 上篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/5.md) `new`
+- [24 大技巧 - 成为编程高手，保持软件健康长青](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor) `new`
 
 ## 前端
 
@@ -39,6 +37,7 @@
 
 ### 其他
 
+- [24 大技巧 - 成为编程高手，保持软件健康长青](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor)
 - [Taro 源码解读 - @tarojs/taro 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/1.md)
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md)
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md)
