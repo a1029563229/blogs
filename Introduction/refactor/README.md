@@ -2,19 +2,21 @@
 
 最近，小李感觉公司女生们看他的眼神不太对劲了，那种笑容好像是充满慈爱的、姨母般的笑容。
 
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-06_09-42-09.jpg)
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_08-42-12.jpg)
 
-作为一名老实本分的程序员，小李不太喜欢这种被人过度关注的感觉，他不知道发生了什么。
+作为一名老实本分的程序员，小李不太习惯这种被人过度关注的感觉，他不知道发生了什么。
 
 ······
 
-最近公司开始流行起了小李和小王的八卦，他们的关系似乎过于亲密，还经常挤在一个工位上办公，一直到半夜。
+小李和小王的关系似乎过于亲密，还经常挤在一个工位上办公，一直到半夜。
 
 这个流言直到某天他们的聊天内容被某个运营小姐姐听到，他们之间的秘密才被大家发现。
 
 ## 小李和小王的故事
 
 “这串代码看起来不太好。” 小李指着屏幕，眉头紧锁。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_08-49-50.jpg)
 
 “咋了，这段代码是我写的，因为这里要实现客户的一个定制化需求，所以看起来有点复杂。” 小王凑了过来。
 
@@ -26,9 +28,9 @@
 
 中午 12 点，办公室的空气中弥漫着饭菜的香气，还有成群结队约饭的小伙伴，休闲区也成了干饭的主战场。
 
-“噢？原来小李和小王这种叫做结对编程？” 运营小姐姐看着眼前这位老工程师充满睿智的双眼。
+“噢？原来小李和小王这种叫做结对编程？” 运营小姐姐目光扫向还在座位上的小李小王。
 
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-06_09-43-50.jpg)
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_08-52-08.jpg)
 
 “嗯...偶尔的结对编程是正常的，但是长期的结对编程说明出现了一些坏味道。”老工程师说完，端起饭盆，干完了最后一口饭。
 
@@ -52,7 +54,9 @@
 
 小李和小王顶着两个大黑眼圈来到会议室，老耿早已经在会议室等着了。
 
-小李看了一眼投影仪的内容 “ 24 种常见的坏味道及重构手法 —— 告别加班，可持续发展”。
+小李看了一眼投影仪的内容 “`24 种常见的坏味道及重构手法 —— 告别加班，可持续发展`”。
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_08-56-33.jpg)
 
 “呐，给你们俩准备的咖啡，打起精神来哈。”大宝用身子推门进来，手上端着两杯热腾腾的咖啡，这是他刚从休息区亲手煮的新鲜咖啡。
 
@@ -94,13 +98,17 @@
 
 ”坏味道我们刚才已经说过了，我再讲个小故事吧。我这么多年以来，看过很多很多代码，它们所属的项目有大获成功的，也有奄奄一息的。观察这些代码时，我和我的老搭档学会了从中找出某些特定结构，这些结构指出了 `重构` 的可能性，这些结构也就是我刚才提到的 `坏味道`。”
 
-“噢对，我刚才还提到了一个词 —— `重构`。这听着像是个很可怕的词，但是我可以和你们说，我口中的 `重构` 并不是你们想的那种推翻重来，我给这个词一个全新的定义吧 —— `对软件内部结构的一种调整，目的是在不改变软件可观察行为的前提下，提高其可理解性，降低其修改成本。`，你们也可以理解为是在 `使用一系列重构手法，在不改变软件可观察行为的前提下，调整其结构。`”
+“噢对，我刚才还提到了一个词 —— `重构`。这听着像是个很可怕的词，但是我可以和你们说，我口中的 `重构` 并不是你们想的那种推翻重来，有本书给了这个词一个全新的定义 —— `对软件内部结构的一种调整，目的是在不改变软件可观察行为的前提下，提高其可理解性，降低其修改成本。`，你们也可以理解为是在 `使用一系列重构手法，在不改变软件可观察行为的前提下，调整其结构。`”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_08-58-56.jpg)
 
 “如果有人说他们的代码在重构过程中有一两天时间不可用，基本上可以确定，他们在做的事不是重构。”老耿开了个玩笑：“他们可能在对代码施展某种治疗魔法，这种魔法带来的副作用就是会让软件短暂性休克。”
 
 “在这里，还有一点值得一提，那就是如何做到 `不改变软件可观察行为`，这需要一些外力的协助。这里我不建议你们再把加班的人群延伸到测试人员，我给出的方案是准备一套完备的、运行速度很快的测试套件。在绝大多数情况下，如果想要重构，就得先有一套可以自测试的代码。”
 
 “接下来，我会先审查你们商城系统的代码，发现代码中存在的坏味道，然后添加单元测试，进行重构后，最后通过测试完成重构。”
+
+“我会在这个过程中，给你们演示并讲解 24 种常见的坏味道及重构手法。”
 
 “我们开始吧！”老耿重新回到座位。
 
@@ -228,7 +236,11 @@ const orderPrice = getPrice(order);
 
 “阿宝说的没错，我们至少要保证我们重构的地方有单元测试，且能通过单元测试，才能算作是重构完成。”
 
-老耿稍作停顿后，等待大家理解自己刚才的那段话后，接着说：“看来大家都开始感受到了重构的魅力，我们接着说剩下的坏味道吧。”
+老耿稍作停顿后，等待大家理解自己刚才的那段话后，接着说：“看来大家都开始感受到了重构的魅力，我们最后看看这段代码重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-13-23.jpg)
+
+“ok，那我们接着说剩下的坏味道吧。”
 
 ## 重复代码（Repeat Code）
 
@@ -248,7 +260,7 @@ function photoDiv(photo) {
 function emitPhotoData(aPhoto) {
   const result = [];
   result.push(`<p>location: ${aPhoto.location}</p>`);
-  result.push(`<p>date: ${aPhoto.date.toDateString()}</p>`);
+  result.push(`<p>date: ${aPhoto.date}</p>`);
   return result.join('\n');
 }
 ```
@@ -367,7 +379,11 @@ function emitPhotoData(aPhoto) {
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-08_08-08-52.jpg)
 
-“ok，测试通过。这次重构完成了，提交一个 `Commit`，我们继续看下一个坏味道。”
+“ok，测试通过。这次重构完成了，提交一个 `Commit`，再看一下修改前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-10-56.jpg)
+
+“我们继续看下一个坏味道。”
 
 ## 过长函数（Long Function）
 
@@ -630,7 +646,11 @@ function printOwing(invoice) {
 
 小李小王相视一笑，觉得有点不好意思。
 
-“那我们继续。”老耿马不停蹄。
+“我们来看看重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-17-02.jpg)
+
+“我们继续。”老耿马不停蹄。
 
 ## 过长参数列表（Long Parameter List）
 
@@ -937,6 +957,10 @@ const insidePriceProducts = priceInsideRange(
 
 “这样一来，让 `priceOutSideRange` 和 `priceInsideRange` 函数内部也更加清晰了。同时，`range` 被组织成了一种新的数据结构，这种结构可以在任何计算区间的地方使用。”
 
+“我们来看看重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-20-02.jpg)
+
 “我们继续。”
 
 ## 全局数据（Global Data）
@@ -1033,6 +1057,10 @@ describe("test global data", () => {
 
 小李小王疯狂点头。
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-22-39.jpg)
+
 “那我们继续。”
 
 ## 可变数据（Mutable Data）
@@ -1123,6 +1151,10 @@ function merge(target, source) {
 
 小李小王奋笔疾书，把书名记了下来。
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-26-45.jpg)
+
 “那我们继续。”
 
 ## 发散式变化（Divergent Change）
@@ -1160,6 +1192,8 @@ function calShipping(basePrice) {
 function getPrice(order) {
     return calBasePrice(order) - calDiscount(order) + calShipping(calBasePrice(order));
 }
+
+const orderPrice = getPrice(order);
 ```
 
 “修改完成后，我们运行之前写的测试用例... 测试通过了。”
@@ -1171,6 +1205,10 @@ function getPrice(order) {
 大宝适时补充了一句：“其实这就是面向对象设计原则中的 `单一职责原则`。”
 
 “阿宝说的没错，keep simple，`每次只关心一个上下文` 这一点一直很重要。”
+
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-29-53.jpg)
 
 “我们继续。”
 
@@ -1264,8 +1302,11 @@ const reading = new Reading({ customer: 'ivan', quantity: 10, month: 5, year: 20
 
 小李小王疯狂点头。
 
-“那我们继续。”
+“我们来看一下重构前后的对比。”
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-33-15.jpg)
+
+“那我们继续。”
 
 ## 依恋情节（Feature Envy）
 
@@ -1368,6 +1409,10 @@ class AccountType {
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-13_09-09-27.jpg)
 
 “ok，测试通过了，别忘了提交代码。”老耿提交了一个 commit。
+
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-35-43.jpg)
 
 “我们继续下一个。”
 
@@ -1523,7 +1568,13 @@ class Person {
 
 “在这里我选择新建一个类，而不是简单的记录结构，是因为一旦拥有新的类，你就有机会让程序散发出一种芳香。得到新的类以后，你就可以着手寻找其他坏味道，例如“依恋情节”，这可以帮你指出能够移至新类中的种种行为。这是一种强大的动力：有用的类被创建出来，大量的重复被消除，后续开发得以加速，原来的数据泥团终于在它们的小社会中充分发挥价值。”
 
-“比如这里，`TelephoneNumber` 类被提炼出来后，就可以去消灭那些使用到 `telephoneNumber` 的重复代码，并且根据使用情况进一步优化，我就不做展开了，我们继续讲下一个坏味道。”
+“比如这里，`TelephoneNumber` 类被提炼出来后，就可以去消灭那些使用到 `telephoneNumber` 的重复代码，并且根据使用情况进一步优化，我就不做展开了。”
+
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-37-52.jpg)
+
+“我们继续讲下一个坏味道。”
 
 ## 基本类型偏执（Primitive Obsession）
 
@@ -1759,6 +1810,10 @@ class Product {
 “这个案例演示了一种很常见的场景，相信你们以后也可以识别基本类型偏执这种坏味道了。”
 
 小李小王疯狂点头。
+
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-43-54.jpg)
 
 “那我们继续吧。”
 
@@ -2046,7 +2101,13 @@ function createPrice(value) {
 
 “复杂的条件逻辑是编程中最难理解的东西之一，最好可以将条件逻辑拆分到不同的场景，从而拆解复杂的条件逻辑。这种拆分有时用条件逻辑本身的结构就足以表达，但使用类和多态能把逻辑的拆分表述得更清晰。”
 
-“就像我刚才演示的那样，那我们继续吧。”
+“就像我刚才演示的那样。”
+
+“我们来看一下重构前后的对比。“
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-47-54.jpg)
+
+“那我们继续吧。”
 
 ## 循环语句（Loop）
 
@@ -2238,6 +2299,10 @@ function acquireCityData(input, country) {
 
 “所以，我给出的建议是：除了对性能有严格要求的实时系统，其他任何情况下“编写快速软件”的秘密就是：先写出可调优的软件，然后调优它以求获得足够的速度。短期看来，重构的确可能使软件变慢，但它使优化阶段的软件性能调优更容易，最终还是会得到好的效果。”
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-49-52.jpg)
+
 “那我们继续下一个。”
 
 ## 冗赘的元素（Lazy Element）
@@ -2324,6 +2389,10 @@ function reportLines(aCustomer) {
 “在重构的过程中会发现越来越多可以重构的新结构，就像我刚才演示的那样。”
 
 “像这类的冗赘的元素存在并没有太多的帮助，所以，让它们慷慨赴义去吧。”
+
+“我们来看看重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-51-18.jpg)
 
 “我们继续。”
 
@@ -2437,6 +2506,10 @@ class Shipment {
 小李小王疯狂点头。
 
 “关于代码通用性设计，如果所有装置都会被用到，就值得那么做；如果用不到，就不值得。用不上的装置只会挡你的路，所以，把它搬开吧。”
+
+“我们来看看重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-53-01.jpg)
 
 “我们继续吧。”
 
@@ -2600,6 +2673,10 @@ const site = customer === 'unknown' ? new Site(new NullCustomer()) : new Site(ne
 
 小李小王疯狂点头。
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-55-50.jpg)
+
 “我们继续下一个。”
 
 ## 过长的消息链（Message Chains）
@@ -2622,7 +2699,13 @@ function goodNameFunc() {
 
 “再给提炼出来的函数，取一个好名字就行了。”
 
-“还有一种情况，就是委托关系，需要隐藏委托关系。我就不做展开了，你们有兴趣的话去看一看重构那本书吧，我们继续下一个。”
+“还有一种情况，就是委托关系，需要隐藏委托关系。我就不做展开了，你们有兴趣的话去看一看重构那本书吧。“
+
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_09-57-27.jpg)
+
+我们继续下一个。”
 
 ## 中间人（Middle Man）
 
@@ -2749,6 +2832,10 @@ class Product {
 
 “很难说什么程度的隐藏才是合适的。但是有隐藏委托关系和删除中间人，就可以在系统运行过程中不断进行调整。随着代码的变化，“合适的隐藏程度” 这个尺度也相应改变。”
 
+“我们来看看重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_10-00-07.jpg)
+
 “我们继续下一个吧。”
 
 ## 内幕交易（Insider Trading）
@@ -2854,6 +2941,10 @@ class Person {
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-13_08-43-55.jpg)
 
 “运行通过了，在所有代码替换完成前，可以先保留对 `department` 的访问，在所有代码都修改完成后，再完全移除，提交代码。”
+
+“我们来看看重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_10-01-47.jpg)
 
 “我们继续下一个。”
 
@@ -3024,6 +3115,10 @@ class Department extends Party {
 
 “有很多时候，合理的继承关系是在程序演化的过程中才浮现出来的：我发现了一些共同元素，希望把它们抽取到一处，于是就有了继承关系。所以，先尝试用小而快的重构手法，重构后再发现新的可重构结构。”
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_10-06-33.jpg)
+
 “我们继续下一个。”
 
 ## 纯数据类（Data Class）
@@ -3146,6 +3241,10 @@ class Product {
 
 “我们需要为纯数据赋予行为，或者使用纯数据类来控制数据的读写。否则的话，纯数据类并没有太大存在的意义，应该作为冗赘元素被移除。”
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_10-08-24.jpg)
+
 “那我们继续下一个。”
 
 ## 被拒绝的遗赠（Refuse Bequest）
@@ -3211,6 +3310,10 @@ class Department extends Party {
 
 “十有八九这种坏味道很淡，需要对业务熟悉程度较高才能发现。”
 
+“我们来看一下重构前后的对比。”
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/assets/common/Xnip2021-06-14_10-11-25.jpg)
+
 “那我们继续下一个。”
 
 ## 注释（Comments）
@@ -3244,6 +3347,43 @@ class Department extends Party {
 文中的老耿原型其实就是《重构：改善既有代码的设计》的作者们，小王小李指的是团队中那些经常容易把代码写的像打补丁，然后过了一段时间老是想推翻重来的编程新人们（可能是老人），而大宝则像是一名手握屠龙术却不敢直面恶龙的高级工程师。
 
 我以为，重构也需要勇气，开始尝试的勇气。
+
+## 配套练习
+
+我将文中所有的案例都整理到了 `github` 上，每个坏味道都有一个独立的目录，每个目录的结构看起来就像是这样。
+
+- `xx.before.js`：重构前的代码
+- `xx.js`：重构后的代码
+- `xx.test.js`：配套的测试代码
+
+强烈建议读者们按照文章教程，自行完成一次重构练习，这样可以更好的识别坏味道和掌握重构手法。
+
+下面是对应的链接：
+
+- [神秘命名（Mysterious Name）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/神秘命名)
+- [重复代码（Repeat Code）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/重复代码)
+- [过长函数（Long Function）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/过长函数)
+- [过长参数列表（Long Parameter List）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/过长参数列表)
+- [全局数据（Global Data）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/全局数据)
+- [可变数据（Mutable Data）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/可变数据)
+- [发散式变化（Divergent Change）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/发散式变化)
+- [霰弹式修改（Shotgun Surgery）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/霰弹式修改)
+- [依恋情节（Feature Envy）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/依恋情节)
+- [数据泥团（Data Clumps）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/数据泥团)
+- [基本类型偏执（Primitive Obsession）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/基本类型偏执)
+- [重复的 switch（Repeated switch）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/重复的switch)
+- [循环语句（Loop）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/循环语句)
+- [冗赘的元素（Lazy Element）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/冗赘的元素)
+- [夸夸其谈通用性（Speculative Generality）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/夸夸其谈通用性)
+- [临时字段（Temporary Field）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/临时字段)
+- [过长的消息链（Message Chains）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/过长的消息链)
+- [中间人（Middle Man）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/中间人)
+- [内幕交易（Insider Trading）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/内幕交易)
+- [过大的类（Large Class）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/过大的类)
+- [异曲同工的类（Alternative Classes with Different Interfaces）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/异曲同工的类)
+- [纯数据类（Data Class）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/纯数据类)
+- [被拒绝的遗赠（Refuse Bequest）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/被拒绝的遗赠)
+- [注释（Comments）](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor/practice/src/注释)
 
 ## 最后一件事
 
