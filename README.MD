@@ -8,7 +8,7 @@
 
 ## 最新/最受欢迎
 
-- [24 大技巧 - 成为编程高手，保持软件健康长青](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor) `new`
+- [代码中常见的 24 种坏味道及重构手法](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor) `new`
 
 ## 前端
 
@@ -37,7 +37,7 @@
 
 ### 其他
 
-- [24 大技巧 - 成为编程高手，保持软件健康长青](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor)
+- [代码中常见的 24 种坏味道及重构手法](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor)
 - [Taro 源码解读 - @tarojs/taro 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/1.md)
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md)
 - [Taro 源码解读 - taro build 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/3.md)
