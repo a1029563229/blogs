@@ -8,7 +8,7 @@
 
 ## 最新/最受欢迎
 
-- [代码中常见的 24 种坏味道及重构手法](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor) `new`
+- [浅谈 npm、cnpm、yarn](https://github.com/a1029563229/Blogs/tree/master/Introduction/node/npm.md) `new`
 
 ## 前端
 
@@ -56,6 +56,7 @@
 
 ### Nodejs
 
+- [浅谈 npm、cnpm、yarn](https://github.com/a1029563229/Blogs/tree/master/Introduction/node/npm.md)
 - [使用 Node 处理 I/O 密集型任务](https://github.com/a1029563229/Blogs/tree/master/BestPractices/node/concurrent)
 - [Express 的基本使用，前端进阶 Node 的第一课](https://github.com/a1029563229/Blogs/tree/master/Introduction/node/express/README.md)
 - [Node 源码解析 - http 模块](https://github.com/a1029563229/Node-Source-Excerpt/tree/master/http)
