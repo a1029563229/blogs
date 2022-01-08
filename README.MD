@@ -37,6 +37,7 @@
 
 ### 其他
 
+- [2021 年度总结](https://github.com/a1029563229/Blogs/tree/master/PLAN/2021.md)
 - [代码中常见的 24 种坏味道及重构手法](https://github.com/a1029563229/Blogs/tree/master/Introduction/refactor)
 - [Taro 源码解读 - @tarojs/taro 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/1.md)
 - [Taro 源码解读 - @tarojs/cli 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/taro/2.md)
