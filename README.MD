@@ -9,6 +9,7 @@
 ## 最新/最受欢迎
 
 - [Axios 源码解读 —— request 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/1.md) `new`
+- [Axios 源码解读 —— 网络请求篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/2.md) `new`
 
 ## 前端
 
@@ -36,6 +37,7 @@
 #### Axios
 
 - [Axios 源码解读 —— request 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/1.md)
+- [Axios 源码解读 —— 网络请求篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/2.md)
 
 #### React
 
