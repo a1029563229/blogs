@@ -1,0 +1,37 @@
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jgxl-pre-commit": "lint-staged"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "isomorphic-fetch": "^3.0.0",
+    "node-fetch": "^3.1.1",
+    "ts-node": "^10.4.0"
+  },
+  "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.35",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
+    "@typescript-eslint/parser": "2.34.0",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.22.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-standard": "5.0.0",
+    "husky": "5.2.0",
+    "lint-staged": "10.5.4",
+    "prettier": "1.19.1",
+    "standard": "16.0.3"
+  },
+  "lint-staged": {
+    "src/**": [
+      "eslint --fix"
+    ]
+  }
+}
