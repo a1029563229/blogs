@@ -8,6 +8,7 @@
 
 ## 最新/最受欢迎
 
+- [Vite + Vue3 初体验 —— Vite 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/1.md) `new`
 - [Axios 源码解读 —— request 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/1.md) `new`
 - [Axios 源码解读 —— 网络请求篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/2.md) `new`
 - [Axios 源码解读 —— 源码实现篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/axios/3.md) `new`
@@ -20,6 +21,10 @@
 - [基于 qiankun 的微前端最佳实践（图文并茂） - 应用间通信篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Communication.md)
 - [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 - [万字长文+图文并茂+全面解析微前端框架 qiankun（乾坤） 源码 - qiankun 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/qiankun/1.md) `hot!`
+
+### Vue
+
+- [Vite + Vue3 初体验 —— Vite 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/1.md)
 
 ### React
 
