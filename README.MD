@@ -10,6 +10,7 @@
 
 - [Vite 源码解读系列（图文结合） —— 本地开发服务器篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/3.md) `new`
 - [Vite 源码解读系列（图文结合） —— 构建篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/4.md) `new`
+- [Vite 源码解读系列（图文结合） —— 插件篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/5.md) `new`
 
 ## 前端
 
@@ -24,8 +25,6 @@
 
 - [Vite + Vue3 初体验 —— Vite 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/1.md)
 - [Vite + Vue3 初体验 —— Vue3 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/2.md) 
-- [Vite 源码解读系列（图文结合） —— 本地开发服务器篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/3.md)
-- [Vite 源码解读系列（图文结合） —— 构建篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/4.md)
   
 ### React
 
@@ -45,6 +44,7 @@
 
 - [Vite 源码解读系列（图文结合） —— 本地开发服务器篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/3.md)
 - [Vite 源码解读系列（图文结合） —— 构建篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/4.md)
+- [Vite 源码解读系列（图文结合） —— 插件篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/5.md)
 
 #### Axios
 
