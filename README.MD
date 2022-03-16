@@ -8,6 +8,7 @@
 
 ## 最新/最受欢迎
 
+- [Vite 实战：手把手教你写一个 Vite 插件](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/6.md) `new`
 - [Vite 源码解读系列（图文结合） —— 本地开发服务器篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/3.md) `new`
 - [Vite 源码解读系列（图文结合） —— 构建篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/4.md) `new`
 - [Vite 源码解读系列（图文结合） —— 插件篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/5.md) `new`
@@ -21,10 +22,11 @@
 - [基于 qiankun 的微前端最佳实践（图文并茂） - 应用部署篇](https://github.com/a1029563229/Blogs/tree/master/BestPractices/qiankun/Deploy.md)
 - [万字长文+图文并茂+全面解析微前端框架 qiankun（乾坤） 源码 - qiankun 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/qiankun/1.md) `hot!`
 
-### Vue
+### Vue + Vite
 
 - [Vite + Vue3 初体验 —— Vite 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/1.md)
 - [Vite + Vue3 初体验 —— Vue3 篇](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/2.md) 
+- [Vite 实战：手把手教你写一个 Vite 插件](https://github.com/a1029563229/Blogs/tree/master/Source-Code/vite/6.md)
   
 ### React
 
