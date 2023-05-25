@@ -6,9 +6,9 @@
 
 如果喜欢这类风格的博客，请帮忙点亮 `star` 鼓励一下吧！
 
-## 最新/最受欢迎
+## 最新
 
-- [Nest 快速通关攻略](https://github.com/a1029563229/Blogs/tree/master/BestPractices/nest/1.md) `new`
+- [初始化 spring boot + mybatis 项目](https://github.com/a1029563229/Blogs/tree/master/Introduction/java/springboot+mybatis-quickstart.md)
 
 ## 前端
 
@@ -95,6 +95,10 @@
 ### PHP
 
 - [YII 初体验 —— 搭建一个简单的 Todo List 系统](https://github.com/a1029563229/Blogs/tree/master/BestPractices/php/Yii-TodoList.md)
+
+### Java
+
+- [初始化 spring boot + mybatis 项目](https://github.com/a1029563229/Blogs/tree/master/Introduction/java/springboot+mybatis-quickstart.md)
 
 ### Go
 
