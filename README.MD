@@ -8,6 +8,7 @@
 
 ## 最新
 
+- [AutoGPT 使用教程及上手体验（一分钟配置可用）](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/autogpt.md)
 - [初始化 spring boot + mybatis 项目](https://github.com/a1029563229/Blogs/tree/master/Introduction/java/springboot+mybatis-quickstart.md)
 
 ## 前端
@@ -111,3 +112,9 @@
 
 - [使用 Docker 构建一个容器应用（一）](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image)
 - [使用 Docker 构建一个容器应用（二）](https://github.com/a1029563229/Blogs/tree/master/Introduction/docker/image/README2.md)
+
+## 其他
+
+### GPT
+
+- [AutoGPT 使用教程及上手体验（一分钟配置可用）](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/autogpt.md)
