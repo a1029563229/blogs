@@ -110,7 +110,7 @@ results.save(save_dir='results/')
 
 作为 0 基础选手，通过 `Gorilla`，确实可以快速的了解到机器学习的相关知识，同时也可以快速的实现一个机器学习的项目。
 
-下面附上一些相关资料：
+下面附上一些相关资料，包含 Gorilla 教程：
 
 [Gorilla 官方地址](https://github.com/ShishirPatil/gorilla)
 
