@@ -8,6 +8,7 @@
 
 ## 最新
 
+- [通过 Gorilla 入门机器学习](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/gorilla.md)
 - [AutoGPT 使用教程及上手体验（一分钟配置可用）](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/autogpt.md)
 - [初始化 spring boot + mybatis 项目](https://github.com/a1029563229/Blogs/tree/master/Introduction/java/springboot+mybatis-quickstart.md)
 
@@ -118,3 +119,4 @@
 ### GPT
 
 - [AutoGPT 使用教程及上手体验（一分钟配置可用）](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/autogpt.md)
+- [通过 Gorilla 入门机器学习](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/gorilla.md)
