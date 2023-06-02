@@ -6,6 +6,10 @@
 
 如果喜欢这类风格的博客，请帮忙点亮 `star` 鼓励一下吧！
 
+> 联系方式
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images%5Cimages%5C%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20230602105800.png)
+
 ## 最新
 
 - [通过 Gorilla 入门机器学习](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/gorilla.md)
