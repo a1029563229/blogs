@@ -1,4 +1,4 @@
-# [译]你的 ChatGPT 使用姿势是错的！告诉你 4 个使用 ChatGPT 的小技巧
+# 你的 ChatGPT 使用姿势是错的！告诉你 4 个使用 ChatGPT 的小技巧
 
 > 本文译自 [You’re Using ChatGPT Wrong! Here’s How to Be Ahead of 99% of ChatGPT Users](https://artificialcorner.com/youre-using-chatgpt-wrong-here-s-how-to-be-ahead-of-99-of-chatgpt-users-886a50dabc54)
 
