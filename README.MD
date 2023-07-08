@@ -12,6 +12,7 @@
 
 ## 最新
 
+- [你的 ChatGPT 使用姿势是错的！告诉你 4 个使用 ChatGPT 的小技巧](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/skill_to_use_chatgpt.md)
 - [通过 Gorilla 入门机器学习](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/gorilla.md)
 - [AutoGPT 使用教程及上手体验（一分钟配置可用）](https://github.com/a1029563229/Blogs/tree/master/Introduction/gpt/autogpt.md)
 - [初始化 spring boot + mybatis 项目](https://github.com/a1029563229/Blogs/tree/master/Introduction/java/springboot+mybatis-quickstart.md)
