@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison Table</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .model-name {
+            color: #2563eb;
+        }
+        /* Apply background color to even-numbered rows */
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Input shape</th>
+                    <th>Dataset</th>
+                    <th>AP<sup>val</sup></th>
+                    <th>AP<sup>val</sup><sub>50</sub></th>
+                    <th>Params(M)</th>
+                    <th>FLOPs(G)</th>
+                    <th>T4 TensorRT FP16(FPS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in tableData" :key="row.model">
+                    <td class="model-name">{{ row.model }}</td>
+                    <td>{{ row.inputShape }}</td>
+                    <td>{{ row.dataset }}</td>
+                    <td>{{ row.apVal }}</td>
+                    <td>{{ row.ap50 }}</td>
+                    <td>{{ row.params }}</td>
+                    <td>{{ row.flops }}</td>
+                    <td>{{ row.fps }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                    tableData: [
+                        {
+                            model: 'RT-DETR-R18',
+                            inputShape: 640,
+                            dataset: 'COCO',
+                            apVal: 46.5,
+                            ap50: 63.8,
+                            params: 20,
+                            flops: 60,
+                            fps: 217
+                        },
+                        {
+                            model: 'RT-DETR-R34',
+                            inputShape: 640,
+                            dataset: 'COCO',
+                            apVal: 48.9,
+                            ap50: 66.8,
+                            params: 31,
+                            flops: 92,
+                            fps: 161
+                        },
+                        {
+                            model: 'RT-DETR-R50-m',
+                            inputShape: 640,
+                            dataset: 'COCO',
+                            apVal: 51.3,
+                            ap50: 69.6,
+                            params: 36,
+                            flops: 100,
+                            fps: 145
+                        },
+                        {
+                            model: 'RT-DETR-R50',
+                            inputShape: 640,
+                            dataset: 'COCO',
+                            apVal: 53.1,
+                            ap50: 71.3,
+                            params: 42,
+                            flops: 136,
+                            fps: 108
+                        },
+                        {
+                            model: 'RT-DETR-R101',
+                            inputShape: 640,
+                            dataset: 'COCO',
+                            apVal: 54.3,
+                            ap50: 72.7,
+                            params: 76,
+                            flops: 259,
+                            fps: 74
+                        }
+                    ]
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
