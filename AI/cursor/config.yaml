@@ -1,0 +1,10 @@
+en:
+  title: "Model Comparison Table"
+  model: "Model"
+  input_shape: "Input shape"
+  dataset: "Dataset"
+  ap_val: "AP<sup>val</sup>"
+  ap_val_50: "AP<sup>val</sup><sub>50</sub>"
+  params: "Params(M)"
+  flops: "FLOPs(G)"
+  fps: "T4 TensorRT FP16(FPS)" 

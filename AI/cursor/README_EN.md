@@ -44,7 +44,7 @@ Enter our requirements again and apply the advice from AI. It looks like the fol
 
 At last we can see that the web page is at least 90 per cent similar to the image.
 
-> Mark: It didn't directly get the final effect that we expected. I corrected it again for about 2-3 times. I didn't show that for the reason of article length.
+> Mark: It didn't directly achieve the final effect that we expected. I corrected it again for about 2-3 times. I didn't show that for the reason of article length.
 
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/52d5213e9bffaab5d6e17b000a71201f.jpg)
 
@@ -53,3 +53,66 @@ As we can see, I didn't write a single line of code, but I have drawn a web page
 ## Restore high-fidelity without coding
 
 I think that I have already demonstrated this feature in the above section, so I needn't demonstrate it again.
+
+## Predict your next focus
+
+In the past, some of the AI coding tools such as copilot could only complete the code that followed your programing path.
+
+The Cursor can predict the next line of code you expected and it can also predict your focus that just looks like it's thinking about what you are thinking.
+
+Let me show you an example to explain it. I'm going to remove the row named 'fps', so I first remove the 'fps' line from the first record of the array. Then the `tab` sign has appeared and I can press the `tab` key to directly move the focus to the next line that I want to go to. It looks like the following image.
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/223ef653e92eee35a7b898bb4cd7cbfc.jpg)
+
+It's a simple demonstration. The complicated scene is that you can press the 'tab' key continuously until the project is finished. I don't have the `GIF` to show you what it looks like. I recommend that you probably give it a try by yourself.
+
+## Smart Rewrites
+
+There is a useful feature on Cursor named `Smart Rewrites`. It can make you more relaxed in strict code writing even if you have forgotten many things you have learned before.
+
+Let me show you how it works. I enter many codes with many syntax errors that can't even be called `code`. It looks like the following image.
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/97f4909a7fc4c93a76faa7307789eb84.jpg)
+
+When I keep my cursor on it and press the `tab` key, then magic has occured. The error codes are all fixed!
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/cee3c4a6f9b61b4dd31c32a5264a0618.jpg)
+
+Did you have a memory that an error made you annoyed for a day and you finally found it was caused by a simple spelling error of a word? Now, with Cursor, it can help us find the spelling errors easily in our codes. You'll never be annoyed by this.
+
+## Agent
+
+There is another feature that can make your work more efficient. It is Agent.
+
+We can tell it what we want, then it will stand from the perspective of the whole project to help us finish the job.
+
+I want to show you a real example.
+
+I'm recently working on an international project and there are many pieces of work about translation I need to do.
+
+In the past, I needed to finish the `i18n` config file first and then I needed to refer to those config files.
+
+I have to say that is an inefficient work mode. I need to switch the files between business codes and config files. It makes me very annoyed. 
+
+Today I can work on the international project as a normal project. I can finish my coding work first and then throw it to `Agent` of Cursor.
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/d48f19b4ae9e50fe4e512157b972c313.jpg)
+
+I just need to click the `apply` button step by step. It's very easy, isn't it?
+
+You can use the `Agent` feature if you want to do something that considers the situation from the perspective of the whole project.
+
+## Generate specific code
+
+There is a common feature that needs to be introduced. It's specific code generation.
+
+In the past, if I wanted to write a regular rule about Email, I had to write it manually or search it on the internet.
+
+Now, you can just press the key combination of `Ctrl + K` in any space area in Cursor.
+
+Then a chat popover appears. You can input the requirements, and it will complete the code you need.
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/9b15dbb436124a38f18edaf5366b440a.jpg)
+
+It's very useful in our daily work scene.
+

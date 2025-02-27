@@ -1,0 +1,9 @@
+.container {
+    top: 10px;
+    left: 50px;
+    position: fixed;
+    width: 200px;
+    height: 80px;
+    background-color: green;
+    border-radius: 10px;
+}
