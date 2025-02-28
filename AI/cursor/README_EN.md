@@ -1,5 +1,7 @@
 # 7 Tricks You Must Know about Cursor
 
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/0f134750d1c6f22701dc20bc287311a4.jpg)
+
 Cursor is currently the most popular AI code editor, no one else. Now, I'll teach you the 7 most important tricks about Cursor.
 
 Firstly, I have to admit that I gave up using VsCode once I came across Cursor. It is becoming in increasingly more useful than VsCode.
