@@ -96,7 +96,7 @@ I have to say that is an inefficient work mode. I need to switch the files betwe
 
 Today I can work on the international project as a normal project. I can finish my coding work first and then throw it to `Agent` of Cursor.
 
-![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/d48f19b4ae9e50fe4e512157b972c313.jpg)
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/431054c76ebd38c9eef2a165cc0022b6.jpg)
 
 I just need to click the `apply` button step by step. It's very easy, isn't it?
 
