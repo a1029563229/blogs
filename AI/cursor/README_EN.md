@@ -1,6 +1,6 @@
-# 10 Tricks You Must Know about Cursor
+# 7 Tricks You Must Know about Cursor
 
-Cursor is currently the most popular AI code editor, no one else. Now, I'll teach you the 10 most important tricks about Cursor.
+Cursor is currently the most popular AI code editor, no one else. Now, I'll teach you the 7 most important tricks about Cursor.
 
 Firstly, I have to admit that I gave up using VsCode once I came across Cursor. It is becoming in increasingly more useful than VsCode.
 
@@ -115,4 +115,24 @@ Then a chat popover appears. You can input the requirements, and it will complet
 ![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/9b15dbb436124a38f18edaf5366b440a.jpg)
 
 It's very useful in our daily work scene.
+
+## Chat everywhere
+
+There is also a feature in Cursor which can make your work efficient.
+
+We can select the code snippets which we are concerned about and then ask it some questions.
+
+The difference between the Cursor and LLM is that you can directly ask the questions in Cursor instead of copying your code snippets to the LLM and then copying the answer to replace your code snippets.
+
+The Cursor will output the answer that is based on your questions and you can click the `apply` button to apply it to your project.
+
+![image](http://shadows-mall.oss-cn-shenzhen.aliyuncs.com/images/9d6671d6b05d4e4c79c7722b992fad93.jpg)
+
+## Summary
+
+The above are all tricks about Cursor that I have known and usually used.
+
+In spite of these, there are still many tricks I haven't referred to. You can learn them through the following article which is from Cursor's official website.
+
+[https://www.cursor.com/cn/features](https://www.cursor.com/cn/features)
 
